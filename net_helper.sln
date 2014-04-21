@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinCode", "WinCode\WinCode.csproj", "{3EA58C41-F095-48B1-A019-60F658EE6F75}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "net_helper", "net_helper\net_helper.csproj", "{3EA58C41-F095-48B1-A019-60F658EE6F75}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
