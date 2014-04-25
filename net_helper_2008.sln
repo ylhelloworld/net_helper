@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "net_helper", "net_helper\net_helper.csproj", "{3EA58C41-F095-48B1-A019-60F658EE6F75}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3EA58C41-F095-48B1-A019-60F658EE6F75}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3EA58C41-F095-48B1-A019-60F658EE6F75}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3EA58C41-F095-48B1-A019-60F658EE6F75}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3EA58C41-F095-48B1-A019-60F658EE6F75}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
