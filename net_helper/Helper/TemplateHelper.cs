@@ -18,6 +18,7 @@ class TemplateHelper
 
 
 
+    //根据定义的模板，保存HTML内容到DB
     public static void save_html_to_db(string url, string template_id)
     {
 
@@ -68,9 +69,15 @@ class TemplateHelper
         foreach (DataRow row in dt.Rows)
         {
             if (row["is_doc_id"].ToString() == "Y") continue;
-            save_html_item_to_db(row["type"].ToString(), url, html, doc_id, row["html_path"].ToString(), row["regular_path"].ToString(), row["doc_path"].ToString(), row["redirect_template_id"].ToString()); 
+            try
+            {
+                save_html_item_to_db(row["type"].ToString(), url, html, doc_id, row["html_path"].ToString(), row["regular_path"].ToString(),
+                                     row["doc_path"].ToString(), row["redirect_template_id"].ToString());
+            }
+            catch (Exception error) { }
         }
     }
+    //根据设置的跳转的URL，保存HTML到DB
     public static void save_redirect_html_to_db(string url, string template_id,string doc_id)
     {
 
@@ -100,7 +107,12 @@ class TemplateHelper
         foreach (DataRow row in dt.Rows)
         {
             if (row["is_doc_id"].ToString() == "Y") continue;
-            save_html_item_to_db(row["type"].ToString(), url, html, doc_id, row["html_path"].ToString(), row["regular_path"].ToString(), row["doc_path"].ToString(), row["redirect_template_id"].ToString());
+            try
+            {
+                save_html_item_to_db(row["type"].ToString(), url, html, doc_id, row["html_path"].ToString(), row["regular_path"].ToString(),
+                                     row["doc_path"].ToString(), row["redirect_template_id"].ToString());
+            }
+            catch (Exception error) { }
         }
     }
     public static void save_html_item_to_db(string type, string url, string html, string doc_id, string html_path, string regular_path, string doc_path,string redirect_template_id)
@@ -118,7 +130,10 @@ class TemplateHelper
          | FR       | Fixed Value       |           X         |ALL                    |          √           |
          | ---------|-------------------|---------------------|-----------------------|-----------------------|
          | HR       | HTML Path         |          √         |ALL,INNER,PROPERTY     |          √           | 
-         |---------------------------------------------------------------------------------------------------*/
+         |------------------------------|---------------------|-----------------------|-----------------------|
+         | IMG      | HTML Path         |          √         |ALL,INNER,PROPERTY     |           X           | 
+         |------------------------------|---------------------|-----------------------|----------------------*/
+
         QueryDocument doc_query = new QueryDocument();
         doc_query.Add("doc_id", doc_id);
         UpdateDocument doc_update = new UpdateDocument();
@@ -247,7 +262,57 @@ class TemplateHelper
                     doc_update = MongoHelper.get_update_from_str(str_update);
                     MongoHelper.update_bson(doc_query, doc_update);
 
-                    save_redirect_html_to_db(HtmlHelper.get_full_url(url,str_from), redirect_template_id,doc_id);
+                    save_redirect_html_to_db(HtmlHelper.get_full_url(url,str_from), redirect_template_id,doc_id); 
+                }
+                break;
+
+            case "IMG":
+                doc.LoadHtml(html);
+                nodes = doc.DocumentNode.SelectNodes(html_path);
+
+                string img_url = "";
+                foreach (HtmlNode node in nodes)
+                {
+
+                    string value_orig = "";
+                    string value_new = "";
+
+                    reg = new Regex(@"#[^#]*#");
+                    MatchCollection colloct = reg.Matches(doc_path);
+                    value_orig = colloct[0].Value;
+
+                    if (value_orig == "#ALL#")
+                    {
+                        value_new = node.WriteTo();
+
+                    }
+                    else if (value_orig == "#INNER#")
+                    {
+                        value_new = node.InnerHtml;
+                    }
+                    else
+                    {
+                        value_new = node.Attributes[value_orig.Replace("#", "").Trim()].Value.ToString();
+                    }
+
+                    //使用正则表达式选取值
+                    if (string.IsNullOrEmpty(regular_path))
+                    {
+                        img_url = value_new;
+                    }
+                    else
+                    {
+                        reg = new Regex(regular_path);
+                        img_url = reg.Match(value_new).Value;
+                    }
+
+                    str_from = img_url.Replace(@"/", "-").Replace(@"\", "-");
+                    //替代update_path中设置的参数
+                    str_update = doc_path.Replace(value_orig, str_from);
+                    doc_update = MongoHelper.get_update_from_str(str_update);
+                    MongoHelper.update_bson(doc_query, doc_update);
+
+                    HtmlHelper.down_file_from_url(HtmlHelper.get_full_url(url, img_url), doc_id + str_from);
                 }
                 break;
             default:
@@ -256,6 +321,8 @@ class TemplateHelper
 
 
     }
+
+    //从HTML中选取值，#ALL-整个HTML值，#INNER-内嵌HTML值，#XXXX-HTML中属性值
     public static string get_doc_id(string type, string url, string html, string html_path, string regular_path,string doc_path)
     {
 

@@ -10,7 +10,9 @@ using System.Text.RegularExpressions;
 class HtmlHelper
 {
     public static string down_html_file = @"D:\down_html_file\";
+    public static string down_img_file = @"D:\down_img_file\";
     public static WebClient client = new WebClient();
+    //保存HTML为本地文件
     public static string save_html_to_file(string url)
     {
 
@@ -49,6 +51,7 @@ class HtmlHelper
             return "error [save_html_to_file]" + Environment.NewLine + url + Environment.NewLine + error.Message;
         }
     }
+    //保存HTML中url中的文件
     public static string save_html_url_to_file(string url)
     {
         string msg = "";
@@ -181,5 +184,26 @@ class HtmlHelper
     {
         byte[] bhtml = client.DownloadData(url);
         return Encoding.UTF8.GetString(bhtml);
+    }
+    public static string down_file_from_url(string url, string file_name)
+    {
+        try
+        {
+            string file_path = down_img_file + file_name; 
+
+
+            if (File.Exists(file_path) == false)
+            {
+                client.DownloadFile(url, file_path);
+            }
+            Log.info("save html to file", url);
+            return url;
+        }
+        catch (Exception error)
+        {
+            Log.error_with_msg("down file from url ", url, error);
+            return "error [down_file_url]" + Environment.NewLine + url + Environment.NewLine + error.Message;
+        }
+
     }
 }
