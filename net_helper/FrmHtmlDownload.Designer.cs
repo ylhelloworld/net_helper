@@ -151,6 +151,7 @@
             this.Controls.Add(this.tabControl1);
             this.Name = "FrmHtmlDownload";
             this.Text = "Html DownLoad";
+            this.Load += new System.EventHandler(this.FrmHtmlDownload_Load);
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();

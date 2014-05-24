@@ -51,7 +51,7 @@ class HtmlHelper
             return "error [save_html_to_file]" + Environment.NewLine + url + Environment.NewLine + error.Message;
         }
     }
-    //保存HTML中url中的文件
+    //保存HTML中URL中的文件
     public static string save_html_url_to_file(string url)
     {
         string msg = "";
@@ -95,6 +95,7 @@ class HtmlHelper
 
         return msg;
     }
+    //根据当前所在HTML的URL，获得完整URL
     public static string get_full_url(string url_orig, string url)
     {
 
@@ -158,6 +159,7 @@ class HtmlHelper
             return "wrong [get_full_url]" + Environment.NewLine + error.Message;
         }
     }
+    //获得正常的URL路径
     public static string get_normal_url(string url)
     {
         url = url.Trim();
@@ -185,7 +187,7 @@ class HtmlHelper
         byte[] bhtml = client.DownloadData(url);
         return Encoding.UTF8.GetString(bhtml);
     }
-    public static string down_file_from_url(string url, string file_name)
+    public static string down_img_from_url(string url, string file_name)
     {
         try
         {

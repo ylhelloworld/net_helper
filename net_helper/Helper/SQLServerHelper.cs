@@ -33,12 +33,11 @@ public class SQLServerHelper
         con.Open();
         cmd.ExecuteNonQuery();
         con.Close();
-
     }
     public static string format_sql_str(string sql)
     {
         sql = sql.Replace("'", "''");
-        return sql;
+        return sql;         
     }
 }
 

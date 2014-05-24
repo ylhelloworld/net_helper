@@ -115,6 +115,7 @@ class TemplateHelper
             catch (Exception error) { }
         }
     }
+
     public static void save_html_item_to_db(string type, string url, string html, string doc_id, string html_path, string regular_path, string doc_path,string redirect_template_id)
     {
 
@@ -312,17 +313,15 @@ class TemplateHelper
                     doc_update = MongoHelper.get_update_from_str(str_update);
                     MongoHelper.update_bson(doc_query, doc_update);
 
-                    HtmlHelper.down_file_from_url(HtmlHelper.get_full_url(url, img_url), doc_id + str_from);
+                    HtmlHelper.down_img_from_url(HtmlHelper.get_full_url(url, img_url), doc_id + str_from);
                 }
                 break;
             default:
                 break;
-        }
-
-
+        } 
     }
 
-    //从HTML中选取值，#ALL-整个HTML值，#INNER-内嵌HTML值，#XXXX-HTML中属性值
+    //获得此Template的doc id
     public static string get_doc_id(string type, string url, string html, string html_path, string regular_path,string doc_path)
     {
 
