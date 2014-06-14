@@ -51,6 +51,7 @@
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.tool_close_form = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.autoFiexeURLPickToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MainMenu.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -129,7 +130,8 @@
             this.templateManageToolStripMenuItem,
             this.templateOperateToolStripMenuItem,
             this.setFixedUrlToolStripMenuItem,
-            this.selectFixedToolStripMenuItem});
+            this.selectFixedToolStripMenuItem,
+            this.autoFiexeURLPickToolStripMenuItem});
             this.templateToolStripMenuItem.Name = "templateToolStripMenuItem";
             this.templateToolStripMenuItem.Size = new System.Drawing.Size(65, 20);
             this.templateToolStripMenuItem.Text = "Template";
@@ -137,28 +139,28 @@
             // templateManageToolStripMenuItem
             // 
             this.templateManageToolStripMenuItem.Name = "templateManageToolStripMenuItem";
-            this.templateManageToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
+            this.templateManageToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
             this.templateManageToolStripMenuItem.Text = "Template Manage";
             this.templateManageToolStripMenuItem.Click += new System.EventHandler(this.templateManageToolStripMenuItem_Click);
             // 
             // templateOperateToolStripMenuItem
             // 
             this.templateOperateToolStripMenuItem.Name = "templateOperateToolStripMenuItem";
-            this.templateOperateToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
+            this.templateOperateToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
             this.templateOperateToolStripMenuItem.Text = "Template Add";
             this.templateOperateToolStripMenuItem.Click += new System.EventHandler(this.templateOperateToolStripMenuItem_Click);
             // 
             // setFixedUrlToolStripMenuItem
             // 
             this.setFixedUrlToolStripMenuItem.Name = "setFixedUrlToolStripMenuItem";
-            this.setFixedUrlToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
+            this.setFixedUrlToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
             this.setFixedUrlToolStripMenuItem.Text = "Fixed URL Set";
             this.setFixedUrlToolStripMenuItem.Click += new System.EventHandler(this.setFixedUrlToolStripMenuItem_Click);
             // 
             // selectFixedToolStripMenuItem
             // 
             this.selectFixedToolStripMenuItem.Name = "selectFixedToolStripMenuItem";
-            this.selectFixedToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
+            this.selectFixedToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
             this.selectFixedToolStripMenuItem.Text = "Fixed URL Pick";
             this.selectFixedToolStripMenuItem.Click += new System.EventHandler(this.selectFixedToolStripMenuItem_Click);
             // 
@@ -248,6 +250,13 @@
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
             // 
+            // autoFiexeURLPickToolStripMenuItem
+            // 
+            this.autoFiexeURLPickToolStripMenuItem.Name = "autoFiexeURLPickToolStripMenuItem";
+            this.autoFiexeURLPickToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
+            this.autoFiexeURLPickToolStripMenuItem.Text = "Auto Fiexe URL Pick";
+            this.autoFiexeURLPickToolStripMenuItem.Click += new System.EventHandler(this.autoFiexeURLPickToolStripMenuItem_Click);
+            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -298,5 +307,6 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem requestSocketToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem viewHexToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem autoFiexeURLPickToolStripMenuItem;
     }
 }

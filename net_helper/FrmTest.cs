@@ -85,7 +85,7 @@ namespace WinCode
 
         private void selectFixedToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FrmFixedUrlPick frm = new FrmFixedUrlPick();
+            FrmFixedUrlAutoPick frm = new FrmFixedUrlAutoPick();
             frm.Show();
         }
 

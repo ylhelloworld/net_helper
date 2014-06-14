@@ -112,7 +112,7 @@ namespace WinCode
         }
         private void selectFixedToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FrmFixedUrlPick frm = new FrmFixedUrlPick();
+            FrmFixedUrlAutoPick frm = new FrmFixedUrlAutoPick();
             set_window((Form)frm);
         }
         private void codeConsoleToolStripMenuItem_Click(object sender, EventArgs e)
@@ -186,6 +186,12 @@ namespace WinCode
         private void viewHexToolStripMenuItem_Click(object sender, EventArgs e)
         {
             FrmHexConvert frm = new FrmHexConvert();
+            set_window((Form)frm);
+        }
+
+        private void autoFiexeURLPickToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FrmFixedUrlAutoPick frm = new FrmFixedUrlAutoPick();
             set_window((Form)frm);
         } 
     }

@@ -172,6 +172,7 @@
       <DependentUpon>FrmRequest_WebHttpRequest.cs</DependentUpon>
     </Compile>
     <Compile Include="Helper\HtmlHelper.cs" />
+    <Compile Include="Helper\TemplateHelper_Match.cs" />
     <Compile Include="Http\HttpSocketHelper.cs" />
     <Compile Include="Helper\Log.cs" />
     <Compile Include="Helper\TemplateHelper.cs" />
@@ -341,6 +342,10 @@
       <DependentUpon>FrmDocFindView.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="FrmFixedUrlAutoPick.resx">
+      <DependentUpon>FrmFixedUrlAutoPick.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -362,6 +367,12 @@
     </Compile>
     <Compile Include="FrmMain.Designer.cs">
       <DependentUpon>FrmMain.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmFixedUrlAutoPick.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmFixedUrlAutoPick.Designer.cs">
+      <DependentUpon>FrmFixedUrlAutoPick.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
