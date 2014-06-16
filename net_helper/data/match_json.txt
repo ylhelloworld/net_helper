@@ -1,6 +1,7 @@
-type:类型
-host:主
-client:客
+type: win0 win1 win_1 point total 
+start_time:
+host:
+client:
 
 three0:
 one0:
@@ -14,21 +15,44 @@ three_1:让-1
 one_1:
 zero_1:
 
-point_1_0:
-……
-point_more:
-
-point_0_1:
-……
-point_1_more:
-
-point_0_0:
-……
-point_0_more:
+point_1_0
+point_2_0
+point_3_0
+point_4_0
+point_5_0
+point_2_1
+point_3_1
+point_4_1
+point_5_1
+point_3_2
+point_4_2
+point_5_2
+point_other_3
+point_0_0
+point_1_1
+point_2_2
+point_3_3
+point_other_1
+point_0_1
+point_0_2
+point_0_3
+point_0_4
+point_0_5
+point_1_2
+point_1_3
+point_1_4
+point_1_5
+point_2_3
+point_2_4
+point_2_5 
+point_other_0
 
 
 total0:
 total1:
 total2:
-……
+total3:
+total4:
+total5:
+total6:
 total_more:

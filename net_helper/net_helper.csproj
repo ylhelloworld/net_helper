@@ -141,6 +141,12 @@
     <Compile Include="FrmLogMonitor.Designer.cs">
       <DependentUpon>FrmLogMonitor.cs</DependentUpon>
     </Compile>
+    <Compile Include="FrmPersent.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmPersent.Designer.cs">
+      <DependentUpon>FrmPersent.cs</DependentUpon>
+    </Compile>
     <Compile Include="FrmRequest_Socket.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -266,6 +272,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FrmLogMonitor.resx">
       <DependentUpon>FrmLogMonitor.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmPersent.resx">
+      <DependentUpon>FrmPersent.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="FrmRequest_Socket.resx">
