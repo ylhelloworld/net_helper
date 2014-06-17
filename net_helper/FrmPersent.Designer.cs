@@ -29,22 +29,22 @@
         private void InitializeComponent()
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.txt_count = new System.Windows.Forms.TextBox();
+            this.btn_compute = new System.Windows.Forms.Button();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.tabPage3 = new System.Windows.Forms.TabPage();
-            this.btn_compute = new System.Windows.Forms.Button();
-            this.txt_compute = new System.Windows.Forms.TextBox();
-            this.dgv_result = new System.Windows.Forms.DataGridView();
             this.dgv_condition = new System.Windows.Forms.DataGridView();
-            this.txt_count = new System.Windows.Forms.TextBox();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.txt_compute = new System.Windows.Forms.TextBox();
+            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.dgv_result = new System.Windows.Forms.DataGridView();
             this.groupBox1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgv_condition)).BeginInit();
             this.tabPage2.SuspendLayout();
             this.tabPage3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_result)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dgv_condition)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -59,6 +59,24 @@
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Operation";
+            // 
+            // txt_count
+            // 
+            this.txt_count.Location = new System.Drawing.Point(22, 30);
+            this.txt_count.Name = "txt_count";
+            this.txt_count.Size = new System.Drawing.Size(100, 20);
+            this.txt_count.TabIndex = 1;
+            this.txt_count.Text = "10";
+            // 
+            // btn_compute
+            // 
+            this.btn_compute.Location = new System.Drawing.Point(139, 28);
+            this.btn_compute.Name = "btn_compute";
+            this.btn_compute.Size = new System.Drawing.Size(75, 23);
+            this.btn_compute.TabIndex = 0;
+            this.btn_compute.Text = "Compute";
+            this.btn_compute.UseVisualStyleBackColor = true;
+            this.btn_compute.Click += new System.EventHandler(this.btn_compute_Click);
             // 
             // tabControl1
             // 
@@ -85,6 +103,15 @@
             this.tabPage1.Text = "Condition";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // dgv_condition
+            // 
+            this.dgv_condition.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgv_condition.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgv_condition.Location = new System.Drawing.Point(3, 3);
+            this.dgv_condition.Name = "dgv_condition";
+            this.dgv_condition.Size = new System.Drawing.Size(1065, 467);
+            this.dgv_condition.TabIndex = 1;
+            // 
             // tabPage2
             // 
             this.tabPage2.Controls.Add(this.txt_compute);
@@ -96,6 +123,18 @@
             this.tabPage2.Text = "Compute";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
+            // txt_compute
+            // 
+            this.txt_compute.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txt_compute.Font = new System.Drawing.Font("Lucida Console", 9.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txt_compute.Location = new System.Drawing.Point(3, 3);
+            this.txt_compute.Multiline = true;
+            this.txt_compute.Name = "txt_compute";
+            this.txt_compute.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.txt_compute.Size = new System.Drawing.Size(1065, 467);
+            this.txt_compute.TabIndex = 0;
+            this.txt_compute.TextChanged += new System.EventHandler(this.txt_compute_TextChanged);
+            // 
             // tabPage3
             // 
             this.tabPage3.Controls.Add(this.dgv_result);
@@ -106,27 +145,6 @@
             this.tabPage3.Text = "Result";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
-            // btn_compute
-            // 
-            this.btn_compute.Location = new System.Drawing.Point(139, 28);
-            this.btn_compute.Name = "btn_compute";
-            this.btn_compute.Size = new System.Drawing.Size(75, 23);
-            this.btn_compute.TabIndex = 0;
-            this.btn_compute.Text = "Compute";
-            this.btn_compute.UseVisualStyleBackColor = true;
-            this.btn_compute.Click += new System.EventHandler(this.btn_compute_Click);
-            // 
-            // txt_compute
-            // 
-            this.txt_compute.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txt_compute.Location = new System.Drawing.Point(3, 3);
-            this.txt_compute.Multiline = true;
-            this.txt_compute.Name = "txt_compute";
-            this.txt_compute.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txt_compute.Size = new System.Drawing.Size(1065, 467);
-            this.txt_compute.TabIndex = 0;
-            this.txt_compute.TextChanged += new System.EventHandler(this.txt_compute_TextChanged);
-            // 
             // dgv_result
             // 
             this.dgv_result.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -135,23 +153,6 @@
             this.dgv_result.Name = "dgv_result";
             this.dgv_result.Size = new System.Drawing.Size(1071, 473);
             this.dgv_result.TabIndex = 0;
-            // 
-            // dgv_condition
-            // 
-            this.dgv_condition.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgv_condition.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dgv_condition.Location = new System.Drawing.Point(3, 3);
-            this.dgv_condition.Name = "dgv_condition";
-            this.dgv_condition.Size = new System.Drawing.Size(1065, 467);
-            this.dgv_condition.TabIndex = 1;
-            // 
-            // txt_count
-            // 
-            this.txt_count.Location = new System.Drawing.Point(22, 30);
-            this.txt_count.Name = "txt_count";
-            this.txt_count.Size = new System.Drawing.Size(100, 20);
-            this.txt_count.TabIndex = 1;
-            this.txt_count.Text = "100";
             // 
             // FrmPersent
             // 
@@ -167,11 +168,11 @@
             this.groupBox1.PerformLayout();
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgv_condition)).EndInit();
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
             this.tabPage3.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgv_result)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dgv_condition)).EndInit();
             this.ResumeLayout(false);
 
         }
