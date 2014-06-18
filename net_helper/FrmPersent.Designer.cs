@@ -105,6 +105,7 @@
             // 
             // dgv_condition
             // 
+            this.dgv_condition.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
             this.dgv_condition.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgv_condition.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgv_condition.Location = new System.Drawing.Point(3, 3);

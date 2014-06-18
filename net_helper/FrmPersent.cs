@@ -29,71 +29,129 @@ namespace WinCode
 
         public void bind_data()
         {
+
+            DataTable dt_condition = new DataTable();
+
             DataColumn col = new DataColumn();
             col.DataType = Type.GetType("System.Boolean");
             col.ColumnName = "selected";
             col.DefaultValue = false;
-
-            dt_condition.Columns.Add(col);
-            dt_condition.Columns["selected"].SetOrdinal(0);
-
+            dt_condition.Columns.Add(col); 
             dt_condition.Columns.Add("start_time");
             dt_condition.Columns.Add("host");
             dt_condition.Columns.Add("client");
             dt_condition.Columns.Add("three");
             dt_condition.Columns.Add("one");
-            dt_condition.Columns.Add("zero");
-
-            DataRow row1 = dt_condition.NewRow();
-            row1["start_time"] = "2014-07-16";
-            row1["host"] = "A1";
-            row1["client"] = "A2";
-            row1["three"] = "1.3";
-            row1["one"] = "4.35";
-            row1["zero"] = "8";
-            dt_condition.Rows.Add(row1);
-
-            DataRow row2 = dt_condition.NewRow();
-            row2["start_time"] = "2014-07-16";
-            row2["host"] = "B1";
-            row2["client"] = "B2";
-            row2["three"] = "1.18";
-            row2["one"] = "5.4";
-            row2["zero"] = "11";
-            dt_condition.Rows.Add(row2);
-
-            this.dgv_condition.DataSource = dt_condition;
+            dt_condition.Columns.Add("zero"); 
+           
 
 
+            string sql = " select *" +
+                        " from win" +
+                        " where start_time>'{0}'" +
+                        " order by start_time,website,host,client,timespan";  
+            sql = string.Format(sql, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+
+            DataTable dt = SQLServerHelper.get_table(sql);
+
+            for (int i = 0; i < dt.Rows.Count; i++)
+            {
+                DataRow row = dt_condition.NewRow();
+                if (i == 0)
+                {
+                    row["start_time"] = dt.Rows[i]["start_time"].ToString();
+                    row["host"] = dt.Rows[i]["host"].ToString();
+                    row["client"] = dt.Rows[i]["client"].ToString();
+                    row["three"] = dt.Rows[i]["three"].ToString();
+                    row["one"] = dt.Rows[i]["one"].ToString();
+                    row["zero"] = dt.Rows[i]["zero"].ToString();
+                    dt_condition.Rows.Add(row);
+                }
+                else
+                {
+                    if (dt.Rows[i]["start_time"].ToString() != dt.Rows[i - 1]["start_time"].ToString() ||
+                       dt.Rows[i]["host"].ToString() != dt.Rows[i - 1]["host"].ToString() ||
+                       dt.Rows[i]["client"].ToString() != dt.Rows[i - 1]["client"].ToString())
+                    {
+                        row["start_time"] = dt.Rows[i]["start_time"].ToString();
+                        row["host"] = dt.Rows[i]["host"].ToString();
+                        row["client"] = dt.Rows[i]["client"].ToString();
+                        row["three"] = dt.Rows[i]["three"].ToString();
+                        row["one"] = dt.Rows[i]["one"].ToString();
+                        row["zero"] = dt.Rows[i]["zero"].ToString();
+                        dt_condition.Rows.Add(row); 
+                    } 
+                }
+            } 
+            this.dgv_condition.DataSource = dt_condition; 
         }
 
-        private void btn_compute_Click(object sender, EventArgs e)
+        private void btn_compute_Click(object sender, EventArgs e)  
         {
-             this.txt_compute.Text=compute_into_txt(Convert.ToInt16(this.txt_count.Text));
+            this.txt_compute.Text = "";
+ 
+            DataTable dt = new DataTable();
+            dt.Columns.Add("start_time");
+            dt.Columns.Add("host");
+            dt.Columns.Add("client");
+            dt.Columns.Add("three");
+            dt.Columns.Add("one");
+            dt.Columns.Add("zero");
 
-            //for (int i = 10; i <= 20; i++)
-            //{ 
-            //    this.txt_compute.Text = this.txt_compute.Text+ compute_into_txt(i)+Environment.NewLine+Environment.NewLine;
-            //    Application.DoEvents();
-            //}
+            foreach (DataGridViewRow row in dgv_condition.Rows)
+            {
+                if (Convert.ToBoolean(row.Cells["selected"].Value) == true)
+                {
+                    DataRow row_new = dt.NewRow();
+                    row_new["start_time"] = row.Cells["start_time"].Value.ToString();
+                    row_new["host"] = row.Cells["host"].Value.ToString();
+                    row_new["client"] = row.Cells["client"].Value.ToString();
+                    row_new["three"] = row.Cells["three"].Value.ToString();
+                    row_new["one"] = row.Cells["one"].Value.ToString();
+                    row_new["zero"] =row.Cells["zero"].Value.ToString();
+                    dt.Rows.Add(row_new);
+                } 
+            }
+
+            if (dt.Rows.Count == 0) return;
+            for (int i = 0; i < dt.Rows.Count; i++)
+            {
+                for (int j = i + 1; j < dt.Rows.Count; j++)
+                {
+                    this.txt_compute.Text = this.txt_compute.Text + Environment.NewLine   +Environment.NewLine +
+                                            "-------------------------------------------------------------------------------"+Environment.NewLine+
+                                            compute_into_txt(Convert.ToInt32(txt_count.Text),
+                                                             dt.Rows[i]["start_time"].ToString(),
+                                                             dt.Rows[i]["host"].ToString(),
+                                                             dt.Rows[i]["client"].ToString(),
+                                                             Convert.ToDouble(dt.Rows[i]["three"].ToString()),
+                                                             Convert.ToDouble(dt.Rows[i]["one"].ToString()),
+                                                             Convert.ToDouble(dt.Rows[i]["zero"].ToString()),
+                                                             dt.Rows[j]["start_time"].ToString(),
+                                                             dt.Rows[j]["host"].ToString(),
+                                                             dt.Rows[j]["client"].ToString(),
+                                                             Convert.ToDouble(dt.Rows[j]["three"].ToString()),
+                                                             Convert.ToDouble(dt.Rows[j]["one"].ToString()),
+                                                             Convert.ToDouble(dt.Rows[j]["zero"].ToString()));
+                    Application.DoEvents();
+                                                             
+                }
+            }
+            this.txt_compute.Text = this.txt_compute.Text +Environment.NewLine+
+                                    "-------------------------------------------------------------------------------";
+            MessageBox.Show("bingo!!!complete!!!");
         }
-        public string compute_into_txt(int count)
+        public string compute_into_txt(int count,
+                                       string start_time1, string host1, string client1, double three1, double one1, double zero1,
+                                       string start_time2, string host2, string client2, double three2, double one2, double zero2)
         {
 
             StringBuilder builder = new StringBuilder();  
 
             DateTime dt_start = DateTime.Now; 
-            Int64 step = 0;
-            double return_persent = 1.2; 
+            Int64 step = 0; 
 
-
-            double three1 = Convert.ToDouble(dt_condition.Rows[0]["three"].ToString());
-            double one1 = Convert.ToDouble(dt_condition.Rows[0]["one"].ToString());
-            double zero1 = Convert.ToDouble(dt_condition.Rows[0]["zero"].ToString());
-
-            double three2 = Convert.ToDouble(dt_condition.Rows[1]["three"].ToString());
-            double one2 = Convert.ToDouble(dt_condition.Rows[1]["one"].ToString());
-            double zero2 = Convert.ToDouble(dt_condition.Rows[1]["zero"].ToString());
+     
 
             double result_min = -1000;
             double result_max = 0;
@@ -119,107 +177,44 @@ namespace WinCode
 
           
 
-            for (int i1 = 0; i1 <= count; i1++)
+            for (int b33 = 0; b33 <= count; b33++)
             {
-                for (int i2 = 0; i2 <= count - i1; i2++)
+                for (int b31 = 0; b31 <= count - b33; b31++)
                 {
-                    for (int i3 = 0; i3 <= count - i1 - i2; i3++)
+                    for (int b30 = 0; b30 <= count - b33 - b31; b30++)
                     {
-                        for (int i4 = 0; i4 <= count - i1 - i2 - i3; i4++)
+                        for (int b13 = 0; b13 <= count - b33 - b31 - b30; b13++)
                         {
-                            for (int i5 = 0; i5 <= count - i1 - i2 - i3 - i4; i5++)
+                            for (int b11 = 0; b11 <= count - b33 - b31 - b30 - b13; b11++)
                             {
-                                for (int i6 = 0; i6 <= count - i1 - i2 - i3 - i4 - i5; i6++)
+                                for (int b10 = 0; b10 <= count - b33 - b31 - b30 - b13 - b11; b10++)
                                 {
-                                    for (int i7 = 0; i7 <= count - i1 - i2 - i3 - i4 - i5 - i6; i7++)
+                                    for (int b03 = 0; b03 <= count - b33 - b31 - b30 - b13 - b11 - b10; b03++)
                                     {
-                                        for (int i8 = 0; i8 <= count - i1 - i2 - i3 - i4 - i5 - i6 - i7; i8++)
+                                        for (int b01 = 0; b01 <= count - b33 - b31 - b30 - b13 - b11 - b10 - b03; b01++)
                                         {
-                                            int i9 = count - i1 - i2 - i3 - i4 - i5 - i6 - i7 - i8;
+                                            int b00 = count - b33 - b31 - b30 - b13 - b11 - b10 - b03 - b01;
 
-                                            double r33 = 0;
-                                            double r31 = 0;
-                                            double r30 = 0;
-                                            double r13 = 0;
-                                            double r11 = 0;
-                                            double r10 = 0;
-                                            double r03 = 0;
-                                            double r01 = 0;
-                                            double r00 = 0;
-                                            if (three1 * three2 >= 1.88)
-                                            {
-                                                r33 = i1 * three1 * three2 + (i1 / 2.0) -count;
-                                            }
-                                            else
-                                            {
-                                                r33 = i1 * three1 * three2 * return_persent - count;
-                                            }
-                                            if (three1 * one2 >= 1.88)
-                                            {
-                                                r31 = i2 * three1 * one2 + (i2 / 2.0) - count;
-                                            }
-                                            else
-                                            {
-                                                r31 = i2 * three1 * one2 * return_persent - count;
-                                            }
-                                            if (three1 * zero2 >= 1.88)
-                                            {
-                                                r30 = i3 * three1 * zero2 + (i3 / 2.0) - count;
-                                            }
-                                            else
-                                            {
-                                                r30 = i3 * three1 * zero2 * return_persent - count;
-                                            }
-                                            if (one1 * three2 > 1.88)
-                                            {
-                                                r13 = i4 * one1 * three2 + (i4 / 2.0) -count;
-                                            }
-                                            else
-                                            {
-                                                r13 = i4 * one1 * three2 * return_persent - count;
-                                            }
-                                            if (one1 * one2 > 1.88)
-                                            {
-                                                r11 = i5 * one1 * one2 + (i5 / 2.0) -count;
-                                            }
-                                            else
-                                            {
-                                                r11 = i5 * one1 * one2 * return_persent - count;
-                                            }
-                                            if (one1 * zero2 > 1.88)
-                                            {
-                                                r10= i6 * one1 * zero2 + (i6 / 2.0)- count;
-                                            }
-                                            else
-                                            {
-                                                r10 = i6 * one1 * zero2 * return_persent - count;
-                                            } 
-                                            if (zero1 * three2 > 1.88)
-                                            {
-                                                r03 = i7 * zero1 * three2 + (i7 / 2.0) -count;
-                                            }
-                                            else
-                                            {
-                                                r03 = i7 * zero1 * three2 * return_persent - count;
-                                            }
-                                            if (zero1 * one2 > 1.88)
-                                            {
-                                                r01 = i8 * zero1 * one2 + (i8 / 2.0) -count;
-                                            }
-                                            else
-                                            {
-                                                r01 = i8 * zero1 * one2 * return_persent - count;
-                                            }
-                                            if (zero1 * zero2 > 1.88)
-                                            {
-                                                r00 = i9 * zero1 * zero2 + (i9 / 2.0)- count;
-                                            }
-                                            else
-                                            {
-                                                r00 = i9 * zero1 * zero2 * return_persent - count;
+                                            double r33 = 0; 
+                                            double r31 = 0; 
+                                            double r30 = 0; 
+                                            double r13 = 0; 
+                                            double r11 = 0; 
+                                            double r10 = 0; 
+                                            double r03 = 0; 
+                                            double r01 = 0; 
+                                            double r00 = 0; 
 
-                                            }
 
+                                            r33 = get_max_profit("33", b33, count, three1, three2);
+                                            r31 = get_max_profit("31", b31, count, three1, one2);
+                                            r30 = get_max_profit("30", b30, count, three1, zero2);
+                                            r13 = get_max_profit("33", b13, count, one1, three2);
+                                            r11 = get_max_profit("31", b11, count, one1, one2);
+                                            r10 = get_max_profit("30", b10, count, one1, zero2);
+                                            r03 = get_max_profit("03", b03, count, zero1, three2);
+                                            r01 = get_max_profit("01", b01, count, zero1, one2);
+                                            r00 = get_max_profit("00", b00, count, zero1, zero2); 
 
                                             double max = 0;
                                             double min = 99999999;
@@ -249,15 +244,15 @@ namespace WinCode
                                                 result_max = max;
 
 
-                                                result_b33 = i1;
-                                                result_b31 = i2;
-                                                result_b30 = i3;
-                                                result_b13 = i4;
-                                                result_b11 = i5;
-                                                result_b10 = i6;
-                                                result_b03 = i7;
-                                                result_b01 = i8;
-                                                result_b00 = i9;
+                                                result_b33 = b33;
+                                                result_b31 = b31;
+                                                result_b30 = b30;
+                                                result_b13 = b13;
+                                                result_b11 = b11;
+                                                result_b10 = b10;
+                                                result_b03 = b03;
+                                                result_b01 = b01;
+                                                result_b00 = b00;
 
 
                                                 result_r33 = r33;
@@ -290,7 +285,15 @@ namespace WinCode
             }
             DateTime dt_end = DateTime.Now;
 
-          return "bit count:"+count.ToString()+Environment.NewLine+
+          return start_time1+"      "+host1.PadRight(10, ' ')+client1.PadRight(10, ' ')+
+                 three1.ToString("f2").PadRight(10, ' ')+
+                 one1.ToString("f2").PadRight(10, ' ') +
+                 zero1.ToString("f2").PadRight(10, ' ') +Environment.NewLine+
+                 start_time2 + "      " + host2.PadRight(10, ' ') + client2.PadRight(10, ' ') +
+                 three2.ToString("f2").PadRight(10, ' ') +
+                 one2.ToString("f2").PadRight(10, ' ') +
+                 zero2.ToString("f2").PadRight(10, ' ') + Environment.NewLine +
+                "bit count:"+count.ToString()+Environment.NewLine+
                 "total count: " + step.ToString() + Environment.NewLine +
                 "use seconds: " + (dt_end - dt_start).TotalSeconds.ToString() + Environment.NewLine +
                 "return value: " + result_min.ToString("f4") + "~" + result_max.ToString("f4")+Environment.NewLine +
@@ -305,16 +308,32 @@ namespace WinCode
                 "B03: " + result_b03.ToString().PadRight(15, ' ') + 
                 "B01: " + result_b01.ToString().PadRight(15, ' ') + 
                 "B00: " + result_b00.ToString().PadRight(15, ' ') + Environment.NewLine +
-                "R33: " + result_r33.ToString("f4").PadRight(25, ' ') + 
-                "R31: " + result_r31.ToString("f4").PadRight(25, ' ') + 
-                "R30: " + result_r30.ToString("f4").PadRight(25, ' ') + Environment.NewLine +
-                "R13: " + result_r13.ToString("f4").PadRight(25, ' ') + 
-                "R11: " + result_r11.ToString("f4").PadRight(25, ' ') + 
-                "R10: " + result_r10.ToString("f4").PadRight(25, ' ') + Environment.NewLine +
-                "R03: " + result_r03.ToString("f4").PadRight(25, ' ') + 
-                "R01: " + result_r01.ToString("f4").PadRight(25, ' ') + 
-                "R00: " + result_r00.ToString("f4").PadRight(25, ' '); 
+                "R33: " + result_r33.ToString("f4").PadRight(15, ' ') + 
+                "R31: " + result_r31.ToString("f4").PadRight(15, ' ') + 
+                "R30: " + result_r30.ToString("f4").PadRight(15, ' ') + Environment.NewLine +
+                "R13: " + result_r13.ToString("f4").PadRight(15, ' ') + 
+                "R11: " + result_r11.ToString("f4").PadRight(15, ' ') + 
+                "R10: " + result_r10.ToString("f4").PadRight(15, ' ') + Environment.NewLine +
+                "R03: " + result_r03.ToString("f4").PadRight(15, ' ') + 
+                "R01: " + result_r01.ToString("f4").PadRight(15, ' ') + 
+                "R00: " + result_r00.ToString("f4").PadRight(15, ' '); 
             
+        }
+        public double get_max_profit(string type,int count,int total,double offer_a,double offer_b)
+        {
+            double temp=0;
+            double profit=-99999999;
+
+            temp = count * offer_a * offer_b - total;
+            if (temp > profit) profit = temp;
+
+            temp = count * offer_a * offer_b * 1.206 - total;
+            if (temp > profit) profit = temp;
+
+            //if (offer_a * offer_b * 1 >= 1.88) temp = count * offer_a * offer_b + (count * 0.5) - total;
+            //if (temp > profit) profit = temp;
+
+            return profit; 
         }
         public void compute_into_table()
         {

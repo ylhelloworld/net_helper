@@ -30,7 +30,7 @@ class TemplateHelper_Match
         DataTable dt = SQLServerHelper.get_table(sql);
 
         //Get Query Document 
-        string doc_id = DateTime.Now.ToString("yyyyMMddHHmmss") + DateTime.Now.Millisecond.ToString();
+        string doc_id = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + DateTime.Now.Millisecond.ToString();
         
 
         BsonDocument doc_insert = new BsonDocument();
