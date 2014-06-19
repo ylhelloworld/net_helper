@@ -1,0 +1,50 @@
+//选取n个的种类
+//====================================================================================================
+            string sql = "insert into temp_select  (select_count,data) values ('{0}','{1}')";
+            int step = 0;
+            for (int i1 = 1; i1 <= 9; i1++)
+            {
+                string sql1 = string.Format(sql,"1", i1.ToString());
+                SQLServerHelper.exe_sql(sql1); 
+                for (int i2 = i1 + 1; i2 <= 9; i2++)
+                {
+                    string sql2 = string.Format(sql,"2", i1.ToString()+i2.ToString());
+                    SQLServerHelper.exe_sql(sql2); 
+                    for (int i3 = i2 + 1; i3 <= 9; i3++)
+                    {
+                        string sql3 = string.Format(sql,"3", i1.ToString() + i2.ToString()+i3.ToString());
+                        SQLServerHelper.exe_sql(sql3);
+                        for (int i4 = i3 + 1; i4 <= 9; i4++)
+                        {
+                            string sql4 = string.Format(sql,"4", i1.ToString() + i2.ToString() + i3.ToString()+i4.ToString());
+                            SQLServerHelper.exe_sql(sql4);
+                            for (int i5 = i4 + 1; i5 <= 9; i5++)
+                            {
+                                string sql5 = string.Format(sql,"5", i1.ToString() + i2.ToString() + i3.ToString() + i4.ToString()+i5.ToString());
+                                SQLServerHelper.exe_sql(sql5);
+                                for (int i6 = i5 + 1; i6 <= 9; i6++)
+                                {
+                                    string sql6 = string.Format(sql,"6", i1.ToString() + i2.ToString() + i3.ToString() + i4.ToString() + i5.ToString()+i6.ToString());
+                                    SQLServerHelper.exe_sql(sql6);
+                                    for (int i7 = i6 + 1; i7 <= 9; i7++)
+                                    {
+                                        string sql7 = string.Format(sql,"7", i1.ToString() + i2.ToString() + i3.ToString() + i4.ToString() + i5.ToString() + i6.ToString()+i7.ToString());
+                                        SQLServerHelper.exe_sql(sql7);
+                                        for (int i8 = i7 + 1; i8 <= 9; i8++)
+                                        {
+                                            string sql8 = string.Format(sql,"8", i1.ToString() + i2.ToString() + i3.ToString() + i4.ToString() + i5.ToString() + i6.ToString() + i7.ToString()+i8.ToString());
+                                            SQLServerHelper.exe_sql(sql8);
+                                            for (int i9 = i8 + 1; i9 <= 9; i9++)
+                                            {
+                                                string sql9 = string.Format(sql,"9", i1.ToString() + i2.ToString() + i3.ToString() + i4.ToString() + i5.ToString() + i6.ToString() + i7.ToString() + i8.ToString()+i9.ToString());
+                                                SQLServerHelper.exe_sql(sql9);
+                                            } 
+                                        }
+                                    }
+
+                                }
+                            }
+                        }
+                    }
+                }
+            }
