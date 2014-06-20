@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.btn_create_group = new System.Windows.Forms.Button();
             this.btn_load = new System.Windows.Forms.Button();
             this.txt_count = new System.Windows.Forms.TextBox();
             this.btn_compute = new System.Windows.Forms.Button();
@@ -54,6 +55,7 @@
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox1.Controls.Add(this.btn_compute_group);
+            this.groupBox1.Controls.Add(this.btn_create_group);
             this.groupBox1.Controls.Add(this.btn_load);
             this.groupBox1.Controls.Add(this.txt_count);
             this.groupBox1.Controls.Add(this.btn_compute);
@@ -64,11 +66,21 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Operation";
             // 
+            // btn_create_group
+            // 
+            this.btn_create_group.Location = new System.Drawing.Point(975, 30);
+            this.btn_create_group.Name = "btn_create_group";
+            this.btn_create_group.Size = new System.Drawing.Size(97, 23);
+            this.btn_create_group.TabIndex = 3;
+            this.btn_create_group.Text = "Create Group";
+            this.btn_create_group.UseVisualStyleBackColor = true;
+            this.btn_create_group.Click += new System.EventHandler(this.btn_create_group_Click);
+            // 
             // btn_load
             // 
             this.btn_load.Location = new System.Drawing.Point(149, 28);
             this.btn_load.Name = "btn_load";
-            this.btn_load.Size = new System.Drawing.Size(75, 23);
+            this.btn_load.Size = new System.Drawing.Size(97, 23);
             this.btn_load.TabIndex = 2;
             this.btn_load.Text = "Load";
             this.btn_load.UseVisualStyleBackColor = true;
@@ -84,9 +96,9 @@
             // 
             // btn_compute
             // 
-            this.btn_compute.Location = new System.Drawing.Point(242, 28);
+            this.btn_compute.Location = new System.Drawing.Point(252, 28);
             this.btn_compute.Name = "btn_compute";
-            this.btn_compute.Size = new System.Drawing.Size(75, 23);
+            this.btn_compute.Size = new System.Drawing.Size(97, 23);
             this.btn_compute.TabIndex = 0;
             this.btn_compute.Text = "Compute";
             this.btn_compute.UseVisualStyleBackColor = true;
@@ -171,10 +183,10 @@
             // 
             // btn_compute_group
             // 
-            this.btn_compute_group.Location = new System.Drawing.Point(337, 27);
+            this.btn_compute_group.Location = new System.Drawing.Point(358, 28);
             this.btn_compute_group.Name = "btn_compute_group";
-            this.btn_compute_group.Size = new System.Drawing.Size(118, 23);
-            this.btn_compute_group.TabIndex = 3;
+            this.btn_compute_group.Size = new System.Drawing.Size(97, 23);
+            this.btn_compute_group.TabIndex = 4;
             this.btn_compute_group.Text = "Compute Group";
             this.btn_compute_group.UseVisualStyleBackColor = true;
             this.btn_compute_group.Click += new System.EventHandler(this.btn_compute_group_Click);
@@ -215,6 +227,7 @@
         private System.Windows.Forms.DataGridView dgv_condition;
         private System.Windows.Forms.TextBox txt_count;
         private System.Windows.Forms.Button btn_load;
+        private System.Windows.Forms.Button btn_create_group;
         private System.Windows.Forms.Button btn_compute_group;
     }
 }

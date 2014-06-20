@@ -1,50 +1,107 @@
-//选取n个的种类
-//====================================================================================================
-            string sql = "insert into temp_select  (select_count,data) values ('{0}','{1}')";
-            int step = 0;
-            for (int i1 = 1; i1 <= 9; i1++)
-            {
-                string sql1 = string.Format(sql,"1", i1.ToString());
-                SQLServerHelper.exe_sql(sql1); 
-                for (int i2 = i1 + 1; i2 <= 9; i2++)
+ insert into temp_group
+===========================================================================================
+ private void btn_compute_group_Click(object sender, EventArgs e)
+        {
+            
+            //All Group
+            int group1 = 0;
+            StringBuilder sb = new StringBuilder();
+            for (int i = 9; i <= 111111111; i++)
+            { 
+                string num = i.ToString();
+                int total = 0;
+                if (num.Contains("0") == false)
                 {
-                    string sql2 = string.Format(sql,"2", i1.ToString()+i2.ToString());
-                    SQLServerHelper.exe_sql(sql2); 
-                    for (int i3 = i2 + 1; i3 <= 9; i3++)
+                    for (int j = 0; j < num.Length; j++)
                     {
-                        string sql3 = string.Format(sql,"3", i1.ToString() + i2.ToString()+i3.ToString());
-                        SQLServerHelper.exe_sql(sql3);
-                        for (int i4 = i3 + 1; i4 <= 9; i4++)
-                        {
-                            string sql4 = string.Format(sql,"4", i1.ToString() + i2.ToString() + i3.ToString()+i4.ToString());
-                            SQLServerHelper.exe_sql(sql4);
-                            for (int i5 = i4 + 1; i5 <= 9; i5++)
-                            {
-                                string sql5 = string.Format(sql,"5", i1.ToString() + i2.ToString() + i3.ToString() + i4.ToString()+i5.ToString());
-                                SQLServerHelper.exe_sql(sql5);
-                                for (int i6 = i5 + 1; i6 <= 9; i6++)
-                                {
-                                    string sql6 = string.Format(sql,"6", i1.ToString() + i2.ToString() + i3.ToString() + i4.ToString() + i5.ToString()+i6.ToString());
-                                    SQLServerHelper.exe_sql(sql6);
-                                    for (int i7 = i6 + 1; i7 <= 9; i7++)
-                                    {
-                                        string sql7 = string.Format(sql,"7", i1.ToString() + i2.ToString() + i3.ToString() + i4.ToString() + i5.ToString() + i6.ToString()+i7.ToString());
-                                        SQLServerHelper.exe_sql(sql7);
-                                        for (int i8 = i7 + 1; i8 <= 9; i8++)
-                                        {
-                                            string sql8 = string.Format(sql,"8", i1.ToString() + i2.ToString() + i3.ToString() + i4.ToString() + i5.ToString() + i6.ToString() + i7.ToString()+i8.ToString());
-                                            SQLServerHelper.exe_sql(sql8);
-                                            for (int i9 = i8 + 1; i9 <= 9; i9++)
-                                            {
-                                                string sql9 = string.Format(sql,"9", i1.ToString() + i2.ToString() + i3.ToString() + i4.ToString() + i5.ToString() + i6.ToString() + i7.ToString() + i8.ToString()+i9.ToString());
-                                                SQLServerHelper.exe_sql(sql9);
-                                            } 
-                                        }
-                                    }
+                        total = total + Convert.ToInt32(num.Substring(j, 1));
+                    }
+                    if (total == 9)
+                    {
+                        group1 = group1 + 1;
+                        sb.Append(i.ToString() + Environment.NewLine);
 
-                                }
+
+                        //save all group
+                        int group2 = 0;
+                        int count = 0; 
+                        for (int j = 0; j < num.Length; j++)
+                        {
+                            group2 = group2 + 1; 
+                            string no = "";
+                            for(int k=1;k<=Convert.ToInt32(num.Substring(j,1));k++)
+                            {
+                                count = count + 1;
+                                no = no + count.ToString(); 
                             }
+                            string sql = "";
+                            string sql_temp = "insert into temp_group  (type,group1,group2,no) values ('{0}','{1}','{2}','{3}')";
+                            sql = string.Format(sql_temp, i.ToString(), group1.ToString(), group2.ToString(), no);
+                            SQLServerHelper.exe_sql(sql); 
                         }
+
+                       
+                         
                     }
                 }
             }
+            this.txt_compute.Text = sb.ToString();
+
+
+
+            MessageBox.Show(group1.ToString());
+        }
+
+intsert into temp_group2
+=================================================================================
+        private void btn_compute_group_Click(object sender, EventArgs e)
+        {
+
+            //All Group
+            int group1 = 0;
+            StringBuilder sb = new StringBuilder();
+            for (int i = 9; i <= 111111111; i++)
+            {
+                string num = i.ToString();
+                int total = 0;
+                if (num.Contains("0") == false)
+                {
+                    for (int j = 0; j < num.Length; j++)
+                    {
+                        total = total + Convert.ToInt32(num.Substring(j, 1));
+                    }
+                    if (total == 9)
+                    {
+
+                        group1 = group1 + 1;
+                        sb.Append(i.ToString() + Environment.NewLine);
+
+
+                        string[] info = new string[] { "", "", "", "", "", "", "", "", "" };
+                        //save all group 
+                        int count = 0;
+                        for (int j = 0; j < num.Length; j++)
+                        {
+                            string no = "";
+                            for (int k = 1; k <= Convert.ToInt32(num.Substring(j, 1)); k++)
+                            {
+                                count = count + 1;
+                                no = no + count.ToString();
+                            }
+                            info[j] = no;
+                        }
+                        string sql = "";
+                        string sql_temp = " insert into temp_group2  (type,group1,group2,group3,group4,group5,group6,group7,group8,group9) " +
+                                          " values ('{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}')";
+                        sql = string.Format(sql_temp, i.ToString(), info[0].ToString(), info[1].ToString(), info[2].ToString(), info[3].ToString(), info[4].ToString(),
+                                     info[5].ToString(), info[6].ToString(), info[7].ToString(), info[8].ToString());
+                        SQLServerHelper.exe_sql(sql);
+                    }
+                }
+            }
+            this.txt_compute.Text = sb.ToString();
+
+
+
+            MessageBox.Show(group1.ToString());
+        }

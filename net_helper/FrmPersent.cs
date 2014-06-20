@@ -150,52 +150,111 @@ namespace WinCode
 
         private void btn_compute_group_Click(object sender, EventArgs e)
         {
-            //A 1,1,1,1,1,1,1,1,1  
-            //B 1,1,1,1,1,1,1,2   
-            //C 1,1,1,1,1,1,3      
-            //D 1,1,1,1,1,4        
-            //E 1,1,1,1,5
-            //F 1,1,1,6
-            //G 1,1,7
-            //H 1,8
-            //I 9
-            //J 1,1,1,1,1,2,2  
-            //K 1,1,1,1,2,3 
-            //L 1,1,1,3,3
-            //M 1,1,1,2,2,2  
-            //N 1,1,4,3
-            //O 1,1,3,2,2 
-            //P 1,4,4
-            //Q 1,3,3,2
-            //R 1,4,2,2
-            //S 2,2,2,3
-            //T 2,3,4
-            //U 2,2,5
-            //V 2,7
-            //W 3,3,3
-            //X 3,6
-            //Y 4,5
+            this.txt_compute.Text = "";
 
-            string sql = "";
-           
-            string sql_temp = "insert into temp_group  (type,group1,group2,no) values ('{0}','{1}','{2}','{3}')";
-            
-            //A 1,1,1,1,1,1,1,1,1  
-            for (int i = 1; i <= 9; i++)
+            DataTable dt = new DataTable();
+            dt.Columns.Add("start_time");
+            dt.Columns.Add("host");
+            dt.Columns.Add("client");
+            dt.Columns.Add("three");
+            dt.Columns.Add("one");
+            dt.Columns.Add("zero");
+
+            foreach (DataGridViewRow row in dgv_condition.Rows)
             {
-                sql_temp = "insert into temp_group  (type,group1,group2,no) values ('{0}','{1}','{2}','{3}')";
-                sql = string.Format(sql_temp, "9-1", i.ToString(), "1", i.ToString());
-                SQLServerHelper.exe_sql(sql);
+                if (Convert.ToBoolean(row.Cells["selected"].Value) == true)
+                {
+                    DataRow row_new = dt.NewRow();
+                    row_new["start_time"] = row.Cells["start_time"].Value.ToString();
+                    row_new["host"] = row.Cells["host"].Value.ToString();
+                    row_new["client"] = row.Cells["client"].Value.ToString();
+                    row_new["three"] = row.Cells["three"].Value.ToString();
+                    row_new["one"] = row.Cells["one"].Value.ToString();
+                    row_new["zero"] = row.Cells["zero"].Value.ToString();
+                    dt.Rows.Add(row_new);
+                }
             }
-          
-            //B 1,1,1,1,1,1,1,2  
-            for (int i = 120000000; i <= 8900000000; i + 10000000)
+
+            if (dt.Rows.Count == 0) return;
+            for (int i = 0; i < dt.Rows.Count; i++)
             {
+                for (int j = i + 1; j < dt.Rows.Count; j++)
+                {
+                    this.txt_compute.Text = this.txt_compute.Text + Environment.NewLine + Environment.NewLine +
+                                            "-------------------------------------------------------------------------------" + Environment.NewLine +
+                                            str_compute_into_group(Convert.ToInt32(txt_count.Text),
+                                                         dt.Rows[i]["start_time"].ToString(),
+                                                         dt.Rows[i]["host"].ToString(),
+                                                         dt.Rows[i]["client"].ToString(),
+                                                         Convert.ToDouble(dt.Rows[i]["three"].ToString()),
+                                                         Convert.ToDouble(dt.Rows[i]["one"].ToString()),
+                                                         Convert.ToDouble(dt.Rows[i]["zero"].ToString()),
+                                                         dt.Rows[j]["start_time"].ToString(),
+                                                         dt.Rows[j]["host"].ToString(),
+                                                         dt.Rows[j]["client"].ToString(),
+                                                         Convert.ToDouble(dt.Rows[j]["three"].ToString()),
+                                                         Convert.ToDouble(dt.Rows[j]["one"].ToString()),
+                                                         Convert.ToDouble(dt.Rows[j]["zero"].ToString()));
+                    Application.DoEvents();
 
+                }
             }
-            
+            this.txt_compute.Text = this.txt_compute.Text + Environment.NewLine +
+                                    "-------------------------------------------------------------------------------";
+            MessageBox.Show("bingo!!!complete!!!");
+        }
 
-            MessageBox.Show("bingo!");
+
+        private void btn_create_group_Click(object sender, EventArgs e)
+        {
+
+            //All Group
+            int group1 = 0;
+            StringBuilder sb = new StringBuilder();
+            for (int i = 9; i <= 99; i++)
+            {
+                string num = i.ToString();
+                int total = 0;
+                if (num.Contains("0") == false)
+                {
+                    for (int j = 0; j < num.Length; j++)
+                    {
+                        total = total + Convert.ToInt32(num.Substring(j, 1));
+                    }
+                    if (total == 9)
+                    {
+
+                        group1 = group1 + 1;
+                        sb.Append(i.ToString() + Environment.NewLine);
+
+
+                        string[] info = new string[] { "", "", "", "", "", "", "", "", "" };
+                        //save all group 
+                        int count = 0;
+                        for (int j = 0; j < num.Length; j++)
+                        {
+                            string no = "";
+                            for (int k = 1; k <= Convert.ToInt32(num.Substring(j, 1)); k++)
+                            {
+                                count = count + 1;
+                                no = no + count.ToString();
+                            }
+                            info[j] = no;
+                        }
+                        string sql = "";
+                        string sql_temp = " insert into temp_group2  (type,group1,group2,group3,group4,group5,group6,group7,group8,group9) " +
+                                          " values ('{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}')";
+                        sql = string.Format(sql_temp, i.ToString(), info[0].ToString(), info[1].ToString(), info[2].ToString(), info[3].ToString(), info[4].ToString(),
+                                     info[5].ToString(), info[6].ToString(), info[7].ToString(), info[8].ToString());
+                        SQLServerHelper.exe_sql(sql);
+                    }
+                }
+            }
+            this.txt_compute.Text = sb.ToString();
+
+
+
+            MessageBox.Show(group1.ToString());
         }
 
         public string str_compute_into_group(int count,
@@ -203,13 +262,17 @@ namespace WinCode
                                              string start_time2, string host2, string client2, double three2, double one2, double zero2)
         {
 
+
             StringBuilder builder = new StringBuilder();
 
             DateTime dt_start = DateTime.Now;
             Int64 step = 0;
 
 
+            string sql = "select * from temp_group2";
+            DataTable dt_group = SQLServerHelper.get_table(sql);
 
+            int result_group_index = 0;
             double result_min = -1000;
             double result_max = 0;
             double result_b33 = 0;
@@ -252,6 +315,7 @@ namespace WinCode
                                         {
                                             int b00 = count - b33 - b31 - b30 - b13 - b11 - b10 - b03 - b01;
 
+
                                             double r33 = 0;
                                             double r31 = 0;
                                             double r30 = 0;
@@ -264,107 +328,87 @@ namespace WinCode
 
 
 
-           
+                                            r33 = b33 * three1 * three2;
+                                            r31 = b31 * three1 * one2;
+                                            r30 = b30 * three1 * zero2;
+                                            r13 = b13 * one1 * three2;
+                                            r11 = b11 * one1 * one2;
+                                            r10 = b10 * one1 * zero2;
+                                            r03 = b03 * zero1 * three2;
+                                            r01 = b01 * zero1 * one2;
+                                            r00 = b00 * zero1 * zero2;
 
+                                            int[] bits = new int[] { b33, b31, b30, b13, b11, b10, b03, b01, b00 };
+                                            double[] profits = new double[] { r33, r31, r30, r13, r11, r10, r03, r01, r00 };  
 
-
-
-                                            //for (int group1 = 0; group1 <= 9; group1++)
-                                            //{
-                                            //    for (int group2 = 0; group2 <= 9 - group1; group2++)
-                                            //    {
-                                            //        for (int group3 = 0; group3 <= 9 - group1 - group2; group3++)
-                                            //        {
-                                            //            for (int group4 = 0; group4 <= 9 - group1 - group2 - group3; group4++)
-                                            //            {
-                                            //                for (int group5 = 0; group5 <= 9 - group1 - group2 - group3 - group4; group5++)
-                                            //                {
-                                            //                    for (int group6 = 0; group6 <= 9 - group1 - group2 - group3 - group4 - group5; group6++)
-                                            //                    {
-                                            //                        for (int group7 = 0; group7 <= 9 - group1 - group2 - group3 - group4 - group5 - group6; group7++)
-                                            //                        {
-                                            //                            for (int group8 = 0; group8 <= 9 - group1 - group2 - group3 - group4 - group5 - group6 - group7; group8++)
-                                            //                            {
-                                            //                                int group9 = 9 - group1 - group2 - group3 - group4 - group5 - group6 - group7 - group8;
-
-                                            //                            }
-                                            //                        }
-                                            //                    }
-                                            //                }
-                                            //            } 
-                                            //        } 
-                                            //    } 
-                                            //}
-
-                                            r33 = get_max_profit("33", b33, count, three1, three2);
-                                            r31 = get_max_profit("31", b31, count, three1, one2);
-                                            r30 = get_max_profit("30", b30, count, three1, zero2);
-                                            r13 = get_max_profit("33", b13, count, one1, three2);
-                                            r11 = get_max_profit("31", b11, count, one1, one2);
-                                            r10 = get_max_profit("30", b10, count, one1, zero2);
-                                            r03 = get_max_profit("03", b03, count, zero1, three2);
-                                            r01 = get_max_profit("01", b01, count, zero1, one2);
-                                            r00 = get_max_profit("00", b00, count, zero1, zero2);
-
-                                            double[] bits = new double[] { b33, b31, b30, b13, b11, b10, b03, b01, b00 };
-                                            double[] profits = new double[] { r33, r31, r30, r13, r11, r10, r03, r01, r00 };
-                                            double[] group = new double[] { };
-
-                                            for (int i = 1; i <= 9; i++)
+ 
+                                            for (int i = 0; i < dt_group.Rows.Count; i++)
                                             {
+                                                double[] profits_group = new double[] { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+                                                for (int j = 1; j < dt_group.Columns.Count; j++)
+                                                {
+                                                    string group = dt_group.Rows[i][j].ToString();
+                                                    if (!string.IsNullOrEmpty(group))
+                                                    {
+                                                        int bid_group = 0; 
+                                                        for (int k = 0; k < group.Length; k++)
+                                                        {
+                                                            int index = Convert.ToInt32(group.Substring(k, 1));
+                                                            bid_group = bid_group + bits[index - 1];
+                                                        }
+                                                        for (int k = 0; k < group.Length; k++)
+                                                        {
+                                                            int index = Convert.ToInt32(group.Substring(k, 1));
+                                                            profits_group[index - 1] = profits[index - 1] - count;
+                                                            if(bid_group>0)
+                                                            {
+                                                                if ((profits[index - 1] - bid_group) / bid_group >= 1.88) profits_group[index - 1] = profits[index - 1] + bid_group / 2.0 - count;
+                                                            }
+                                                        }
+                                                    }
+                                                }
+
+                                                double max = 0;
+                                                double min = 99999999;
+                                                for (int l = 0; l < profits_group.Length; l++)
+                                                {
+                                                    if (profits_group[l] < min) min = profits_group[l];
+                                                    if (profits_group[l] > max) max = profits_group[l];
+                                                }
+                                                if (min > result_min)
+                                                {
+
+                                                    result_group_index = i;
+                                                    result_min = min;
+                                                    result_max = max;
+
+
+                                                    result_b33 = b33;
+                                                    result_b31 = b31;
+                                                    result_b30 = b30;
+                                                    result_b13 = b13;
+                                                    result_b11 = b11;
+                                                    result_b10 = b10;
+                                                    result_b03 = b03;
+                                                    result_b01 = b01;
+                                                    result_b00 = b00;
+
+
+                                                    result_r33 = profits_group[0];
+                                                    result_r31 = profits_group[1];
+                                                    result_r30 = profits_group[2];
+                                                    result_r13 = profits_group[3];
+                                                    result_r11 = profits_group[4];
+                                                    result_r10 = profits_group[5];
+                                                    result_r03 = profits_group[6];
+                                                    result_r01 = profits_group[7];
+                                                    result_r00 = profits_group[8];
+                                                }
+                                                step = step + 1; 
 
                                             }
-                                            double max = 0;
-                                            double min = 99999999;
-
-                                            if (r33 > max) max = r33;
-                                            if (r33 < min) min = r33;
-                                            if (r31 > max) max = r31;
-                                            if (r31 < min) min = r31;
-                                            if (r30 > max) max = r30;
-                                            if (r30 < min) min = r30;
-                                            if (r13 > max) max = r13;
-                                            if (r13 < min) min = r13;
-                                            if (r11 > max) max = r11;
-                                            if (r11 < min) min = r11;
-                                            if (r10 > max) max = r10;
-                                            if (r10 < min) min = r10;
-                                            if (r03 > max) max = r03;
-                                            if (r03 < min) min = r03;
-                                            if (r01 > max) max = r01;
-                                            if (r01 < min) min = r01;
-                                            if (r00 > max) max = r00;
-                                            if (r00 < min) min = r00;
-
-                                            if (min > result_min)
-                                            {
-                                                result_min = min;
-                                                result_max = max;
 
 
-                                                result_b33 = b33;
-                                                result_b31 = b31;
-                                                result_b30 = b30;
-                                                result_b13 = b13;
-                                                result_b11 = b11;
-                                                result_b10 = b10;
-                                                result_b03 = b03;
-                                                result_b01 = b01;
-                                                result_b00 = b00;
-
-
-                                                result_r33 = r33;
-                                                result_r31 = r31;
-                                                result_r30 = r30;
-                                                result_r13 = r13;
-                                                result_r11 = r11;
-                                                result_r10 = r10;
-                                                result_r03 = r03;
-                                                result_r01 = r01;
-                                                result_r00 = r00;
-                                            }
-
-                                            step = step + 1;
                                         }
 
                                     }
@@ -381,8 +425,18 @@ namespace WinCode
                 }
 
             }
-            DateTime dt_end = DateTime.Now;
 
+            string group_info = "";
+            for (int i = 1; i < dt_group.Columns.Count; i++)
+            {
+                if (!string.IsNullOrEmpty(dt_group.Rows[result_group_index][i].ToString()))
+                {
+                    group_info = group_info + "Group " + i.ToString() + ":" + dt_group.Rows[result_group_index][i].ToString() + "  ";
+                }
+
+            }
+
+            DateTime dt_end = DateTime.Now;
             return start_time1 + "      " + host1.PadRight(10, ' ') + client1.PadRight(10, ' ') +
                    three1.ToString("f2").PadRight(10, ' ') +
                    one1.ToString("f2").PadRight(10, ' ') +
@@ -396,6 +450,7 @@ namespace WinCode
                   "use seconds: " + (dt_end - dt_start).TotalSeconds.ToString() + Environment.NewLine +
                   "return value: " + result_min.ToString("f4") + "~" + result_max.ToString("f4") + Environment.NewLine +
                   "return persent: " + (result_min / count * 100).ToString("f6") + "%" + Environment.NewLine +
+                  "group information: " + group_info + Environment.NewLine +
                   "detail infomation:" + Environment.NewLine +
                   "B33: " + result_b33.ToString().PadRight(15, ' ') +
                   "B31: " + result_b31.ToString().PadRight(15, ' ') +
@@ -603,212 +658,16 @@ namespace WinCode
             temp = count * offer_a * offer_b - total;
             if (temp > profit) profit = temp;
 
-            temp = count * offer_a * offer_b * 1.206 - total;
-            if (temp > profit) profit = temp;
+            //temp = count * offer_a * offer_b * 1.206 - total;
+            //if (temp > profit) profit = temp;
 
             //if (offer_a * offer_b * 1 >= 1.88) temp = count * offer_a * offer_b + (count * 0.5) - total;
             //if (temp > profit) profit = temp;
 
             return profit;
-        }
-        public void compute_into_table()
-        {
-
-            StringBuilder builder = new StringBuilder();
-            DataTable dt = new DataTable();
-            dt.Columns.Add("B33");
-            dt.Columns.Add("B31");
-            dt.Columns.Add("B30");
-            dt.Columns.Add("B13");
-            dt.Columns.Add("B11");
-            dt.Columns.Add("B10");
-            dt.Columns.Add("B03");
-            dt.Columns.Add("B01");
-            dt.Columns.Add("B00");
-            dt.Columns.Add("R33");
-            dt.Columns.Add("R31");
-            dt.Columns.Add("R30");
-            dt.Columns.Add("R13");
-            dt.Columns.Add("R11");
-            dt.Columns.Add("R10");
-            dt.Columns.Add("R03");
-            dt.Columns.Add("R01");
-            dt.Columns.Add("R00");
-            dt.Columns.Add("min", typeof(double));
-            dt.Columns.Add("max", typeof(double));
-
-            //10 43758 1
-            //12 125970 3
-            //13 203490 6
-            //14 319770 10
-            //15 490314 15
-            //16 735471 22
-            //17 1081575 33
-            //18 Out of Memory
-            DateTime dt_start = DateTime.Now;
-            int count = 17;
-            int step = 0;
-
-            double three1 = Convert.ToDouble(dt_condition.Rows[0]["three"].ToString());
-            double one1 = Convert.ToDouble(dt_condition.Rows[0]["one"].ToString());
-            double zero1 = Convert.ToDouble(dt_condition.Rows[0]["zero"].ToString());
-
-            double three2 = Convert.ToDouble(dt_condition.Rows[1]["three"].ToString());
-            double one2 = Convert.ToDouble(dt_condition.Rows[1]["one"].ToString());
-            double zero2 = Convert.ToDouble(dt_condition.Rows[1]["zero"].ToString());
-            double all_min = 999999999;
-            double all_min_max = 999999999;
-
-            for (int i1 = 0; i1 <= count; i1++)
-            {
-                for (int i2 = 0; i2 <= count - i1; i2++)
-                {
-                    for (int i3 = 0; i3 <= count - i1 - i2; i3++)
-                    {
-                        for (int i4 = 0; i4 <= count - i1 - i2 - i3; i4++)
-                        {
-                            for (int i5 = 0; i5 <= count - i1 - i2 - i3 - i4; i5++)
-                            {
-                                for (int i6 = 0; i6 <= count - i1 - i2 - i3 - i4 - i5; i6++)
-                                {
-                                    for (int i7 = 0; i7 <= count - i1 - i2 - i3 - i4 - i5 - i6; i7++)
-                                    {
-                                        for (int i8 = 0; i8 <= count - i1 - i2 - i3 - i4 - i5 - i6 - i7; i8++)
-                                        {
-                                            int i9 = count - i1 - i2 - i3 - i4 - i5 - i6 - i7 - i8;
-                                            DataRow row_new = dt.NewRow();
-
-                                            row_new["B33"] = i1;
-                                            row_new["B31"] = i2;
-                                            row_new["B30"] = i3;
-                                            row_new["B13"] = i4;
-                                            row_new["B11"] = i5;
-                                            row_new["B10"] = i6;
-                                            row_new["B03"] = i7;
-                                            row_new["B01"] = i8;
-                                            row_new["B00"] = i9;
-
-                                            if (three1 * three2 >= 1.88)
-                                            {
-                                                row_new["R33"] = i1 * three1 * three2 - count / 2;
-                                            }
-                                            else
-                                            {
-                                                row_new["R33"] = i1 * three1 * three2 - count;
-                                            }
-                                            if (three1 * one2 >= 1.88)
-                                            {
-                                                row_new["R31"] = i2 * three1 * one2 - count / 2;
-                                            }
-                                            else
-                                            {
-                                                row_new["R31"] = i2 * three1 * one2 - count;
-                                            }
-                                            if (three1 * zero2 >= 1.88)
-                                            {
-                                                row_new["R30"] = i3 * three1 * zero2 - count / 2;
-                                            }
-                                            else
-                                            {
-                                                row_new["R30"] = i3 * three1 * zero2 - count;
-                                            }
-                                            if (one1 * three2 > 1.88)
-                                            {
-                                                row_new["R13"] = i4 * one1 * three2 - count / 2;
-                                            }
-                                            else
-                                            {
-                                                row_new["R13"] = i4 * one1 * three2 - count;
-                                            }
-                                            if (one1 * one2 > 1.88)
-                                            {
-                                                row_new["R11"] = i5 * one1 * one2 - count / 2;
-                                            }
-                                            else
-                                            {
-                                                row_new["R11"] = i5 * one1 * one2 - count;
-                                            }
-                                            if (one1 * zero2 > 1.88)
-                                            {
-                                                row_new["R10"] = i6 * one1 * zero2 - count / 2;
-                                            }
-                                            else
-                                            {
-                                                row_new["R10"] = i6 * one1 * zero2 - count;
-                                            }
-                                            if (zero1 * three2 > 1.88)
-                                            {
-                                                row_new["R03"] = i7 * zero1 * three2 - count / 2;
-                                            }
-                                            else
-                                            {
-                                                row_new["R03"] = i7 * zero1 * three2 - count;
-                                            }
-                                            if (zero1 * one2 > 1.88)
-                                            {
-                                                row_new["R01"] = i8 * zero1 * one2 - count / 2;
-                                            }
-                                            else
-                                            {
-                                                row_new["R01"] = i8 * zero1 * one2 - count;
-                                            }
-                                            if (zero1 * zero2 > 1.88)
-                                            {
-                                                row_new["R00"] = i9 * zero1 * zero2 - count / 2;
-                                            }
-                                            else
-                                            {
-                                                row_new["R00"] = i9 * zero1 * zero2 - count;
-
-                                            }
+        } 
 
 
-                                            double max = 0;
-                                            double min = 99999999;
-                                            string[] str_result = new string[] { "R33", "R31", "R30", "R13", "R11", "R10", "R03", "R01", "R00" };
-                                            foreach (string result in str_result)
-                                            {
-                                                double value = Convert.ToDouble(row_new[result].ToString());
-                                                if (value > max)
-                                                {
-                                                    max = value;
-                                                }
-                                                if (value < min)
-                                                {
-                                                    min = value;
-                                                }
-                                            }
-                                            row_new["max"] = max;
-                                            row_new["min"] = min;
-
-                                            dt.Rows.Add(row_new);
-                                            step = step + 1;
-                                        }
-
-                                    }
-
-                                }
-
-                            }
-
-                        }
-
-                    }
-
-
-                }
-
-            }
-            DateTime dt_end = DateTime.Now;
-
-            this.txt_compute.Text = "total count: " + dt.Rows.Count + Environment.NewLine +
-                                    "total seconds: " + (dt_end - dt_start).Seconds.ToString() + Environment.NewLine +
-                                    "min value: " + all_min.ToString() + "~" + all_min_max.ToString();
-            this.dgv_result.DataSource = dt;
-            MessageBox.Show(step.ToString());
-        }
-
-     
 
     }
 }
