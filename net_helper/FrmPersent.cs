@@ -8,11 +8,15 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
+using MongoDB.Bson;
+using MongoDB.Driver;
+
 namespace WinCode
 {
     public partial class FrmPersent : Form
     {
         DataTable dt_condition = new DataTable();
+        DataTable dt_group = new DataTable();
         public FrmPersent()
         {
             InitializeComponent();
@@ -22,196 +26,178 @@ namespace WinCode
         {
             bind_data();
         }
-
         private void btn_load_Click(object sender, EventArgs e)
         {
             bind_data();
+        }
+        private void btn_compute_Click(object sender, EventArgs e)
+        {
+            this.txt_compute.Text = "";
+            int start_count = Convert.ToInt16(txt_count_start.Text);
+            int end_count = Convert.ToInt16(txt_count_start.Text);
+            if (!string.IsNullOrEmpty(txt_count_end.Text)) end_count = Convert.ToInt16(txt_count_end.Text);
+
+            DataTable dt = new DataTable();
+            dt.Columns.Add("start_time");
+            dt.Columns.Add("host");
+            dt.Columns.Add("client");
+            dt.Columns.Add("three");
+            dt.Columns.Add("one");
+            dt.Columns.Add("zero");
+
+            foreach (DataGridViewRow row in dgv_condition.Rows)
+            {
+                if (Convert.ToBoolean(row.Cells["selected"].Value) == true)
+                {
+                    DataRow row_new = dt.NewRow();
+                    row_new["start_time"] = row.Cells["start_time"].Value.ToString();
+                    row_new["host"] = row.Cells["host"].Value.ToString();
+                    row_new["client"] = row.Cells["client"].Value.ToString();
+                    row_new["three"] = row.Cells["three"].Value.ToString();
+                    row_new["one"] = row.Cells["one"].Value.ToString();
+                    row_new["zero"] = row.Cells["zero"].Value.ToString();
+                    dt.Rows.Add(row_new);
+                }
+            }
+
+            if (dt.Rows.Count == 0) return;
+            for (int i = 0; i < dt.Rows.Count; i++)
+            {
+                for (int j = i + 1; j < dt.Rows.Count; j++)
+                {
+                    for (int count = start_count; count <= end_count; count++)
+                    {
+                        BsonDocument doc_normal = get_doc_compute_normal(count,
+                                                                      dt.Rows[i]["start_time"].ToString(),
+                                                                      dt.Rows[i]["host"].ToString(),
+                                                                      dt.Rows[i]["client"].ToString(),
+                                                                      Convert.ToDouble(dt.Rows[i]["three"].ToString()),
+                                                                      Convert.ToDouble(dt.Rows[i]["one"].ToString()),
+                                                                      Convert.ToDouble(dt.Rows[i]["zero"].ToString()),
+                                                                      dt.Rows[j]["start_time"].ToString(),
+                                                                      dt.Rows[j]["host"].ToString(),
+                                                                      dt.Rows[j]["client"].ToString(),
+                                                                      Convert.ToDouble(dt.Rows[j]["three"].ToString()),
+                                                                      Convert.ToDouble(dt.Rows[j]["one"].ToString()),
+                                                                      Convert.ToDouble(dt.Rows[j]["zero"].ToString()));
+                        BsonDocument doc_group = get_doc_compute_group(doc_normal);
+                        this.txt_compute.Text = this.txt_compute.Text + Environment.NewLine + Environment.NewLine +
+                                                "-------------------------------------------------------------------------------" + Environment.NewLine +
+                                                get_info_from_doc(doc_normal) + Environment.NewLine + Environment.NewLine + get_info_from_doc(doc_group);
+                        Application.DoEvents();
+                    }
+
+                }
+            }
+            this.txt_compute.Text = this.txt_compute.Text + Environment.NewLine +
+                                    "-------------------------------------------------------------------------------";
+            this.tab.SelectTab(1);
+
+            MessageBox.Show("bingo!!!complete!!!");
+        }
+        private void btn_compute_second_Click(object sender, EventArgs e)
+        {
+
+            BsonDocument doc_first = MongoHelper.query_bson_from_string("match", "{'doc_id':'20140622165403514'}");
+            this.txt_compute.Text = "";
+            int start_count = Convert.ToInt16(txt_count_start.Text);
+            int end_count = Convert.ToInt16(txt_count_start.Text);
+            if (!string.IsNullOrEmpty(txt_count_end.Text)) end_count = Convert.ToInt16(txt_count_end.Text);
+
+            DataTable dt = new DataTable();
+            dt.Columns.Add("start_time");
+            dt.Columns.Add("host");
+            dt.Columns.Add("client");
+            dt.Columns.Add("three");
+            dt.Columns.Add("one");
+            dt.Columns.Add("zero");
+
+            foreach (DataGridViewRow row in dgv_condition.Rows)
+            {
+                if (Convert.ToBoolean(row.Cells["selected"].Value) == true)
+                {
+                    DataRow row_new = dt.NewRow();
+                    row_new["start_time"] = row.Cells["start_time"].Value.ToString();
+                    row_new["host"] = row.Cells["host"].Value.ToString();
+                    row_new["client"] = row.Cells["client"].Value.ToString();
+                    row_new["three"] = row.Cells["three"].Value.ToString();
+                    row_new["one"] = row.Cells["one"].Value.ToString();
+                    row_new["zero"] = row.Cells["zero"].Value.ToString();
+                    dt.Rows.Add(row_new);
+                }
+            }
+
+            if (dt.Rows.Count == 0) return;
+            for (int i = 0; i < dt.Rows.Count; i++)
+            {
+                for (int j = i + 1; j < dt.Rows.Count; j++)
+                {
+                    for (int count = start_count; count <= end_count; count++)
+                    {
+                        BsonDocument doc_temp = doc_first;
+
+                        for (int more = 1; more <= 1000; more++)
+                        {
+                            BsonDocument doc_normal = get_doc_compute_normal_second(doc_temp, count,
+                                                                          dt.Rows[i]["start_time"].ToString(),
+                                                                          dt.Rows[i]["host"].ToString(),
+                                                                          dt.Rows[i]["client"].ToString(),
+                                                                          Convert.ToDouble(dt.Rows[i]["three"].ToString()),
+                                                                          Convert.ToDouble(dt.Rows[i]["one"].ToString()),
+                                                                          Convert.ToDouble(dt.Rows[i]["zero"].ToString()),
+                                                                          dt.Rows[j]["start_time"].ToString(),
+                                                                          dt.Rows[j]["host"].ToString(),
+                                                                          dt.Rows[j]["client"].ToString(),
+                                                                          Convert.ToDouble(dt.Rows[j]["three"].ToString()),
+                                                                          Convert.ToDouble(dt.Rows[j]["one"].ToString()),
+                                                                          Convert.ToDouble(dt.Rows[j]["zero"].ToString()));
+                             doc_temp = get_doc_compute_group_second(doc_temp, doc_normal);
+                             doc_temp["bid_count"] =( Convert.ToInt16(doc_temp["bid_count"].ToString()) + count * more).ToString();
+                            this.txt_compute.Text = this.txt_compute.Text + Environment.NewLine + Environment.NewLine +
+                                                    "-------------------------------------------------------------------------------" + Environment.NewLine +
+                                                    get_info_from_doc(doc_normal) + Environment.NewLine + Environment.NewLine + get_info_from_doc(doc_temp);
+                            Application.DoEvents();
+                        }
+                    }
+
+                }
+            }
+            this.txt_compute.Text = this.txt_compute.Text + Environment.NewLine +
+                                    "-------------------------------------------------------------------------------";
+            this.tab.SelectTab(1);
+
+            MessageBox.Show("bingo!!!complete!!!");
+        }
+        private void btn_find_result_Click(object sender, EventArgs e)
+        {
+
+            StringBuilder sb = new StringBuilder();
+            MongoCursor<BsonDocument> cursor = MongoHelper.query_cursor_from_string("match", this.txt_find_condition.Text);
+            if (cursor.Count() != 0)
+            {
+                foreach (BsonDocument doc in cursor)
+                {
+                    sb.Append(Environment.NewLine);
+                    sb.Append("-------------------------------------------------------------------------------" + Environment.NewLine);
+                    sb.Append(get_info_from_doc(doc));
+                }
+                sb.Append(Environment.NewLine + "-------------------------------------------------------------------------------");
+                this.txt_compute.Text = sb.ToString();
+                this.tab.SelectTab(1);
+            }
         }
         private void txt_compute_TextChanged(object sender, EventArgs e)
         {
             this.txt_compute.SelectionStart = this.txt_compute.TextLength;
             this.txt_compute.ScrollToCaret();
         }
-
-        public void bind_data()
-        {
-
-            DataTable dt_condition = new DataTable();
-
-            DataColumn col = new DataColumn();
-            col.DataType = Type.GetType("System.Boolean");
-            col.ColumnName = "selected";
-            col.DefaultValue = false;
-            dt_condition.Columns.Add(col);
-            dt_condition.Columns.Add("start_time");
-            dt_condition.Columns.Add("host");
-            dt_condition.Columns.Add("client");
-            dt_condition.Columns.Add("three");
-            dt_condition.Columns.Add("one");
-            dt_condition.Columns.Add("zero");
-
-
-
-            string sql = " select *" +
-                        " from win" +
-                        " where start_time>'{0}'" +
-                        " order by start_time,website,host,client,timespan";
-            sql = string.Format(sql, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
-
-            DataTable dt = SQLServerHelper.get_table(sql);
-
-            for (int i = 0; i < dt.Rows.Count; i++)
-            {
-                DataRow row = dt_condition.NewRow();
-                if (i == 0)
-                {
-                    row["start_time"] = dt.Rows[i]["start_time"].ToString();
-                    row["host"] = dt.Rows[i]["host"].ToString();
-                    row["client"] = dt.Rows[i]["client"].ToString();
-                    row["three"] = dt.Rows[i]["three"].ToString();
-                    row["one"] = dt.Rows[i]["one"].ToString();
-                    row["zero"] = dt.Rows[i]["zero"].ToString();
-                    dt_condition.Rows.Add(row);
-                }
-                else
-                {
-                    if (dt.Rows[i]["start_time"].ToString() != dt.Rows[i - 1]["start_time"].ToString() ||
-                       dt.Rows[i]["host"].ToString() != dt.Rows[i - 1]["host"].ToString() ||
-                       dt.Rows[i]["client"].ToString() != dt.Rows[i - 1]["client"].ToString())
-                    {
-                        row["start_time"] = dt.Rows[i]["start_time"].ToString();
-                        row["host"] = dt.Rows[i]["host"].ToString();
-                        row["client"] = dt.Rows[i]["client"].ToString();
-                        row["three"] = dt.Rows[i]["three"].ToString();
-                        row["one"] = dt.Rows[i]["one"].ToString();
-                        row["zero"] = dt.Rows[i]["zero"].ToString();
-                        dt_condition.Rows.Add(row);
-                    }
-                }
-            }
-            this.dgv_condition.DataSource = dt_condition;
-        }
-
-        private void btn_compute_Click(object sender, EventArgs e)
-        {
-            this.txt_compute.Text = "";
-
-            DataTable dt = new DataTable();
-            dt.Columns.Add("start_time");
-            dt.Columns.Add("host");
-            dt.Columns.Add("client");
-            dt.Columns.Add("three");
-            dt.Columns.Add("one");
-            dt.Columns.Add("zero");
-
-            foreach (DataGridViewRow row in dgv_condition.Rows)
-            {
-                if (Convert.ToBoolean(row.Cells["selected"].Value) == true)
-                {
-                    DataRow row_new = dt.NewRow();
-                    row_new["start_time"] = row.Cells["start_time"].Value.ToString();
-                    row_new["host"] = row.Cells["host"].Value.ToString();
-                    row_new["client"] = row.Cells["client"].Value.ToString();
-                    row_new["three"] = row.Cells["three"].Value.ToString();
-                    row_new["one"] = row.Cells["one"].Value.ToString();
-                    row_new["zero"] = row.Cells["zero"].Value.ToString();
-                    dt.Rows.Add(row_new);
-                }
-            }
-
-            if (dt.Rows.Count == 0) return;
-            for (int i = 0; i < dt.Rows.Count; i++)
-            {
-                for (int j = i + 1; j < dt.Rows.Count; j++)
-                {
-                    this.txt_compute.Text = this.txt_compute.Text + Environment.NewLine + Environment.NewLine +
-                                            "-------------------------------------------------------------------------------" + Environment.NewLine +
-                                            str_compute(Convert.ToInt32(txt_count.Text),
-                                                         dt.Rows[i]["start_time"].ToString(),
-                                                         dt.Rows[i]["host"].ToString(),
-                                                         dt.Rows[i]["client"].ToString(),
-                                                         Convert.ToDouble(dt.Rows[i]["three"].ToString()),
-                                                         Convert.ToDouble(dt.Rows[i]["one"].ToString()),
-                                                         Convert.ToDouble(dt.Rows[i]["zero"].ToString()),
-                                                         dt.Rows[j]["start_time"].ToString(),
-                                                         dt.Rows[j]["host"].ToString(),
-                                                         dt.Rows[j]["client"].ToString(),
-                                                         Convert.ToDouble(dt.Rows[j]["three"].ToString()),
-                                                         Convert.ToDouble(dt.Rows[j]["one"].ToString()),
-                                                         Convert.ToDouble(dt.Rows[j]["zero"].ToString()));
-                    Application.DoEvents();
-
-                }
-            }
-            this.txt_compute.Text = this.txt_compute.Text + Environment.NewLine +
-                                    "-------------------------------------------------------------------------------";
-            MessageBox.Show("bingo!!!complete!!!");
-        }
-
-        private void btn_compute_group_Click(object sender, EventArgs e)
-        {
-            this.txt_compute.Text = "";
-
-            DataTable dt = new DataTable();
-            dt.Columns.Add("start_time");
-            dt.Columns.Add("host");
-            dt.Columns.Add("client");
-            dt.Columns.Add("three");
-            dt.Columns.Add("one");
-            dt.Columns.Add("zero");
-
-            foreach (DataGridViewRow row in dgv_condition.Rows)
-            {
-                if (Convert.ToBoolean(row.Cells["selected"].Value) == true)
-                {
-                    DataRow row_new = dt.NewRow();
-                    row_new["start_time"] = row.Cells["start_time"].Value.ToString();
-                    row_new["host"] = row.Cells["host"].Value.ToString();
-                    row_new["client"] = row.Cells["client"].Value.ToString();
-                    row_new["three"] = row.Cells["three"].Value.ToString();
-                    row_new["one"] = row.Cells["one"].Value.ToString();
-                    row_new["zero"] = row.Cells["zero"].Value.ToString();
-                    dt.Rows.Add(row_new);
-                }
-            }
-
-            if (dt.Rows.Count == 0) return;
-            for (int i = 0; i < dt.Rows.Count; i++)
-            {
-                for (int j = i + 1; j < dt.Rows.Count; j++)
-                {
-                    this.txt_compute.Text = this.txt_compute.Text + Environment.NewLine + Environment.NewLine +
-                                            "-------------------------------------------------------------------------------" + Environment.NewLine +
-                                            str_compute_into_group(Convert.ToInt32(txt_count.Text),
-                                                         dt.Rows[i]["start_time"].ToString(),
-                                                         dt.Rows[i]["host"].ToString(),
-                                                         dt.Rows[i]["client"].ToString(),
-                                                         Convert.ToDouble(dt.Rows[i]["three"].ToString()),
-                                                         Convert.ToDouble(dt.Rows[i]["one"].ToString()),
-                                                         Convert.ToDouble(dt.Rows[i]["zero"].ToString()),
-                                                         dt.Rows[j]["start_time"].ToString(),
-                                                         dt.Rows[j]["host"].ToString(),
-                                                         dt.Rows[j]["client"].ToString(),
-                                                         Convert.ToDouble(dt.Rows[j]["three"].ToString()),
-                                                         Convert.ToDouble(dt.Rows[j]["one"].ToString()),
-                                                         Convert.ToDouble(dt.Rows[j]["zero"].ToString()));
-                    Application.DoEvents();
-
-                }
-            }
-            this.txt_compute.Text = this.txt_compute.Text + Environment.NewLine +
-                                    "-------------------------------------------------------------------------------";
-            MessageBox.Show("bingo!!!complete!!!");
-        }
-
-
         private void btn_create_group_Click(object sender, EventArgs e)
         {
 
             //All Group
             int group1 = 0;
             StringBuilder sb = new StringBuilder();
-            for (int i = 9; i <= 99; i++)
+            for (int i = 9; i <= 111111111; i++)
             {
                 string num = i.ToString();
                 int total = 0;
@@ -257,222 +243,69 @@ namespace WinCode
             MessageBox.Show(group1.ToString());
         }
 
-        public string str_compute_into_group(int count,
-                                             string start_time1, string host1, string client1, double three1, double one1, double zero1,
-                                             string start_time2, string host2, string client2, double three2, double one2, double zero2)
+
+        public void bind_data()
         {
-
-
-            StringBuilder builder = new StringBuilder();
-
-            DateTime dt_start = DateTime.Now;
-            Int64 step = 0;
-
-
+            //bind group
             string sql = "select * from temp_group2";
-            DataTable dt_group = SQLServerHelper.get_table(sql);
+            dt_group = SQLServerHelper.get_table(sql);
 
-            int result_group_index = 0;
-            double result_min = -1000;
-            double result_max = 0;
-            double result_b33 = 0;
-            double result_b31 = 0;
-            double result_b30 = 0;
-            double result_b13 = 0;
-            double result_b11 = 0;
-            double result_b10 = 0;
-            double result_b03 = 0;
-            double result_b01 = 0;
-            double result_b00 = 0;
-            double result_r33 = 0;
-            double result_r31 = 0;
-            double result_r30 = 0;
-            double result_r13 = 0;
-            double result_r11 = 0;
-            double result_r10 = 0;
-            double result_r03 = 0;
-            double result_r01 = 0;
-            double result_r00 = 0;
+            DataTable dt_condition = new DataTable();
+
+            DataColumn col = new DataColumn();
+            col.DataType = Type.GetType("System.Boolean");
+            col.ColumnName = "selected";
+            col.DefaultValue = false;
+            dt_condition.Columns.Add(col);
+            dt_condition.Columns.Add("start_time");
+            dt_condition.Columns.Add("host");
+            dt_condition.Columns.Add("client");
+            dt_condition.Columns.Add("three");
+            dt_condition.Columns.Add("one");
+            dt_condition.Columns.Add("zero");
 
 
 
+            sql = " select *" +
+                   " from win" +
+                   " where start_time>'{0}'" +
+                   " order by start_time,website,host,client,timespan";
+            sql = string.Format(sql, DateTime.Now.AddDays(-10).ToString("yyyy-MM-dd HH:mm:ss"));
 
-            for (int b33 = 0; b33 <= count; b33++)
+            DataTable dt = SQLServerHelper.get_table(sql);
+
+            for (int i = 0; i < dt.Rows.Count; i++)
             {
-                for (int b31 = 0; b31 <= count - b33; b31++)
+                DataRow row = dt_condition.NewRow();
+                if (i == 0)
                 {
-                    for (int b30 = 0; b30 <= count - b33 - b31; b30++)
+                    row["start_time"] = dt.Rows[i]["start_time"].ToString();
+                    row["host"] = dt.Rows[i]["host"].ToString();
+                    row["client"] = dt.Rows[i]["client"].ToString();
+                    row["three"] = dt.Rows[i]["three"].ToString();
+                    row["one"] = dt.Rows[i]["one"].ToString();
+                    row["zero"] = dt.Rows[i]["zero"].ToString();
+                    dt_condition.Rows.Add(row);
+                }
+                else
+                {
+                    if (dt.Rows[i]["start_time"].ToString() != dt.Rows[i - 1]["start_time"].ToString() ||
+                       dt.Rows[i]["host"].ToString() != dt.Rows[i - 1]["host"].ToString() ||
+                       dt.Rows[i]["client"].ToString() != dt.Rows[i - 1]["client"].ToString())
                     {
-                        for (int b13 = 0; b13 <= count - b33 - b31 - b30; b13++)
-                        {
-                            for (int b11 = 0; b11 <= count - b33 - b31 - b30 - b13; b11++)
-                            {
-                                for (int b10 = 0; b10 <= count - b33 - b31 - b30 - b13 - b11; b10++)
-                                {
-                                    for (int b03 = 0; b03 <= count - b33 - b31 - b30 - b13 - b11 - b10; b03++)
-                                    {
-                                        for (int b01 = 0; b01 <= count - b33 - b31 - b30 - b13 - b11 - b10 - b03; b01++)
-                                        {
-                                            int b00 = count - b33 - b31 - b30 - b13 - b11 - b10 - b03 - b01;
-
-
-                                            double r33 = 0;
-                                            double r31 = 0;
-                                            double r30 = 0;
-                                            double r13 = 0;
-                                            double r11 = 0;
-                                            double r10 = 0;
-                                            double r03 = 0;
-                                            double r01 = 0;
-                                            double r00 = 0;
-
-
-
-                                            r33 = b33 * three1 * three2;
-                                            r31 = b31 * three1 * one2;
-                                            r30 = b30 * three1 * zero2;
-                                            r13 = b13 * one1 * three2;
-                                            r11 = b11 * one1 * one2;
-                                            r10 = b10 * one1 * zero2;
-                                            r03 = b03 * zero1 * three2;
-                                            r01 = b01 * zero1 * one2;
-                                            r00 = b00 * zero1 * zero2;
-
-                                            int[] bits = new int[] { b33, b31, b30, b13, b11, b10, b03, b01, b00 };
-                                            double[] profits = new double[] { r33, r31, r30, r13, r11, r10, r03, r01, r00 };  
-
- 
-                                            for (int i = 0; i < dt_group.Rows.Count; i++)
-                                            {
-                                                double[] profits_group = new double[] { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-                                                for (int j = 1; j < dt_group.Columns.Count; j++)
-                                                {
-                                                    string group = dt_group.Rows[i][j].ToString();
-                                                    if (!string.IsNullOrEmpty(group))
-                                                    {
-                                                        int bid_group = 0; 
-                                                        for (int k = 0; k < group.Length; k++)
-                                                        {
-                                                            int index = Convert.ToInt32(group.Substring(k, 1));
-                                                            bid_group = bid_group + bits[index - 1];
-                                                        }
-                                                        for (int k = 0; k < group.Length; k++)
-                                                        {
-                                                            int index = Convert.ToInt32(group.Substring(k, 1));
-                                                            profits_group[index - 1] = profits[index - 1] - count;
-                                                            if(bid_group>0)
-                                                            {
-                                                                if ((profits[index - 1] - bid_group) / bid_group >= 1.88) profits_group[index - 1] = profits[index - 1] + bid_group / 2.0 - count;
-                                                            }
-                                                        }
-                                                    }
-                                                }
-
-                                                double max = 0;
-                                                double min = 99999999;
-                                                for (int l = 0; l < profits_group.Length; l++)
-                                                {
-                                                    if (profits_group[l] < min) min = profits_group[l];
-                                                    if (profits_group[l] > max) max = profits_group[l];
-                                                }
-                                                if (min > result_min)
-                                                {
-
-                                                    result_group_index = i;
-                                                    result_min = min;
-                                                    result_max = max;
-
-
-                                                    result_b33 = b33;
-                                                    result_b31 = b31;
-                                                    result_b30 = b30;
-                                                    result_b13 = b13;
-                                                    result_b11 = b11;
-                                                    result_b10 = b10;
-                                                    result_b03 = b03;
-                                                    result_b01 = b01;
-                                                    result_b00 = b00;
-
-
-                                                    result_r33 = profits_group[0];
-                                                    result_r31 = profits_group[1];
-                                                    result_r30 = profits_group[2];
-                                                    result_r13 = profits_group[3];
-                                                    result_r11 = profits_group[4];
-                                                    result_r10 = profits_group[5];
-                                                    result_r03 = profits_group[6];
-                                                    result_r01 = profits_group[7];
-                                                    result_r00 = profits_group[8];
-                                                }
-                                                step = step + 1; 
-
-                                            }
-
-
-                                        }
-
-                                    }
-
-                                }
-
-                            }
-
-                        }
-
+                        row["start_time"] = dt.Rows[i]["start_time"].ToString();
+                        row["host"] = dt.Rows[i]["host"].ToString();
+                        row["client"] = dt.Rows[i]["client"].ToString();
+                        row["three"] = dt.Rows[i]["three"].ToString();
+                        row["one"] = dt.Rows[i]["one"].ToString();
+                        row["zero"] = dt.Rows[i]["zero"].ToString();
+                        dt_condition.Rows.Add(row);
                     }
-
-
                 }
-
             }
-
-            string group_info = "";
-            for (int i = 1; i < dt_group.Columns.Count; i++)
-            {
-                if (!string.IsNullOrEmpty(dt_group.Rows[result_group_index][i].ToString()))
-                {
-                    group_info = group_info + "Group " + i.ToString() + ":" + dt_group.Rows[result_group_index][i].ToString() + "  ";
-                }
-
-            }
-
-            DateTime dt_end = DateTime.Now;
-            return start_time1 + "      " + host1.PadRight(10, ' ') + client1.PadRight(10, ' ') +
-                   three1.ToString("f2").PadRight(10, ' ') +
-                   one1.ToString("f2").PadRight(10, ' ') +
-                   zero1.ToString("f2").PadRight(10, ' ') + Environment.NewLine +
-                   start_time2 + "      " + host2.PadRight(10, ' ') + client2.PadRight(10, ' ') +
-                   three2.ToString("f2").PadRight(10, ' ') +
-                   one2.ToString("f2").PadRight(10, ' ') +
-                   zero2.ToString("f2").PadRight(10, ' ') + Environment.NewLine +
-                  "bit count:" + count.ToString() + Environment.NewLine +
-                  "total count: " + step.ToString() + Environment.NewLine +
-                  "use seconds: " + (dt_end - dt_start).TotalSeconds.ToString() + Environment.NewLine +
-                  "return value: " + result_min.ToString("f4") + "~" + result_max.ToString("f4") + Environment.NewLine +
-                  "return persent: " + (result_min / count * 100).ToString("f6") + "%" + Environment.NewLine +
-                  "group information: " + group_info + Environment.NewLine +
-                  "detail infomation:" + Environment.NewLine +
-                  "B33: " + result_b33.ToString().PadRight(15, ' ') +
-                  "B31: " + result_b31.ToString().PadRight(15, ' ') +
-                  "B30: " + result_b30.ToString().PadRight(15, ' ') + Environment.NewLine +
-                  "B13: " + result_b13.ToString().PadRight(15, ' ') +
-                  "B11: " + result_b11.ToString().PadRight(15, ' ') +
-                  "B10: " + result_b10.ToString().PadRight(15, ' ') + Environment.NewLine +
-                  "B03: " + result_b03.ToString().PadRight(15, ' ') +
-                  "B01: " + result_b01.ToString().PadRight(15, ' ') +
-                  "B00: " + result_b00.ToString().PadRight(15, ' ') + Environment.NewLine +
-                  "R33: " + result_r33.ToString("f4").PadRight(15, ' ') +
-                  "R31: " + result_r31.ToString("f4").PadRight(15, ' ') +
-                  "R30: " + result_r30.ToString("f4").PadRight(15, ' ') + Environment.NewLine +
-                  "R13: " + result_r13.ToString("f4").PadRight(15, ' ') +
-                  "R11: " + result_r11.ToString("f4").PadRight(15, ' ') +
-                  "R10: " + result_r10.ToString("f4").PadRight(15, ' ') + Environment.NewLine +
-                  "R03: " + result_r03.ToString("f4").PadRight(15, ' ') +
-                  "R01: " + result_r01.ToString("f4").PadRight(15, ' ') +
-                  "R00: " + result_r00.ToString("f4").PadRight(15, ' ');
-
+            this.dgv_condition.DataSource = dt_condition;
         }
-        public string str_compute(int count,
+        public BsonDocument get_doc_compute_normal(int count,
                                    string start_time1, string host1, string client1, double three1, double one1, double zero1,
                                    string start_time2, string host2, string client2, double three2, double one2, double zero2)
         {
@@ -573,8 +406,6 @@ namespace WinCode
                                             {
                                                 result_min = min;
                                                 result_max = max;
-
-
                                                 result_b33 = b33;
                                                 result_b31 = b31;
                                                 result_b30 = b30;
@@ -584,8 +415,6 @@ namespace WinCode
                                                 result_b03 = b03;
                                                 result_b01 = b01;
                                                 result_b00 = b00;
-
-
                                                 result_r33 = r33;
                                                 result_r31 = r31;
                                                 result_r30 = r30;
@@ -615,39 +444,656 @@ namespace WinCode
 
             }
             DateTime dt_end = DateTime.Now;
+            BsonDocument doc = new BsonDocument();
+            doc.Add("doc_id", DateTime.Now.ToString("yyyyMMddHHmmss") + DateTime.Now.Millisecond.ToString());
+            doc.Add("type", "2-normal-min");
+            doc.Add("start_time1", start_time1);
+            doc.Add("host1", host1);
+            doc.Add("client1", client1);
+            doc.Add("three1", three1.ToString("f2"));
+            doc.Add("one1", one1.ToString("f2"));
+            doc.Add("zero1", zero1.ToString("f2"));
+            doc.Add("start_time2", start_time1);
+            doc.Add("host2", host2);
+            doc.Add("client2", client2);
+            doc.Add("three2", three2.ToString("f2"));
+            doc.Add("one2", one2.ToString("f2"));
+            doc.Add("zero2", zero2.ToString("f2"));
+            doc.Add("bid_count", count.ToString());
+            doc.Add("total_count", step.ToString());
+            doc.Add("use_second", (dt_end - dt_start).TotalSeconds.ToString());
+            doc.Add("min_value", result_min.ToString("f4"));
+            doc.Add("max_value", result_max.ToString("f4"));
+            doc.Add("b33", result_b33.ToString());
+            doc.Add("b31", result_b31.ToString());
+            doc.Add("b30", result_b30.ToString());
+            doc.Add("b13", result_b13.ToString());
+            doc.Add("b11", result_b11.ToString());
+            doc.Add("b10", result_b10.ToString());
+            doc.Add("b03", result_b03.ToString());
+            doc.Add("b01", result_b01.ToString());
+            doc.Add("b00", result_b00.ToString());
+            doc.Add("r33", result_r33.ToString("f4"));
+            doc.Add("r31", result_r31.ToString("f4"));
+            doc.Add("r30", result_r30.ToString("f4"));
+            doc.Add("r13", result_r13.ToString("f4"));
+            doc.Add("r11", result_r11.ToString("f4"));
+            doc.Add("r10", result_r10.ToString("f4"));
+            doc.Add("r03", result_r03.ToString("f4"));
+            doc.Add("r01", result_r01.ToString("f4"));
+            doc.Add("r00", result_r00.ToString("f4"));
+            // MongoHelper.insert_bson("match", doc);
+            return doc;
+        }
+        public BsonDocument get_doc_compute_group(BsonDocument doc_input)
+        {
+            int count = Convert.ToInt16(doc_input["bid_count"].ToString());
+            string start_time1 = doc_input["start_time1"].ToString();
+            string host1 = doc_input["host1"].ToString();
+            string client1 = doc_input["client1"].ToString();
+            double three1 = Convert.ToDouble(doc_input["three1"].ToString());
+            double one1 = Convert.ToDouble(doc_input["one1"].ToString());
+            double zero1 = Convert.ToDouble(doc_input["zero1"].ToString());
+            string start_time2 = doc_input["start_time2"].ToString();
+            string host2 = doc_input["host2"].ToString();
+            string client2 = doc_input["client2"].ToString();
+            double three2 = Convert.ToDouble(doc_input["three2"].ToString());
+            double one2 = Convert.ToDouble(doc_input["one2"].ToString());
+            double zero2 = Convert.ToDouble(doc_input["zero2"].ToString());
+            int b33 = Convert.ToInt16(doc_input["b33"].ToString());
+            int b31 = Convert.ToInt16(doc_input["b31"].ToString());
+            int b30 = Convert.ToInt16(doc_input["b30"].ToString());
+            int b13 = Convert.ToInt16(doc_input["b13"].ToString());
+            int b11 = Convert.ToInt16(doc_input["b11"].ToString());
+            int b10 = Convert.ToInt16(doc_input["b10"].ToString());
+            int b03 = Convert.ToInt16(doc_input["b03"].ToString());
+            int b01 = Convert.ToInt16(doc_input["b01"].ToString());
+            int b00 = Convert.ToInt16(doc_input["b00"].ToString());
 
-            return start_time1 + "      " + host1.PadRight(10, ' ') + client1.PadRight(10, ' ') +
-                   three1.ToString("f2").PadRight(10, ' ') +
-                   one1.ToString("f2").PadRight(10, ' ') +
-                   zero1.ToString("f2").PadRight(10, ' ') + Environment.NewLine +
-                   start_time2 + "      " + host2.PadRight(10, ' ') + client2.PadRight(10, ' ') +
-                   three2.ToString("f2").PadRight(10, ' ') +
-                   one2.ToString("f2").PadRight(10, ' ') +
-                   zero2.ToString("f2").PadRight(10, ' ') + Environment.NewLine +
-                  "bit count:" + count.ToString() + Environment.NewLine +
-                  "total count: " + step.ToString() + Environment.NewLine +
-                  "use seconds: " + (dt_end - dt_start).TotalSeconds.ToString() + Environment.NewLine +
-                  "return value: " + result_min.ToString("f4") + "~" + result_max.ToString("f4") + Environment.NewLine +
-                  "return persent: " + (result_min / count * 100).ToString("f6") + "%" + Environment.NewLine +
-                  "detail infomation:" + Environment.NewLine +
-                  "B33: " + result_b33.ToString().PadRight(15, ' ') +
-                  "B31: " + result_b31.ToString().PadRight(15, ' ') +
-                  "B30: " + result_b30.ToString().PadRight(15, ' ') + Environment.NewLine +
-                  "B13: " + result_b13.ToString().PadRight(15, ' ') +
-                  "B11: " + result_b11.ToString().PadRight(15, ' ') +
-                  "B10: " + result_b10.ToString().PadRight(15, ' ') + Environment.NewLine +
-                  "B03: " + result_b03.ToString().PadRight(15, ' ') +
-                  "B01: " + result_b01.ToString().PadRight(15, ' ') +
-                  "B00: " + result_b00.ToString().PadRight(15, ' ') + Environment.NewLine +
-                  "R33: " + result_r33.ToString("f4").PadRight(15, ' ') +
-                  "R31: " + result_r31.ToString("f4").PadRight(15, ' ') +
-                  "R30: " + result_r30.ToString("f4").PadRight(15, ' ') + Environment.NewLine +
-                  "R13: " + result_r13.ToString("f4").PadRight(15, ' ') +
-                  "R11: " + result_r11.ToString("f4").PadRight(15, ' ') +
-                  "R10: " + result_r10.ToString("f4").PadRight(15, ' ') + Environment.NewLine +
-                  "R03: " + result_r03.ToString("f4").PadRight(15, ' ') +
-                  "R01: " + result_r01.ToString("f4").PadRight(15, ' ') +
-                  "R00: " + result_r00.ToString("f4").PadRight(15, ' ');
+
+            StringBuilder builder = new StringBuilder();
+
+            int result_group_index = 0;
+            double result_min = -1000;
+            double result_max = 0;
+            double result_b33 = 0;
+            double result_b31 = 0;
+            double result_b30 = 0;
+            double result_b13 = 0;
+            double result_b11 = 0;
+            double result_b10 = 0;
+            double result_b03 = 0;
+            double result_b01 = 0;
+            double result_b00 = 0;
+            double result_r33 = 0;
+            double result_r31 = 0;
+            double result_r30 = 0;
+            double result_r13 = 0;
+            double result_r11 = 0;
+            double result_r10 = 0;
+            double result_r03 = 0;
+            double result_r01 = 0;
+            double result_r00 = 0;
+
+            double r33 = 0;
+            double r31 = 0;
+            double r30 = 0;
+            double r13 = 0;
+            double r11 = 0;
+            double r10 = 0;
+            double r03 = 0;
+            double r01 = 0;
+            double r00 = 0;
+
+            r33 = b33 * three1 * three2;
+            r31 = b31 * three1 * one2;
+            r30 = b30 * three1 * zero2;
+            r13 = b13 * one1 * three2;
+            r11 = b11 * one1 * one2;
+            r10 = b10 * one1 * zero2;
+            r03 = b03 * zero1 * three2;
+            r01 = b01 * zero1 * one2;
+            r00 = b00 * zero1 * zero2;
+
+            int[] bits = new int[] { b33, b31, b30, b13, b11, b10, b03, b01, b00 };
+            double[] profits = new double[] { r33, r31, r30, r13, r11, r10, r03, r01, r00 };
+
+            DateTime dt_start = DateTime.Now;
+            for (int i = 0; i < dt_group.Rows.Count; i++)
+            {
+                double[] profits_group = new double[] { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+                for (int j = 1; j < dt_group.Columns.Count; j++)
+                {
+                    string group = dt_group.Rows[i][j].ToString();
+                    if (!string.IsNullOrEmpty(group))
+                    {
+                        int bid_group = 0;
+                        for (int k = 0; k < group.Length; k++)
+                        {
+                            int index = Convert.ToInt32(group.Substring(k, 1));
+                            bid_group = bid_group + bits[index - 1];
+                        }
+                        for (int k = 0; k < group.Length; k++)
+                        {
+                            int index = Convert.ToInt32(group.Substring(k, 1));
+                            profits_group[index - 1] = profits[index - 1] - count;
+                            if (bid_group > 0)
+                            {
+                                if ((profits[index - 1] - bid_group) / bid_group >= 1.88) profits_group[index - 1] = profits[index - 1] + bid_group / 2.0 - count;
+                            }
+                        }
+                    }
+                }
+
+                double max = 0;
+                double min = 99999999;
+                for (int l = 0; l < profits_group.Length; l++)
+                {
+                    if (profits_group[l] < min) min = profits_group[l];
+                    if (profits_group[l] > max) max = profits_group[l];
+                }
+
+                if (min > result_min)
+                {
+
+                    result_group_index = i;
+                    result_min = min;
+                    result_max = max;
+                    result_b33 = b33;
+                    result_b31 = b31;
+                    result_b30 = b30;
+                    result_b13 = b13;
+                    result_b11 = b11;
+                    result_b10 = b10;
+                    result_b03 = b03;
+                    result_b01 = b01;
+                    result_b00 = b00;
+                    result_r33 = profits_group[0];
+                    result_r31 = profits_group[1];
+                    result_r30 = profits_group[2];
+                    result_r13 = profits_group[3];
+                    result_r11 = profits_group[4];
+                    result_r10 = profits_group[5];
+                    result_r03 = profits_group[6];
+                    result_r01 = profits_group[7];
+                    result_r00 = profits_group[8];
+                }
+            }
+            DateTime dt_end = DateTime.Now;
+
+
+
+            string group_info = "";
+            for (int i = 1; i < dt_group.Columns.Count; i++)
+            {
+                if (!string.IsNullOrEmpty(dt_group.Rows[result_group_index][i].ToString()))
+                {
+                    group_info = group_info + "Group-" + i.ToString() + ":" + dt_group.Rows[result_group_index][i].ToString() + "  ";
+                }
+
+            }
+
+
+            BsonDocument doc = new BsonDocument();
+            doc.Add("doc_id", DateTime.Now.ToString("yyyyMMddHHmmss") + DateTime.Now.Millisecond.ToString());
+            doc.Add("type", "2-group-min");
+            doc.Add("start_time1", start_time1);
+            doc.Add("host1", host1);
+            doc.Add("client1", client1);
+            doc.Add("three1", three1.ToString("f2"));
+            doc.Add("one1", one1.ToString("f2"));
+            doc.Add("zero1", zero1.ToString("f2"));
+            doc.Add("start_time2", start_time1);
+            doc.Add("host2", host2);
+            doc.Add("client2", client2);
+            doc.Add("three2", three2.ToString("f2"));
+            doc.Add("one2", one2.ToString("f2"));
+            doc.Add("zero2", zero2.ToString("f2"));
+            doc.Add("bid_count", count.ToString());
+            doc.Add("total_count", "256");
+            doc.Add("use_second", (dt_end - dt_start).TotalSeconds.ToString());
+            doc.Add("min_value", result_min.ToString("f4"));
+            doc.Add("max_value", result_max.ToString("f4"));
+            doc.Add("group_info", group_info);
+            doc.Add("b33", result_b33.ToString());
+            doc.Add("b31", result_b31.ToString());
+            doc.Add("b30", result_b30.ToString());
+            doc.Add("b13", result_b13.ToString());
+            doc.Add("b11", result_b11.ToString());
+            doc.Add("b10", result_b10.ToString());
+            doc.Add("b03", result_b03.ToString());
+            doc.Add("b01", result_b01.ToString());
+            doc.Add("b00", result_b00.ToString());
+            doc.Add("r33", result_r33.ToString("f4"));
+            doc.Add("r31", result_r31.ToString("f4"));
+            doc.Add("r30", result_r30.ToString("f4"));
+            doc.Add("r13", result_r13.ToString("f4"));
+            doc.Add("r11", result_r11.ToString("f4"));
+            doc.Add("r10", result_r10.ToString("f4"));
+            doc.Add("r03", result_r03.ToString("f4"));
+            doc.Add("r01", result_r01.ToString("f4"));
+            doc.Add("r00", result_r00.ToString("f4")); 
+            // MongoHelper.insert_bson("match", doc);
+            return doc;
+
+        }
+        public BsonDocument get_doc_compute_normal_next(BsonDocument doc_last, int count,
+                                  string start_time1, string host1, string client1, double three1, double one1, double zero1,
+                                  string start_time2, string host2, string client2, double three2, double one2, double zero2)
+        {
+
+            StringBuilder builder = new StringBuilder();
+
+            DateTime dt_start = DateTime.Now;
+            Int64 step = 0;
+
+            int first_result_count = Convert.ToInt16(doc_last["bid_count"].ToString());
+            double first_result_r33 = Convert.ToDouble(doc_last["r33"].ToString());
+            double first_result_r31 = Convert.ToDouble(doc_last["r31"].ToString());
+            double first_result_r30 = Convert.ToDouble(doc_last["r30"].ToString());
+            double first_result_r13 = Convert.ToDouble(doc_last["r13"].ToString());
+            double first_result_r11 = Convert.ToDouble(doc_last["r11"].ToString());
+            double first_result_r10 = Convert.ToDouble(doc_last["r10"].ToString());
+            double first_result_r03 = Convert.ToDouble(doc_last["r03"].ToString());
+            double first_result_r01 = Convert.ToDouble(doc_last["r01"].ToString());
+            double first_result_r00 = Convert.ToDouble(doc_last["r00"].ToString());
+
+
+            double result_min = -1000;
+            double result_max = 0;
+            double result_b33 = 0;
+            double result_b31 = 0;
+            double result_b30 = 0;
+            double result_b13 = 0;
+            double result_b11 = 0;
+            double result_b10 = 0;
+            double result_b03 = 0;
+            double result_b01 = 0;
+            double result_b00 = 0;
+            double result_r33 = 0;
+            double result_r31 = 0;
+            double result_r30 = 0;
+            double result_r13 = 0;
+            double result_r11 = 0;
+            double result_r10 = 0;
+            double result_r03 = 0;
+            double result_r01 = 0;
+            double result_r00 = 0;
+
+
+
+
+            for (int b33 = 0; b33 <= count; b33++)
+            {
+                for (int b31 = 0; b31 <= count - b33; b31++)
+                {
+                    for (int b30 = 0; b30 <= count - b33 - b31; b30++)
+                    {
+                        for (int b13 = 0; b13 <= count - b33 - b31 - b30; b13++)
+                        {
+                            for (int b11 = 0; b11 <= count - b33 - b31 - b30 - b13; b11++)
+                            {
+                                for (int b10 = 0; b10 <= count - b33 - b31 - b30 - b13 - b11; b10++)
+                                {
+                                    for (int b03 = 0; b03 <= count - b33 - b31 - b30 - b13 - b11 - b10; b03++)
+                                    {
+                                        for (int b01 = 0; b01 <= count - b33 - b31 - b30 - b13 - b11 - b10 - b03; b01++)
+                                        {
+                                            int b00 = count - b33 - b31 - b30 - b13 - b11 - b10 - b03 - b01;
+
+                                            double r33 = 0;
+                                            double r31 = 0;
+                                            double r30 = 0;
+                                            double r13 = 0;
+                                            double r11 = 0;
+                                            double r10 = 0;
+                                            double r03 = 0;
+                                            double r01 = 0;
+                                            double r00 = 0;
+
+
+                                            r33 = get_max_profit("33", b33, count, three1, three2) + first_result_r33;
+                                            r31 = get_max_profit("31", b31, count, three1, one2) + first_result_r31;
+                                            r30 = get_max_profit("30", b30, count, three1, zero2) + first_result_r30;
+                                            r13 = get_max_profit("33", b13, count, one1, three2) + first_result_r13;
+                                            r11 = get_max_profit("31", b11, count, one1, one2) + first_result_r11;
+                                            r10 = get_max_profit("30", b10, count, one1, zero2) + first_result_r10;
+                                            r03 = get_max_profit("03", b03, count, zero1, three2) + first_result_r03;
+                                            r01 = get_max_profit("01", b01, count, zero1, one2) + first_result_r01;
+                                            r00 = get_max_profit("00", b00, count, zero1, zero2) + first_result_r00;
+
+                                            double max = 0;
+                                            double min = 99999999;
+
+                                            if (r33 > max) max = r33;
+                                            if (r33 < min) min = r33;
+                                            if (r31 > max) max = r31;
+                                            if (r31 < min) min = r31;
+                                            if (r30 > max) max = r30;
+                                            if (r30 < min) min = r30;
+                                            if (r13 > max) max = r13;
+                                            if (r13 < min) min = r13;
+                                            if (r11 > max) max = r11;
+                                            if (r11 < min) min = r11;
+                                            if (r10 > max) max = r10;
+                                            if (r10 < min) min = r10;
+                                            if (r03 > max) max = r03;
+                                            if (r03 < min) min = r03;
+                                            if (r01 > max) max = r01;
+                                            if (r01 < min) min = r01;
+                                            if (r00 > max) max = r00;
+                                            if (r00 < min) min = r00;
+
+                                            if (min > result_min)
+                                            {
+                                                result_min = min;
+                                                result_max = max;
+                                                result_b33 = b33;
+                                                result_b31 = b31;
+                                                result_b30 = b30;
+                                                result_b13 = b13;
+                                                result_b11 = b11;
+                                                result_b10 = b10;
+                                                result_b03 = b03;
+                                                result_b01 = b01;
+                                                result_b00 = b00;
+                                                result_r33 = r33;
+                                                result_r31 = r31;
+                                                result_r30 = r30;
+                                                result_r13 = r13;
+                                                result_r11 = r11;
+                                                result_r10 = r10;
+                                                result_r03 = r03;
+                                                result_r01 = r01;
+                                                result_r00 = r00;
+                                            }
+
+                                            step = step + 1;
+                                        }
+
+                                    }
+
+                                }
+
+                            }
+
+                        }
+
+                    }
+
+
+                }
+
+            }
+            DateTime dt_end = DateTime.Now;
+            BsonDocument doc = new BsonDocument();
+            doc.Add("doc_id", DateTime.Now.ToString("yyyyMMddHHmmss") + DateTime.Now.Millisecond.ToString());
+            doc.Add("type", "2-normal-second-min");
+            doc.Add("start_time1", start_time1);
+            doc.Add("host1", host1);
+            doc.Add("client1", client1);
+            doc.Add("three1", three1.ToString("f2"));
+            doc.Add("one1", one1.ToString("f2"));
+            doc.Add("zero1", zero1.ToString("f2"));
+            doc.Add("start_time2", start_time1);
+            doc.Add("host2", host2);
+            doc.Add("client2", client2);
+            doc.Add("three2", three2.ToString("f2"));
+            doc.Add("one2", one2.ToString("f2"));
+            doc.Add("zero2", zero2.ToString("f2"));
+            doc.Add("bid_count", count.ToString());
+            doc.Add("first_bid_count", first_result_count);
+            doc.Add("total_count", step.ToString());
+            doc.Add("use_second", (dt_end - dt_start).TotalSeconds.ToString());
+            doc.Add("min_value", result_min.ToString("f4"));
+            doc.Add("max_value", result_max.ToString("f4"));
+            doc.Add("b33", result_b33.ToString());
+            doc.Add("b31", result_b31.ToString());
+            doc.Add("b30", result_b30.ToString());
+            doc.Add("b13", result_b13.ToString());
+            doc.Add("b11", result_b11.ToString());
+            doc.Add("b10", result_b10.ToString());
+            doc.Add("b03", result_b03.ToString());
+            doc.Add("b01", result_b01.ToString());
+            doc.Add("b00", result_b00.ToString());
+            doc.Add("r33", result_r33.ToString("f4"));
+            doc.Add("r31", result_r31.ToString("f4"));
+            doc.Add("r30", result_r30.ToString("f4"));
+            doc.Add("r13", result_r13.ToString("f4"));
+            doc.Add("r11", result_r11.ToString("f4"));
+            doc.Add("r10", result_r10.ToString("f4"));
+            doc.Add("r03", result_r03.ToString("f4"));
+            doc.Add("r01", result_r01.ToString("f4"));
+            doc.Add("r00", result_r00.ToString("f4")); 
+            // MongoHelper.insert_bson("match", doc);
+            return doc;
+        }
+        public BsonDocument get_doc_compute_group_second(BsonDocument doc_first, BsonDocument doc_input)
+        {
+
+            int first_result_count = Convert.ToInt16(doc_first["bid_count"].ToString());
+            double first_result_r33 = Convert.ToDouble(doc_first["r33"].ToString());
+            double first_result_r31 = Convert.ToDouble(doc_first["r31"].ToString());
+            double first_result_r30 = Convert.ToDouble(doc_first["r30"].ToString());
+            double first_result_r13 = Convert.ToDouble(doc_first["r13"].ToString());
+            double first_result_r11 = Convert.ToDouble(doc_first["r11"].ToString());
+            double first_result_r10 = Convert.ToDouble(doc_first["r10"].ToString());
+            double first_result_r03 = Convert.ToDouble(doc_first["r03"].ToString());
+            double first_result_r01 = Convert.ToDouble(doc_first["r01"].ToString());
+            double first_result_r00 = Convert.ToDouble(doc_first["r00"].ToString());
+
+
+            int count = Convert.ToInt16(doc_input["bid_count"].ToString());
+            string start_time1 = doc_input["start_time1"].ToString();
+            string host1 = doc_input["host1"].ToString();
+            string client1 = doc_input["client1"].ToString();
+            double three1 = Convert.ToDouble(doc_input["three1"].ToString());
+            double one1 = Convert.ToDouble(doc_input["one1"].ToString());
+            double zero1 = Convert.ToDouble(doc_input["zero1"].ToString());
+            string start_time2 = doc_input["start_time2"].ToString();
+            string host2 = doc_input["host2"].ToString();
+            string client2 = doc_input["client2"].ToString();
+            double three2 = Convert.ToDouble(doc_input["three2"].ToString());
+            double one2 = Convert.ToDouble(doc_input["one2"].ToString());
+            double zero2 = Convert.ToDouble(doc_input["zero2"].ToString());
+            int b33 = Convert.ToInt16(doc_input["b33"].ToString());
+            int b31 = Convert.ToInt16(doc_input["b31"].ToString());
+            int b30 = Convert.ToInt16(doc_input["b30"].ToString());
+            int b13 = Convert.ToInt16(doc_input["b13"].ToString());
+            int b11 = Convert.ToInt16(doc_input["b11"].ToString());
+            int b10 = Convert.ToInt16(doc_input["b10"].ToString());
+            int b03 = Convert.ToInt16(doc_input["b03"].ToString());
+            int b01 = Convert.ToInt16(doc_input["b01"].ToString());
+            int b00 = Convert.ToInt16(doc_input["b00"].ToString());
+
+
+            StringBuilder builder = new StringBuilder();
+
+            int result_group_index = 0;
+            double result_min = -1000;
+            double result_max = 0;
+            double result_b33 = 0;
+            double result_b31 = 0;
+            double result_b30 = 0;
+            double result_b13 = 0;
+            double result_b11 = 0;
+            double result_b10 = 0;
+            double result_b03 = 0;
+            double result_b01 = 0;
+            double result_b00 = 0;
+            double result_r33 = 0;
+            double result_r31 = 0;
+            double result_r30 = 0;
+            double result_r13 = 0;
+            double result_r11 = 0;
+            double result_r10 = 0;
+            double result_r03 = 0;
+            double result_r01 = 0;
+            double result_r00 = 0;
+
+            double r33 = 0;
+            double r31 = 0;
+            double r30 = 0;
+            double r13 = 0;
+            double r11 = 0;
+            double r10 = 0;
+            double r03 = 0;
+            double r01 = 0;
+            double r00 = 0;
+
+            r33 = b33 * three1 * three2;
+            r31 = b31 * three1 * one2;
+            r30 = b30 * three1 * zero2;
+            r13 = b13 * one1 * three2;
+            r11 = b11 * one1 * one2;
+            r10 = b10 * one1 * zero2;
+            r03 = b03 * zero1 * three2;
+            r01 = b01 * zero1 * one2;
+            r00 = b00 * zero1 * zero2;
+
+            int[] bits = new int[] { b33, b31, b30, b13, b11, b10, b03, b01, b00 };
+            double[] profits = new double[] { r33, r31, r30, r13, r11, r10, r03, r01, r00 };
+
+            DateTime dt_start = DateTime.Now;
+            for (int i = 0; i < dt_group.Rows.Count; i++)
+            {
+                double[] profits_group = new double[] { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+                double[] first_profits_group = new double[]{first_result_r33,first_result_r31,first_result_r30,
+                                                          first_result_r13,first_result_r11,first_result_r10,
+                                                          first_result_r03,first_result_r01,first_result_r00};
+                for (int j = 1; j < dt_group.Columns.Count; j++)
+                {
+                    string group = dt_group.Rows[i][j].ToString();
+                    if (!string.IsNullOrEmpty(group))
+                    {
+                        int bid_group = 0;
+                        for (int k = 0; k < group.Length; k++)
+                        {
+                            int index = Convert.ToInt32(group.Substring(k, 1));
+                            bid_group = bid_group + bits[index - 1];
+                        }
+                        for (int k = 0; k < group.Length; k++)
+                        {
+                            int index = Convert.ToInt32(group.Substring(k, 1));
+                            profits_group[index - 1] = profits[index - 1] - count + first_profits_group[index - 1];
+                            if (bid_group > 0)
+                            {
+                                if ((profits[index - 1] - bid_group) / bid_group >= 1.88) profits_group[index - 1] = profits[index - 1] + bid_group / 2.0 - count + first_profits_group[index - 1];
+                            }
+                        }
+                    }
+                }
+
+                double max = 0;
+                double min = 99999999;
+                for (int l = 0; l < profits_group.Length; l++)
+                {
+                    if (profits_group[l] < min) min = profits_group[l];
+                    if (profits_group[l] > max) max = profits_group[l];
+                }
+
+                if (min > result_min)
+                {
+
+                    result_group_index = i;
+                    result_min = min;
+                    result_max = max;
+                    result_b33 = b33;
+                    result_b31 = b31;
+                    result_b30 = b30;
+                    result_b13 = b13;
+                    result_b11 = b11;
+                    result_b10 = b10;
+                    result_b03 = b03;
+                    result_b01 = b01;
+                    result_b00 = b00;
+                    result_r33 = profits_group[0];
+                    result_r31 = profits_group[1];
+                    result_r30 = profits_group[2];
+                    result_r13 = profits_group[3];
+                    result_r11 = profits_group[4];
+                    result_r10 = profits_group[5];
+                    result_r03 = profits_group[6];
+                    result_r01 = profits_group[7];
+                    result_r00 = profits_group[8];
+                }
+            }
+            DateTime dt_end = DateTime.Now;
+
+
+
+            string group_info = "";
+            for (int i = 1; i < dt_group.Columns.Count; i++)
+            {
+                if (!string.IsNullOrEmpty(dt_group.Rows[result_group_index][i].ToString()))
+                {
+                    group_info = group_info + "Group-" + i.ToString() + ":" + dt_group.Rows[result_group_index][i].ToString() + "  ";
+                }
+
+            }
+
+
+            BsonDocument doc = new BsonDocument();
+            doc.Add("doc_id", DateTime.Now.ToString("yyyyMMddHHmmss") + DateTime.Now.Millisecond.ToString());
+            doc.Add("type", "2-group-second-min");
+            doc.Add("start_time1", start_time1);
+            doc.Add("host1", host1);
+            doc.Add("client1", client1);
+            doc.Add("three1", three1.ToString("f2"));
+            doc.Add("one1", one1.ToString("f2"));
+            doc.Add("zero1", zero1.ToString("f2"));
+            doc.Add("start_time2", start_time1);
+            doc.Add("host2", host2);
+            doc.Add("client2", client2);
+            doc.Add("three2", three2.ToString("f2"));
+            doc.Add("one2", one2.ToString("f2"));
+            doc.Add("zero2", zero2.ToString("f2"));
+            doc.Add("bid_count", count.ToString());
+            doc.Add("first_bid_count", first_result_count.ToString());
+            doc.Add("total_count", "256");
+            doc.Add("use_second", (dt_end - dt_start).TotalSeconds.ToString());
+            doc.Add("min_value", result_min.ToString("f4"));
+            doc.Add("max_value", result_max.ToString("f4"));
+            doc.Add("group_info", group_info);
+            doc.Add("b33", result_b33.ToString());
+            doc.Add("b31", result_b31.ToString());
+            doc.Add("b30", result_b30.ToString());
+            doc.Add("b13", result_b13.ToString());
+            doc.Add("b11", result_b11.ToString());
+            doc.Add("b10", result_b10.ToString());
+            doc.Add("b03", result_b03.ToString());
+            doc.Add("b01", result_b01.ToString());
+            doc.Add("b00", result_b00.ToString());
+            doc.Add("r33", result_r33.ToString("f4"));
+            doc.Add("r31", result_r31.ToString("f4"));
+            doc.Add("r30", result_r30.ToString("f4"));
+            doc.Add("r13", result_r13.ToString("f4"));
+            doc.Add("r11", result_r11.ToString("f4"));
+            doc.Add("r10", result_r10.ToString("f4"));
+            doc.Add("r03", result_r03.ToString("f4"));
+            doc.Add("r01", result_r01.ToString("f4"));
+            doc.Add("r00", result_r00.ToString("f4"));
+            doc.Add("first_group_info", doc_first["group_info"].ToString());
+            doc.Add("first_b33", doc_first["b33"].ToString());
+            doc.Add("first_b31", doc_first["b31"].ToString());
+            doc.Add("first_b30", doc_first["b30"].ToString());
+            doc.Add("first_b13", doc_first["b13"].ToString());
+            doc.Add("first_b11", doc_first["b11"].ToString());
+            doc.Add("first_b10", doc_first["b10"].ToString());
+            doc.Add("first_b03", doc_first["b03"].ToString());
+            doc.Add("first_b01", doc_first["b01"].ToString());
+            doc.Add("first_b00", doc_first["b00"].ToString());
+            doc.Add("first_r33", doc_first["r33"].ToString());
+            doc.Add("first_r31", doc_first["r31"].ToString());
+            doc.Add("first_r30", doc_first["r30"].ToString());
+            doc.Add("first_r13", doc_first["r13"].ToString());
+            doc.Add("first_r11", doc_first["r11"].ToString());
+            doc.Add("first_r10", doc_first["r10"].ToString());
+            doc.Add("first_r03", doc_first["r03"].ToString());
+            doc.Add("first_r01", doc_first["r01"].ToString());
+            doc.Add("first_r00", doc_first["r00"].ToString());
+            //MongoHelper.insert_bson("match", doc);
+            return doc;
 
         }
         public double get_max_profit(string type, int count, int total, double offer_a, double offer_b)
@@ -665,7 +1111,182 @@ namespace WinCode
             //if (temp > profit) profit = temp;
 
             return profit;
-        } 
+        }
+        public string get_info_from_doc(BsonDocument doc)
+        {
+            string result = "";
+            switch (doc["type"].ToString())
+            {
+                case "2-normal-min":
+                    result = "type:" + doc["type"].ToString() + "  doc id:" + doc["doc_id"].ToString() + Environment.NewLine +
+                     doc["start_time1"].ToString() + "      " + doc["host1"].ToString().PadRight(10, ' ') + doc["client1"].ToString().PadRight(10, ' ') +
+                     doc["three1"].ToString().PadRight(10, ' ') +
+                     doc["one1"].ToString().PadRight(10, ' ') +
+                     doc["zero1"].ToString().PadRight(10, ' ') + Environment.NewLine +
+                     doc["start_time1"].ToString() + "      " + doc["host2"].ToString().PadRight(10, ' ') + doc["client2"].ToString().PadRight(10, ' ') +
+                     doc["three2"].ToString().PadRight(10, ' ') +
+                     doc["one2"].ToString().PadRight(10, ' ') +
+                     doc["zero2"].ToString().PadRight(10, ' ') + Environment.NewLine +
+                    "bid count:" + doc["bid_count"].ToString() + Environment.NewLine +
+                    "total count: " + doc["total_count"].ToString() + Environment.NewLine +
+                    "use seconds: " + doc["use_second"].ToString() + Environment.NewLine +
+                    "return value: " + doc["min_value"].ToString() + "~" + doc["max_value"].ToString() + Environment.NewLine +
+                    "return persent: " + (Convert.ToDouble(doc["min_value"].ToString()) / Convert.ToDouble(doc["bid_count"].ToString()) * 100).ToString("f6") + "%" + Environment.NewLine +
+                    "detail infomation:" + Environment.NewLine +
+                    "B33: " + doc["b33"].ToString().PadRight(15, ' ') +
+                    "B31: " + doc["b31"].ToString().PadRight(15, ' ') +
+                    "B30: " + doc["b30"].ToString().PadRight(15, ' ') + Environment.NewLine +
+                    "B13: " + doc["b13"].ToString().PadRight(15, ' ') +
+                    "B11: " + doc["b11"].ToString().PadRight(15, ' ') +
+                    "B10: " + doc["b10"].ToString().PadRight(15, ' ') + Environment.NewLine +
+                    "B03: " + doc["b03"].ToString().PadRight(15, ' ') +
+                    "B01: " + doc["b01"].ToString().PadRight(15, ' ') +
+                    "B00: " + doc["b00"].ToString().PadRight(15, ' ') + Environment.NewLine +
+                    "R33: " + doc["r33"].ToString().PadRight(15, ' ') +
+                    "R31: " + doc["r31"].ToString().PadRight(15, ' ') +
+                    "R30: " + doc["r30"].ToString().PadRight(15, ' ') + Environment.NewLine +
+                    "R13: " + doc["r13"].ToString().PadRight(15, ' ') +
+                    "R11: " + doc["r11"].ToString().PadRight(15, ' ') +
+                    "R10: " + doc["r10"].ToString().PadRight(15, ' ') + Environment.NewLine +
+                    "R03: " + doc["r03"].ToString().PadRight(15, ' ') +
+                    "R01: " + doc["r01"].ToString().PadRight(15, ' ') +
+                    "R00: " + doc["r00"].ToString().PadRight(15, ' ') + Environment.NewLine + Environment.NewLine;
+                    break;
+                case "2-group-min":
+                    result = "type:" + doc["type"].ToString() + "  doc id:" + doc["doc_id"].ToString() + Environment.NewLine +
+                doc["start_time1"].ToString() + "      " + doc["host1"].ToString().PadRight(10, ' ') + doc["client1"].ToString().PadRight(10, ' ') +
+                doc["three1"].ToString().PadRight(10, ' ') +
+                doc["one1"].ToString().PadRight(10, ' ') +
+                doc["zero1"].ToString().PadRight(10, ' ') + Environment.NewLine +
+                doc["start_time1"].ToString() + "      " + doc["host2"].ToString().PadRight(10, ' ') + doc["client2"].ToString().PadRight(10, ' ') +
+                doc["three2"].ToString().PadRight(10, ' ') +
+                doc["one2"].ToString().PadRight(10, ' ') +
+                doc["zero2"].ToString().PadRight(10, ' ') + Environment.NewLine +
+               "bid count:" + doc["bid_count"].ToString() + Environment.NewLine +
+               "total count: " + doc["total_count"].ToString() + Environment.NewLine +
+               "use seconds: " + doc["use_second"].ToString() + Environment.NewLine +
+               "return value: " + doc["min_value"].ToString() + "~" + doc["max_value"].ToString() + Environment.NewLine +
+               "return persent: " + (Convert.ToDouble(doc["min_value"].ToString()) / Convert.ToDouble(doc["bid_count"].ToString()) * 100).ToString("f6") + "%" + Environment.NewLine +
+               "group information: " + doc["group_info"].ToString() + Environment.NewLine +
+               "detail infomation:" + Environment.NewLine +
+               "B33: " + doc["b33"].ToString().PadRight(15, ' ') +
+               "B31: " + doc["b31"].ToString().PadRight(15, ' ') +
+               "B30: " + doc["b30"].ToString().PadRight(15, ' ') + Environment.NewLine +
+               "B13: " + doc["b13"].ToString().PadRight(15, ' ') +
+               "B11: " + doc["b11"].ToString().PadRight(15, ' ') +
+               "B10: " + doc["b10"].ToString().PadRight(15, ' ') + Environment.NewLine +
+               "B03: " + doc["b03"].ToString().PadRight(15, ' ') +
+               "B01: " + doc["b01"].ToString().PadRight(15, ' ') +
+               "B00: " + doc["b00"].ToString().PadRight(15, ' ') + Environment.NewLine +
+               "R33: " + doc["r33"].ToString().PadRight(15, ' ') +
+               "R31: " + doc["r31"].ToString().PadRight(15, ' ') +
+               "R30: " + doc["r30"].ToString().PadRight(15, ' ') + Environment.NewLine +
+               "R13: " + doc["r13"].ToString().PadRight(15, ' ') +
+               "R11: " + doc["r11"].ToString().PadRight(15, ' ') +
+               "R10: " + doc["r10"].ToString().PadRight(15, ' ') + Environment.NewLine +
+               "R03: " + doc["r03"].ToString().PadRight(15, ' ') +
+               "R01: " + doc["r01"].ToString().PadRight(15, ' ') +
+               "R00: " + doc["r00"].ToString().PadRight(15, ' ') + Environment.NewLine + Environment.NewLine;
+                    break;
+                case "2-normal-second-min":
+                    result = "type:" + doc["type"].ToString() + "  doc id:" + doc["doc_id"].ToString() + Environment.NewLine +
+                   doc["start_time1"].ToString() + "      " + doc["host1"].ToString().PadRight(10, ' ') + doc["client1"].ToString().PadRight(10, ' ') +
+                   doc["three1"].ToString().PadRight(10, ' ') +
+                   doc["one1"].ToString().PadRight(10, ' ') +
+                   doc["zero1"].ToString().PadRight(10, ' ') + Environment.NewLine +
+                   doc["start_time1"].ToString() + "      " + doc["host2"].ToString().PadRight(10, ' ') + doc["client2"].ToString().PadRight(10, ' ') +
+                   doc["three2"].ToString().PadRight(10, ' ') +
+                   doc["one2"].ToString().PadRight(10, ' ') +
+                   doc["zero2"].ToString().PadRight(10, ' ') + Environment.NewLine +
+                  "bid count:" + doc["bid_count"].ToString() + Environment.NewLine +
+                  "first bid count:" + doc["first_bid_count"].ToString() + Environment.NewLine +
+                  "total count: " + doc["total_count"].ToString() + Environment.NewLine +
+                  "use seconds: " + doc["use_second"].ToString() + Environment.NewLine +
+                  "return value: " + doc["min_value"].ToString() + "~" + doc["max_value"].ToString() + Environment.NewLine +
+                 "return persent: " + (Convert.ToDouble(doc["min_value"].ToString()) / (Convert.ToDouble(doc["bid_count"].ToString()) + Convert.ToDouble(doc["first_bid_count"].ToString())) * 100).ToString("f6") + "%" + Environment.NewLine +
+                 "first detail infomation:" + Environment.NewLine +
+                  "B33: " + doc["first_b33"].ToString().PadRight(15, ' ') +
+                  "B31: " + doc["first_b31"].ToString().PadRight(15, ' ') +
+                  "B30: " + doc["first_b30"].ToString().PadRight(15, ' ') + Environment.NewLine +
+                  "B13: " + doc["first_b13"].ToString().PadRight(15, ' ') +
+                  "B11: " + doc["first_b11"].ToString().PadRight(15, ' ') +
+                  "B10: " + doc["first_b10"].ToString().PadRight(15, ' ') + Environment.NewLine +
+                  "B03: " + doc["first_b03"].ToString().PadRight(15, ' ') +
+                  "B01: " + doc["first_b01"].ToString().PadRight(15, ' ') +
+                  "B00: " + doc["first_b00"].ToString().PadRight(15, ' ') + Environment.NewLine +
+                  "R33: " + doc["first_r33"].ToString().PadRight(15, ' ') +
+                  "R31: " + doc["first_r31"].ToString().PadRight(15, ' ') +
+                  "R30: " + doc["first_r30"].ToString().PadRight(15, ' ') + Environment.NewLine +
+                  "R13: " + doc["first_r13"].ToString().PadRight(15, ' ') +
+                  "R11: " + doc["first_r11"].ToString().PadRight(15, ' ') +
+                  "R10: " + doc["first_r10"].ToString().PadRight(15, ' ') + Environment.NewLine +
+                  "R03: " + doc["first_r03"].ToString().PadRight(15, ' ') +
+                  "R01: " + doc["first_r01"].ToString().PadRight(15, ' ') +
+                  "R00: " + doc["first_r00"].ToString().PadRight(15, ' ') + Environment.NewLine +
+                    "detail infomation:" + Environment.NewLine +
+                     "B33: " + doc["b33"].ToString().PadRight(15, ' ') +
+                     "B31: " + doc["b31"].ToString().PadRight(15, ' ') +
+                     "B30: " + doc["b30"].ToString().PadRight(15, ' ') + Environment.NewLine +
+                     "B13: " + doc["b13"].ToString().PadRight(15, ' ') +
+                     "B11: " + doc["b11"].ToString().PadRight(15, ' ') +
+                     "B10: " + doc["b10"].ToString().PadRight(15, ' ') + Environment.NewLine +
+                     "B03: " + doc["b03"].ToString().PadRight(15, ' ') +
+                     "B01: " + doc["b01"].ToString().PadRight(15, ' ') +
+                     "B00: " + doc["b00"].ToString().PadRight(15, ' ') + Environment.NewLine +
+                     "R33: " + doc["r33"].ToString().PadRight(15, ' ') +
+                     "R31: " + doc["r31"].ToString().PadRight(15, ' ') +
+                     "R30: " + doc["r30"].ToString().PadRight(15, ' ') + Environment.NewLine +
+                     "R13: " + doc["r13"].ToString().PadRight(15, ' ') +
+                     "R11: " + doc["r11"].ToString().PadRight(15, ' ') +
+                     "R10: " + doc["r10"].ToString().PadRight(15, ' ') + Environment.NewLine +
+                     "R03: " + doc["r03"].ToString().PadRight(15, ' ') +
+                     "R01: " + doc["r01"].ToString().PadRight(15, ' ') +
+                     "R00: " + doc["r00"].ToString().PadRight(15, ' ') + Environment.NewLine + Environment.NewLine;
+                    break;
+                case "2-group-second-min":
+                    result = "type:" + doc["type"].ToString() + "  doc id:" + doc["doc_id"].ToString() + Environment.NewLine +
+                doc["start_time1"].ToString() + "      " + doc["host1"].ToString().PadRight(10, ' ') + doc["client1"].ToString().PadRight(10, ' ') +
+                doc["three1"].ToString().PadRight(10, ' ') +
+                doc["one1"].ToString().PadRight(10, ' ') +
+                doc["zero1"].ToString().PadRight(10, ' ') + Environment.NewLine +
+                doc["start_time1"].ToString() + "      " + doc["host2"].ToString().PadRight(10, ' ') + doc["client2"].ToString().PadRight(10, ' ') +
+                doc["three2"].ToString().PadRight(10, ' ') +
+                doc["one2"].ToString().PadRight(10, ' ') +
+                doc["zero2"].ToString().PadRight(10, ' ') + Environment.NewLine +
+               "bid count:" + doc["bid_count"].ToString() + Environment.NewLine +
+               "first bid count:" + doc["first_bid_count"].ToString() + Environment.NewLine +
+               "total count: " + doc["total_count"].ToString() + Environment.NewLine +
+               "use seconds: " + doc["use_second"].ToString() + Environment.NewLine +
+               "return value: " + doc["min_value"].ToString() + "~" + doc["max_value"].ToString() + Environment.NewLine +
+               "return persent: " + (Convert.ToDouble(doc["min_value"].ToString()) / (Convert.ToDouble(doc["bid_count"].ToString()) + Convert.ToDouble(doc["first_bid_count"].ToString())) * 100).ToString("f6") + "%" + Environment.NewLine +
+               "group information: " + doc["group_info"].ToString() + Environment.NewLine +
+               "detail infomation:" + Environment.NewLine +
+               "B33: " + doc["b33"].ToString().PadRight(15, ' ') +
+               "B31: " + doc["b31"].ToString().PadRight(15, ' ') +
+               "B30: " + doc["b30"].ToString().PadRight(15, ' ') + Environment.NewLine +
+               "B13: " + doc["b13"].ToString().PadRight(15, ' ') +
+               "B11: " + doc["b11"].ToString().PadRight(15, ' ') +
+               "B10: " + doc["b10"].ToString().PadRight(15, ' ') + Environment.NewLine +
+               "B03: " + doc["b03"].ToString().PadRight(15, ' ') +
+               "B01: " + doc["b01"].ToString().PadRight(15, ' ') +
+               "B00: " + doc["b00"].ToString().PadRight(15, ' ') + Environment.NewLine +
+               "R33: " + doc["r33"].ToString().PadRight(15, ' ') +
+               "R31: " + doc["r31"].ToString().PadRight(15, ' ') +
+               "R30: " + doc["r30"].ToString().PadRight(15, ' ') + Environment.NewLine +
+               "R13: " + doc["r13"].ToString().PadRight(15, ' ') +
+               "R11: " + doc["r11"].ToString().PadRight(15, ' ') +
+               "R10: " + doc["r10"].ToString().PadRight(15, ' ') + Environment.NewLine +
+               "R03: " + doc["r03"].ToString().PadRight(15, ' ') +
+               "R01: " + doc["r01"].ToString().PadRight(15, ' ') +
+               "R00: " + doc["r00"].ToString().PadRight(15, ' ') + Environment.NewLine + Environment.NewLine;
+                    break;
+                default:
+                    break;
+            }
+            return result;
+        }
+
+
 
 
 
