@@ -234,7 +234,7 @@ namespace WinCode
         }
         private void btn_compute_auto_Click(object sender, EventArgs e)
         {
-        
+           //add layer method
             this.txt_compute.Text = ""; 
 
             DataTable dt = new DataTable();
@@ -260,7 +260,12 @@ namespace WinCode
                 }
             }
 
-            if (dt.Rows.Count == 0) return;
+            if (dt.Rows.Count == 0)
+            {
+
+                MessageBox.Show("not select data!");
+                return;
+            } 
 
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < dt.Rows.Count; i++)
@@ -278,39 +283,41 @@ namespace WinCode
                     int[] bids = new int[] { 1, 1, 1, 1, 1, 1, 1, 1, 1};
                     double[] profits = new double[]{ three1*three2, three1*one2, three1*zero2, one1*three2, one1* one2, one1*zero2, zero1*three2, zero1*one2, zero1*zero2};
 
-                    for (int k = 1; k < 20; k++)
+                    for (int k = 1; k < 200; k++)
                     {
-
-
                         double min_max = -9999;
                         int select_index = 0;
                         int total_count=9;
                         for (int l = 0; l < 9; l++)
                         {
+                            int[] temp  =new int[]{bids[0],bids[1],bids[2],bids[3],bids[4],bids[5],bids[6],bids[7],bids[8]};
+                            bids.CopyTo(temp, 0);
+                            temp[l] = temp[l] + 1;
                             double min = 9999;
                             for (int m = 0; m < 9; m++)
                             {
-                                double profit = bids[m] * profits[m] - 9 - i;
-                                if (profit < min) profit = min;
+                                double profit = temp[m] * profits[m] - 9 - k;
+                                if (profit < min) min = profit;
                             }
                             if (min > min_max)
                             {
                                 min_max = min;
-                                select_index = l;
-                                total_count=total_count +k;
+                                select_index = l; 
                             }
                         }
-
-                        bids[select_index]=bids[select_index]+1;
+            
+                        total_count = 9 + k;
+                        bids[select_index]=bids[select_index]+1; 
+                      
                         sb.Append("------------------------------------------------------------------------------------------------"+Environment.NewLine);
-                        sb.Append(" B33:" + bids[0].ToString() + " B31:" + bids[1].ToString() + " B30:" + bids[2].ToString() +
+                        sb.Append("B33:" + bids[0].ToString() + " B31:" + bids[1].ToString() + " B30:" + bids[2].ToString() +
                                    " B13:" + bids[3].ToString() + " B11:" + bids[4].ToString() + " B10:" + bids[5].ToString() +
                                    " B03:" + bids[6].ToString() + " B01:" + bids[7].ToString() + " B00:" + bids[8].ToString() + Environment.NewLine);
                         sb.Append("total count:" + total_count.ToString() + Environment.NewLine);
-                        sb.Append("persent:" + (min_max/total_count).ToString("f4")  + Environment.NewLine);
-                        sb.Append("------------------------------------------------------------------------------------------------"+Environment.NewLine);
-
+                        sb.Append("persent:" + (min_max/total_count*100).ToString("f4")+"%"  + Environment.NewLine); 
                     }
+
+                    sb.Append("------------------------------------------------------------------------------------------------" + Environment.NewLine);
                     this.txt_compute.Text = sb.ToString();
                     Application.DoEvents();
 
