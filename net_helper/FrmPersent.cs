@@ -96,7 +96,7 @@ namespace WinCode
             MessageBox.Show("bingo!!!complete!!!");
         }
         private void btn_compute_next_Click(object sender, EventArgs e)
-        { 
+        {
             this.txt_compute.Text = "";
             int start_count = Convert.ToInt16(txt_count_start.Text);
             int end_count = Convert.ToInt16(txt_count_start.Text);
@@ -150,7 +150,7 @@ namespace WinCode
                                                                           Convert.ToDouble(dt.Rows[j]["three"].ToString()),
                                                                           Convert.ToDouble(dt.Rows[j]["one"].ToString()),
                                                                           Convert.ToDouble(dt.Rows[j]["zero"].ToString()));
-                            
+
                             doc_temp = get_doc_compute_group_next(doc_temp, doc_normal);
                             doc_temp["bid_count"] = (Convert.ToInt16(doc_temp["bid_count"].ToString()) + count * more).ToString();
                             this.txt_compute.Text = this.txt_compute.Text + Environment.NewLine + Environment.NewLine +
@@ -173,7 +173,7 @@ namespace WinCode
             Int64 range_min = Convert.ToInt64(this.txt_range_min.Text);
             Int64 range_max = Convert.ToInt64(this.txt_range_max.Text);
             this.txt_compute.Text = "";
-          
+
 
             DataTable dt = new DataTable();
             dt.Columns.Add("start_time");
@@ -203,25 +203,25 @@ namespace WinCode
             {
                 for (int j = i + 1; j < dt.Rows.Count; j++)
                 {
-                    
-                        BsonDocument doc_normal = get_doc_compute_range(range_min,range_max,
-                                                                      dt.Rows[i]["start_time"].ToString(),
-                                                                      dt.Rows[i]["host"].ToString(),
-                                                                      dt.Rows[i]["client"].ToString(),
-                                                                      Convert.ToDouble(dt.Rows[i]["three"].ToString()),
-                                                                      Convert.ToDouble(dt.Rows[i]["one"].ToString()),
-                                                                      Convert.ToDouble(dt.Rows[i]["zero"].ToString()),
-                                                                      dt.Rows[j]["start_time"].ToString(),
-                                                                      dt.Rows[j]["host"].ToString(),
-                                                                      dt.Rows[j]["client"].ToString(),
-                                                                      Convert.ToDouble(dt.Rows[j]["three"].ToString()),
-                                                                      Convert.ToDouble(dt.Rows[j]["one"].ToString()),
-                                                                      Convert.ToDouble(dt.Rows[j]["zero"].ToString()));
-                        BsonDocument doc_group = get_doc_compute_group(doc_normal);
-                        this.txt_compute.Text = this.txt_compute.Text + Environment.NewLine + Environment.NewLine +
-                                                "-------------------------------------------------------------------------------" + Environment.NewLine +
-                                                get_info_from_doc(doc_normal) + Environment.NewLine + Environment.NewLine + get_info_from_doc(doc_group);
-                        Application.DoEvents(); 
+
+                    BsonDocument doc_normal = get_doc_compute_range(range_min, range_max,
+                                                                  dt.Rows[i]["start_time"].ToString(),
+                                                                  dt.Rows[i]["host"].ToString(),
+                                                                  dt.Rows[i]["client"].ToString(),
+                                                                  Convert.ToDouble(dt.Rows[i]["three"].ToString()),
+                                                                  Convert.ToDouble(dt.Rows[i]["one"].ToString()),
+                                                                  Convert.ToDouble(dt.Rows[i]["zero"].ToString()),
+                                                                  dt.Rows[j]["start_time"].ToString(),
+                                                                  dt.Rows[j]["host"].ToString(),
+                                                                  dt.Rows[j]["client"].ToString(),
+                                                                  Convert.ToDouble(dt.Rows[j]["three"].ToString()),
+                                                                  Convert.ToDouble(dt.Rows[j]["one"].ToString()),
+                                                                  Convert.ToDouble(dt.Rows[j]["zero"].ToString()));
+                    BsonDocument doc_group = get_doc_compute_group(doc_normal);
+                    this.txt_compute.Text = this.txt_compute.Text + Environment.NewLine + Environment.NewLine +
+                                            "-------------------------------------------------------------------------------" + Environment.NewLine +
+                                            get_info_from_doc(doc_normal) + Environment.NewLine + Environment.NewLine + get_info_from_doc(doc_group);
+                    Application.DoEvents();
 
                 }
             }
@@ -234,8 +234,8 @@ namespace WinCode
         }
         private void btn_compute_auto_Click(object sender, EventArgs e)
         {
-           //add layer method
-            this.txt_compute.Text = ""; 
+            //add layer method
+            this.txt_compute.Text = "";
 
             DataTable dt = new DataTable();
             dt.Columns.Add("start_time");
@@ -265,14 +265,14 @@ namespace WinCode
 
                 MessageBox.Show("not select data!");
                 return;
-            } 
+            }
 
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < dt.Rows.Count; i++)
             {
                 for (int j = i + 1; j < dt.Rows.Count; j++)
                 {
-                    
+
                     double three1 = Convert.ToDouble(dt.Rows[i]["three"].ToString());
                     double one1 = Convert.ToDouble(dt.Rows[i]["one"].ToString());
                     double zero1 = Convert.ToDouble(dt.Rows[i]["zero"].ToString());
@@ -280,54 +280,201 @@ namespace WinCode
                     double one2 = Convert.ToDouble(dt.Rows[j]["one"].ToString());
                     double zero2 = Convert.ToDouble(dt.Rows[j]["zero"].ToString());
 
-                    int[] bids = new int[] { 1, 1, 1, 1, 1, 1, 1, 1, 1};
-                    double[] profits = new double[]{ three1*three2, three1*one2, three1*zero2, one1*three2, one1* one2, one1*zero2, zero1*three2, zero1*one2, zero1*zero2};
-
-                    for (int k = 1; k < 200; k++)
+                    int[] bids = new int[] { 1, 1, 1, 1, 1, 1, 1, 1, 1 };
+                    int[] bids_temp = new int[] { 1, 1, 1, 1, 1, 1, 1, 1, 1 };
+                    int[] bids_result = new int[] { 1, 1, 1, 1, 1, 1, 1, 1, 1 };
+                    double[] profits = new double[] { three1 * three2, three1 * one2, three1 * zero2, one1 * three2, one1 * one2, one1 * zero2, zero1 * three2, zero1 * one2, zero1 * zero2 };
+                    double[] profits_temp = new double[] { profits[0], profits[1], profits[2], profits[3], profits[4], profits[5], profits[6], profits[7], profits[8] };
+                    for (int step1 = 0; step1 < 9; step1++)
                     {
-                        double min_max = -9999;
-                        int select_index = 0;
-                        int total_count=9;
-                        for (int l = 0; l < 9; l++)
+                        int step_index = 0;
+                        double step_max = -999999999;
+                        for (int step2 = 0; step2 < 9; step2++)
                         {
-                            int[] temp  =new int[]{bids[0],bids[1],bids[2],bids[3],bids[4],bids[5],bids[6],bids[7],bids[8]};
-                            bids.CopyTo(temp, 0);
-                            temp[l] = temp[l] + 1;
-                            double min = 9999;
-                            for (int m = 0; m < 9; m++)
+                            if (profits_temp[step2] > step_max)
                             {
-                                double profit = temp[m] * profits[m] - 9 - k;
-                                if (profit < min) min = profit;
-                            }
-                            if (min > min_max)
-                            {
-                                min_max = min;
-                                select_index = l; 
+                                step_max = profits_temp[step2];
+                                step_index = step2;
                             }
                         }
-            
-                        total_count = 9 + k;
-                        bids[select_index]=bids[select_index]+1; 
-                      
-                        sb.Append("------------------------------------------------------------------------------------------------"+Environment.NewLine);
+                        profits_temp[step_index] = 0;
+                        profits[step1] = step_max;
+                    }
+                    //for (int step = 0; step < 9; step++)
+                    //{
+                    //    profits[step] = profits[step] * 1.208;
+                    //}
+
+                    int bid_total = 9;
+                    int bid_total_temp = 0;
+
+                    double best_persent = -99999999;
+                    double best_persent_temp = -999999999;
+
+                    ////按层轮流加1，取最大
+                    //while (bid_total < 2000)
+                    //{
+                    //    //add 1
+                    //    best_persent_temp = -999999999;
+                    //    for (int k = 0; k < 9; k++)
+                    //    {
+                    //        bids_temp = new int[] { bids[0], bids[1], bids[2], bids[3], bids[4], bids[5], bids[6], bids[7], bids[8] };
+                    //        bids_temp[k] = bids_temp[k] + 1;
+
+                    //        bid_total_temp = bid_total + 1;
+                    //        double profit_min = get_min_profit(bids_temp, profits, bid_total_temp);
+                    //        if (profit_min / bid_total_temp > best_persent_temp)
+                    //        {
+                    //            bids_result = new int[] { bids_temp[0], bids_temp[1], bids_temp[2], bids_temp[3], bids_temp[4], bids_temp[5], bids_temp[6], bids_temp[7], bids_temp[8] };
+                    //            best_persent_temp = profit_min / bid_total_temp;
+                    //        }
+                    //    }
+
+
+                    //    best_persent = best_persent_temp;
+                    //    bid_total = bids_result[0] + bids_result[1] + bids_result[2] + bids_result[3] + bids_result[4] + bids_result[5] + bids_result[6] + bids_result[7] + bids_result[8];
+                    //    bids = new int[] { bids_result[0], bids_result[1], bids_result[2], bids_result[3], bids_result[4], bids_result[5], bids_result[6], bids_result[7], bids_result[8] };
+                    //    sb.Append("------------------------------------------------------------------------------------------------" + Environment.NewLine);
+                    //    sb.Append("B33:" + bids[0].ToString() + " B31:" + bids[1].ToString() + " B30:" + bids[2].ToString() +
+                    //               " B13:" + bids[3].ToString() + " B11:" + bids[4].ToString() + " B10:" + bids[5].ToString() +
+                    //               " B03:" + bids[6].ToString() + " B01:" + bids[7].ToString() + " B00:" + bids[8].ToString() + Environment.NewLine);
+                    //    sb.Append("add count:1" + Environment.NewLine);
+                    //    sb.Append("total bids:" + bid_total.ToString() + Environment.NewLine);
+                    //    sb.Append("persent:" + (best_persent_temp * 100).ToString("f4") + "%" + Environment.NewLine);
+                    //    continue;
+                    //}
+
+
+                    //Russi block
+                    while (bid_total < 1000)
+                    {
+                        //add 1 
+
+                        DateTime dt_start = DateTime.Now;
+                        int[] add = new int[] { 9, 9, 9, 9, 9, 9, 9, 9, 9 };
+                        for (int k0 = 0; k0 <= add[0]; k0++)
+                        {
+                            for (int k1 = 0; k1 <= add[1]; k1++)
+                            {
+                                for (int k2 = 0; k2 <= add[2]; k2++)
+                                {
+                                    for (int k3 = 0; k3 <= add[3]; k3++)
+                                    {
+                                        for (int k4 = 0; k4 <= add[4]; k4++)
+                                        {
+                                            for (int k5 = 0; k5 <= add[5]; k5++)
+                                            {
+                                                for (int k6 = 0; k6 <= add[6]; k6++)
+                                                {
+                                                    for (int k7 = 0; k7 <= add[7]; k7++)
+                                                    {
+                                                        for (int k8 = 0; k8 <= add[8]; k8++)
+                                                        {
+                                                            int bid0 = bids[0] + k0;
+                                                            int bid1 = bids[1] + k1;
+                                                            int bid2 = bids[2] + k2;
+                                                            int bid3 = bids[3] + k3;
+                                                            int bid4 = bids[4] + k4;
+                                                            int bid5 = bids[5] + k5;
+                                                            int bid6 = bids[6] + k6;
+                                                            int bid7 = bids[7] + k7;
+                                                            int bid8 = bids[8] + k8;
+                                                            bid_total_temp = bid0 + bid1 + bid2 + bid3 + bid4 + bid5 + bid6 + bid7 + bid8;
+
+                                                            double profit_min = 999999999;
+
+                                                            if (bid0 * profits[0] - bid_total_temp < profit_min) profit_min = bid0 * profits[0] - bid_total_temp;
+                                                            if (bid1 * profits[1] - bid_total_temp < profit_min) profit_min = bid1 * profits[1] - bid_total_temp;
+                                                            if (bid2 * profits[2] - bid_total_temp < profit_min) profit_min = bid2 * profits[2] - bid_total_temp;
+                                                            if (bid3 * profits[3] - bid_total_temp < profit_min) profit_min = bid3 * profits[3] - bid_total_temp;
+                                                            if (bid4 * profits[4] - bid_total_temp < profit_min) profit_min = bid4 * profits[4] - bid_total_temp;
+                                                            if (bid5 * profits[5] - bid_total_temp < profit_min) profit_min = bid5 * profits[5] - bid_total_temp;
+                                                            if (bid6 * profits[6] - bid_total_temp < profit_min) profit_min = bid6 * profits[6] - bid_total_temp;
+                                                            if (bid7 * profits[7] - bid_total_temp < profit_min) profit_min = bid7 * profits[7] - bid_total_temp;
+                                                            if (bid8 * profits[8] - bid_total_temp < profit_min) profit_min = bid8 * profits[8] - bid_total_temp;
+
+
+
+                                                            if (profit_min / bid_total_temp > best_persent)
+                                                            {
+                                                                double profit_max = -999999999;
+                                                                if (bid0 * profits[0] - bid_total > profit_max) profit_max = bid0 * profits[0] - bid_total;
+                                                                if (bid1 * profits[1] - bid_total > profit_max) profit_max = bid1 * profits[1] - bid_total;
+                                                                if (bid2 * profits[2] - bid_total > profit_max) profit_max = bid2 * profits[2] - bid_total;
+                                                                if (bid3 * profits[3] - bid_total > profit_max) profit_max = bid3 * profits[3] - bid_total;
+                                                                if (bid4 * profits[4] - bid_total > profit_max) profit_max = bid4 * profits[4] - bid_total;
+                                                                if (bid5 * profits[5] - bid_total > profit_max) profit_max = bid5 * profits[5] - bid_total;
+                                                                if (bid6 * profits[6] - bid_total > profit_max) profit_max = bid6 * profits[6] - bid_total;
+                                                                if (bid7 * profits[7] - bid_total > profit_max) profit_max = bid7 * profits[7] - bid_total;
+                                                                if (bid8 * profits[8] - bid_total > profit_max) profit_max = bid8 * profits[8] - bid_total;
+
+                                                                bids[0] = bid0;
+                                                                bids[1] = bid1;
+                                                                bids[2] = bid2;
+                                                                bids[3] = bid3;
+                                                                bids[4] = bid4;
+                                                                bids[5] = bid5;
+                                                                bids[6] = bid6;
+                                                                bids[7] = bid7;
+                                                                bids[8] = bid8;
+
+                                                                bid_total = bid_total_temp;
+                                                                best_persent = profit_min / bid_total;
+
+                                                                goto step_next;
+                                                            }
+                                                            if (k0 == add[0] && k1 == add[1] && k2 == add[2] && k3 == add[3] && k4 == add[4] && k5 == add[5] && k6 == add[6] && k7 ==add[7] && k8 == add[8])
+                                                            {
+                                                                goto step_quit;
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                    step_next:
+                        DateTime dt_end = DateTime.Now;
+                        sb.Append("------------------------------------------------------------------------------------------------" + Environment.NewLine);
                         sb.Append("B33:" + bids[0].ToString() + " B31:" + bids[1].ToString() + " B30:" + bids[2].ToString() +
                                    " B13:" + bids[3].ToString() + " B11:" + bids[4].ToString() + " B10:" + bids[5].ToString() +
                                    " B03:" + bids[6].ToString() + " B01:" + bids[7].ToString() + " B00:" + bids[8].ToString() + Environment.NewLine);
-                        sb.Append("total count:" + total_count.ToString() + Environment.NewLine);
-                        sb.Append("persent:" + (min_max/total_count*100).ToString("f4")+"%"  + Environment.NewLine); 
+                        sb.Append("use seconds:" + (dt_end - dt_start).TotalSeconds.ToString() + Environment.NewLine);
+                        sb.Append("total bids:" + bid_total.ToString() + Environment.NewLine);
+                        sb.Append("persent:" + (best_persent * 100).ToString("f4") + "%" + Environment.NewLine);
+                        this.txt_compute.Text = sb.ToString();
+                        Application.DoEvents();
                     }
-
+                step_quit:
                     sb.Append("------------------------------------------------------------------------------------------------" + Environment.NewLine);
                     this.txt_compute.Text = sb.ToString();
                     Application.DoEvents();
 
                 }
             }
-            
-            this.txt_compute.Text=sb.ToString();
+
+            this.txt_compute.Text = sb.ToString();
             this.tab.SelectTab(1);
 
             MessageBox.Show("bingo!!!complete!!!");
+        }
+        public double get_min_profit(int[] bids, double[] profits, int total_bids)
+        {
+            double min = 999999999;
+            for (int i = 0; i < 9; i++)
+            {
+                double profit = bids[i] * profits[i] - total_bids;
+                if (profit < min)
+                {
+                    min = profit;
+                }
+            }
+            return min;
+
         }
         private void btn_find_result_Click(object sender, EventArgs e)
         {
@@ -645,7 +792,7 @@ namespace WinCode
             doc.Add("r03", result_r03.ToString("f4"));
             doc.Add("r01", result_r01.ToString("f4"));
             doc.Add("r00", result_r00.ToString("f4"));
-           // MongoHelper.insert_bson("match", doc);
+            // MongoHelper.insert_bson("match", doc);
             return doc;
         }
         public BsonDocument get_doc_compute_group(BsonDocument doc_input)
@@ -852,7 +999,7 @@ namespace WinCode
             DateTime dt_start = DateTime.Now;
             Int64 step = 0;
 
-            int    last_result_count = Convert.ToInt16(doc_last["bid_count"].ToString());
+            int last_result_count = Convert.ToInt16(doc_last["bid_count"].ToString());
             double last_result_r33 = Convert.ToDouble(doc_last["r33"].ToString());
             double last_result_r31 = Convert.ToDouble(doc_last["r31"].ToString());
             double last_result_r30 = Convert.ToDouble(doc_last["r30"].ToString());
@@ -1219,7 +1366,7 @@ namespace WinCode
             doc.Add("zero2", zero2.ToString("f2"));
             doc.Add("bid_count", count.ToString());
             doc.Add("total_bid_count", (Convert.ToInt32(doc_last["total_bid_count"].ToString()) + count).ToString());
-            doc.Add("compute_count","256");
+            doc.Add("compute_count", "256");
             doc.Add("use_second", (dt_end - dt_start).TotalSeconds.ToString());
             doc.Add("min_value", result_min.ToString("f4"));
             doc.Add("max_value", result_max.ToString("f4"));
@@ -1248,16 +1395,16 @@ namespace WinCode
         }
 
 
-        public BsonDocument get_doc_compute_range(Int64 range_min,Int64 range_max,
+        public BsonDocument get_doc_compute_range(Int64 range_min, Int64 range_max,
                            string start_time1, string host1, string client1, double three1, double one1, double zero1,
                            string start_time2, string host2, string client2, double three2, double one2, double zero2)
         {
 
 
-          
-            StringBuilder builder = new StringBuilder(); 
+
+            StringBuilder builder = new StringBuilder();
             DateTime dt_start = DateTime.Now;
-            Int64 step = 0; 
+            Int64 step = 0;
 
             double result_min = -99999999;
             double result_persent = -99999999;
@@ -1280,12 +1427,12 @@ namespace WinCode
             double result_r03 = 0;
             double result_r01 = 0;
             double result_r00 = 0;
-            
+
             int count = 0;
 
             for (Int64 range = range_min; range <= range_max; range++)
             {
-                
+
                 string str_range = range.ToString();
 
                 int b33 = Convert.ToInt32(str_range.Substring(0, 1));
@@ -1296,8 +1443,8 @@ namespace WinCode
                 int b10 = Convert.ToInt32(str_range.Substring(5, 1));
                 int b03 = Convert.ToInt32(str_range.Substring(6, 1));
                 int b01 = Convert.ToInt32(str_range.Substring(7, 1));
-                int b00 = Convert.ToInt32(str_range.Substring(8, 1)); 
-                count = b33 + b31 + b30 + b13 + b11 + b10 + b03 + b01 + b00; 
+                int b00 = Convert.ToInt32(str_range.Substring(8, 1));
+                count = b33 + b31 + b30 + b13 + b11 + b10 + b03 + b01 + b00;
 
                 double r33 = 0;
                 double r31 = 0;
@@ -1319,7 +1466,7 @@ namespace WinCode
                 r03 = b03 * zero1 * three2 - count;
                 r01 = b01 * zero1 * one2 - count;
                 r00 = b01 * zero1 * zero2 - count;
- 
+
                 //r33 = get_max_profit("33", b33, count, three1, three2);
                 //r31 = get_max_profit("31", b31, count, three1, one2);
                 //r30 = get_max_profit("30", b30, count, three1, zero2);
@@ -1332,7 +1479,7 @@ namespace WinCode
 
                 double max = -9999999;
                 double min = 99999999;
-        
+
 
                 if (r33 > max) max = r33;
                 if (r33 < min) min = r33;
@@ -1355,7 +1502,7 @@ namespace WinCode
 
                 double persent = min / count;
 
-                if (persent  > result_persent)
+                if (persent > result_persent)
                 {
                     result_persent = persent;
                     result_min = min;
@@ -1378,9 +1525,9 @@ namespace WinCode
                     result_r03 = r03;
                     result_r01 = r01;
                     result_r00 = r00;
-                } 
-                step = step + 1; 
-            } 
+                }
+                step = step + 1;
+            }
 
 
             DateTime dt_end = DateTime.Now;
@@ -1427,7 +1574,7 @@ namespace WinCode
             // MongoHelper.insert_bson("match", doc);
             return doc;
         }
-  
+
         public double get_max_profit(string type, int count, int total, double offer_a, double offer_b)
         {
             double temp = 0;
@@ -1436,8 +1583,8 @@ namespace WinCode
             temp = count * offer_a * offer_b - total;
             if (temp > profit) profit = temp;
 
-            temp = count * offer_a * offer_b * 1.208 - total;
-            if (temp > profit) profit = temp;
+            //temp = count * offer_a * offer_b * 1.208 - total;
+            //if (temp > profit) profit = temp;
 
             //if (offer_a * offer_b * 1 >= 1.88) temp = count * offer_a * offer_b + (count * 0.5) - total;
             //if (temp > profit) profit = temp;
@@ -1601,8 +1748,8 @@ namespace WinCode
             return result;
         }
 
-      
- 
+
+
 
 
 
