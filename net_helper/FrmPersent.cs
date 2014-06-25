@@ -281,6 +281,7 @@ namespace WinCode
                     double zero2 = Convert.ToDouble(dt.Rows[j]["zero"].ToString());
 
                     int[] bids = new int[] { 1, 1, 1, 1, 1, 1, 1, 1, 1 };
+                    int[] steps = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
                     int[] bids_temp = new int[] { 1, 1, 1, 1, 1, 1, 1, 1, 1 };
                     int[] bids_result = new int[] { 1, 1, 1, 1, 1, 1, 1, 1, 1 };
                     double[] profits = new double[] { three1 * three2, three1 * one2, three1 * zero2, one1 * three2, one1 * one2, one1 * zero2, zero1 * three2, zero1 * one2, zero1 * zero2 };
@@ -311,6 +312,8 @@ namespace WinCode
                     double best_persent = -99999999;
                     double best_persent_temp = -999999999;
 
+                    double all_profit_min = 0;
+                    double all_profit_max = 0;
                     ////按层轮流加1，取最大
                     //while (bid_total < 2000)
                     //{
@@ -398,15 +401,15 @@ namespace WinCode
                                                             if (profit_min / bid_total_temp > best_persent)
                                                             {
                                                                 double profit_max = -999999999;
-                                                                if (bid0 * profits[0] - bid_total > profit_max) profit_max = bid0 * profits[0] - bid_total;
-                                                                if (bid1 * profits[1] - bid_total > profit_max) profit_max = bid1 * profits[1] - bid_total;
-                                                                if (bid2 * profits[2] - bid_total > profit_max) profit_max = bid2 * profits[2] - bid_total;
-                                                                if (bid3 * profits[3] - bid_total > profit_max) profit_max = bid3 * profits[3] - bid_total;
-                                                                if (bid4 * profits[4] - bid_total > profit_max) profit_max = bid4 * profits[4] - bid_total;
-                                                                if (bid5 * profits[5] - bid_total > profit_max) profit_max = bid5 * profits[5] - bid_total;
-                                                                if (bid6 * profits[6] - bid_total > profit_max) profit_max = bid6 * profits[6] - bid_total;
-                                                                if (bid7 * profits[7] - bid_total > profit_max) profit_max = bid7 * profits[7] - bid_total;
-                                                                if (bid8 * profits[8] - bid_total > profit_max) profit_max = bid8 * profits[8] - bid_total;
+                                                                if (bid0 * profits[0] - bid_total_temp > profit_max) profit_max = bid0 * profits[0] - bid_total_temp;
+                                                                if (bid1 * profits[1] - bid_total_temp > profit_max) profit_max = bid1 * profits[1] - bid_total_temp;
+                                                                if (bid2 * profits[2] - bid_total_temp > profit_max) profit_max = bid2 * profits[2] - bid_total_temp;
+                                                                if (bid3 * profits[3] - bid_total_temp > profit_max) profit_max = bid3 * profits[3] - bid_total_temp;
+                                                                if (bid4 * profits[4] - bid_total_temp > profit_max) profit_max = bid4 * profits[4] - bid_total_temp;
+                                                                if (bid5 * profits[5] - bid_total_temp > profit_max) profit_max = bid5 * profits[5] - bid_total_temp;
+                                                                if (bid6 * profits[6] - bid_total_temp > profit_max) profit_max = bid6 * profits[6] - bid_total_temp;
+                                                                if (bid7 * profits[7] - bid_total_temp > profit_max) profit_max = bid7 * profits[7] - bid_total_temp;
+                                                                if (bid8 * profits[8] - bid_total_temp > profit_max) profit_max = bid8 * profits[8] - bid_total_temp;
 
                                                                 bids[0] = bid0;
                                                                 bids[1] = bid1;
@@ -418,12 +421,24 @@ namespace WinCode
                                                                 bids[7] = bid7;
                                                                 bids[8] = bid8;
 
+                                                                steps[0] = k0;
+                                                                steps[1] = k1;
+                                                                steps[2] = k2;
+                                                                steps[3] = k3;
+                                                                steps[4] = k4;
+                                                                steps[5] = k5;
+                                                                steps[6] = k6;
+                                                                steps[7] = k7;
+                                                                steps[8] = k8;
+
                                                                 bid_total = bid_total_temp;
                                                                 best_persent = profit_min / bid_total;
+                                                                all_profit_min = profit_min;
+                                                                all_profit_max = profit_max;
 
                                                                 goto step_next;
                                                             }
-                                                            if (k0 == add[0] && k1 == add[1] && k2 == add[2] && k3 == add[3] && k4 == add[4] && k5 == add[5] && k6 == add[6] && k7 ==add[7] && k8 == add[8])
+                                                            if (k0 == add[0] && k1 == add[1] && k2 == add[2] && k3 == add[3] && k4 == add[4] && k5 == add[5] && k6 == add[6] && k7 == add[7] && k8 == add[8])
                                                             {
                                                                 goto step_quit;
                                                             }
@@ -440,16 +455,273 @@ namespace WinCode
                     step_next:
                         DateTime dt_end = DateTime.Now;
                         sb.Append("------------------------------------------------------------------------------------------------" + Environment.NewLine);
-                        sb.Append("B33:" + bids[0].ToString() + " B31:" + bids[1].ToString() + " B30:" + bids[2].ToString() +
-                                   " B13:" + bids[3].ToString() + " B11:" + bids[4].ToString() + " B10:" + bids[5].ToString() +
-                                   " B03:" + bids[6].ToString() + " B01:" + bids[7].ToString() + " B00:" + bids[8].ToString() + Environment.NewLine);
+                        sb.Append(dt.Rows[i]["start_time"].ToString() + "      " + dt.Rows[i]["host"].ToString().PadRight(10, ' ') + dt.Rows[i]["client"].ToString().PadRight(10, ' '));
+                        sb.Append(three1.ToString().PadRight(10, ' ') + one1.ToString().PadRight(10, ' ') + zero1.ToString().PadRight(10, ' ') + Environment.NewLine);
+                        sb.Append(dt.Rows[j]["start_time"].ToString() + "      " + dt.Rows[j]["host"].ToString().PadRight(10, ' ') + dt.Rows[j]["client"].ToString().PadRight(10, ' '));
+                        sb.Append(three2.ToString().PadRight(10, ' ') + one2.ToString().PadRight(10, ' ') + zero2.ToString().PadRight(10, ' ') + Environment.NewLine);
                         sb.Append("use seconds:" + (dt_end - dt_start).TotalSeconds.ToString() + Environment.NewLine);
                         sb.Append("total bids:" + bid_total.ToString() + Environment.NewLine);
+                        sb.Append("profit range:" + all_profit_min.ToString("f2") + "  ~  " + all_profit_max.ToString("f2") + Environment.NewLine);
                         sb.Append("persent:" + (best_persent * 100).ToString("f4") + "%" + Environment.NewLine);
+                        sb.Append("detail info:" + Environment.NewLine);
+                        sb.Append(profits[0].ToString("f2").PadRight(10, ' ') + profits[1].ToString("f2").PadRight(10, ' ') + profits[2].ToString("f2").PadRight(10, ' ') +
+                               profits[3].ToString("f2").PadRight(10, ' ') + profits[4].ToString("f2").PadRight(10, ' ') + profits[5].ToString("f2").PadRight(10, ' ') +
+                               profits[6].ToString("f2").PadRight(10, ' ') + profits[7].ToString("f2").PadRight(10, ' ') + profits[8].ToString("f2").PadRight(10, ' ') + Environment.NewLine);
+                        sb.Append(steps[0].ToString().PadRight(10, ' ') + steps[1].ToString().PadRight(10, ' ') + steps[2].ToString().PadRight(10, ' ') +
+                                steps[3].ToString().PadRight(10, ' ') + steps[4].ToString().PadRight(10, ' ') + steps[5].ToString().PadRight(10, ' ') +
+                                steps[6].ToString().PadRight(10, ' ') + steps[7].ToString().PadRight(10, ' ') + steps[8].ToString().PadRight(10, ' ') + Environment.NewLine);
+                        sb.Append(bids[0].ToString().PadRight(10, ' ') + bids[1].ToString().PadRight(10, ' ') + bids[2].ToString().PadRight(10, ' ') +
+                           bids[3].ToString().PadRight(10, ' ') + bids[4].ToString().PadRight(10, ' ') + bids[5].ToString().PadRight(10, ' ') +
+                           bids[6].ToString().PadRight(10, ' ') + bids[7].ToString().PadRight(10, ' ') + bids[8].ToString().PadRight(10, ' ') + Environment.NewLine);
+                        sb.Append((bids[0] * profits[0] - bid_total).ToString("f2").PadRight(10, ' ') +
+                                  (bids[1] * profits[1] - bid_total).ToString("f2").PadRight(10, ' ') +
+                                  (bids[2] * profits[2] - bid_total).ToString("f2").PadRight(10, ' ') +
+                                  (bids[3] * profits[3] - bid_total).ToString("f2").PadRight(10, ' ') +
+                                  (bids[4] * profits[4] - bid_total).ToString("f2").PadRight(10, ' ') +
+                                  (bids[5] * profits[5] - bid_total).ToString("f2").PadRight(10, ' ') +
+                                  (bids[6] * profits[6] - bid_total).ToString("f2").PadRight(10, ' ') +
+                                  (bids[7] * profits[7] - bid_total).ToString("f2").PadRight(10, ' ') +
+                                  (bids[8] * profits[8] - bid_total).ToString("f2").PadRight(10, ' ') + Environment.NewLine);
                         this.txt_compute.Text = sb.ToString();
                         Application.DoEvents();
                     }
                 step_quit:
+                    sb.Append("------------------------------------------------------------------------------------------------" + Environment.NewLine);
+                    this.txt_compute.Text = sb.ToString();
+                    Application.DoEvents();
+
+                }
+            }
+
+            this.txt_compute.Text = sb.ToString();
+            this.tab.SelectTab(1);
+
+            MessageBox.Show("bingo!!!complete!!!");
+        }
+        private void btn_compute_circle_Click(object sender, EventArgs e)
+        {
+            //add layer method
+            this.txt_compute.Text = "";
+
+            DataTable dt = new DataTable();
+            dt.Columns.Add("start_time");
+            dt.Columns.Add("host");
+            dt.Columns.Add("client");
+            dt.Columns.Add("three");
+            dt.Columns.Add("one");
+            dt.Columns.Add("zero");
+
+            foreach (DataGridViewRow row in dgv_condition.Rows)
+            {
+                if (Convert.ToBoolean(row.Cells["selected"].Value) == true)
+                {
+                    DataRow row_new = dt.NewRow();
+                    row_new["start_time"] = row.Cells["start_time"].Value.ToString();
+                    row_new["host"] = row.Cells["host"].Value.ToString();
+                    row_new["client"] = row.Cells["client"].Value.ToString();
+                    row_new["three"] = row.Cells["three"].Value.ToString();
+                    row_new["one"] = row.Cells["one"].Value.ToString();
+                    row_new["zero"] = row.Cells["zero"].Value.ToString();
+                    dt.Rows.Add(row_new);
+                }
+            }
+
+            if (dt.Rows.Count == 0)
+            {
+
+                MessageBox.Show("not select data!");
+                return;
+            }
+
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < dt.Rows.Count; i++)
+            {
+                for (int j = i + 1; j < dt.Rows.Count; j++)
+                {
+
+                    double three1 = Convert.ToDouble(dt.Rows[i]["three"].ToString());
+                    double one1 = Convert.ToDouble(dt.Rows[i]["one"].ToString());
+                    double zero1 = Convert.ToDouble(dt.Rows[i]["zero"].ToString());
+                    double three2 = Convert.ToDouble(dt.Rows[j]["three"].ToString());
+                    double one2 = Convert.ToDouble(dt.Rows[j]["one"].ToString());
+                    double zero2 = Convert.ToDouble(dt.Rows[j]["zero"].ToString());
+
+                    int[] bids = new int[] { 1, 1, 1, 1, 1, 1, 1, 1, 1 };
+                    int[] bids_temp = new int[] { 1, 1, 1, 1, 1, 1, 1, 1, 1 };
+
+                    double[] profits = new double[] { three1 * three2, three1 * one2, three1 * zero2, one1 * three2, one1 * one2, one1 * zero2, zero1 * three2, zero1 * one2, zero1 * zero2 };
+                    double[] profits_temp = new double[] { profits[0], profits[1], profits[2], profits[3], profits[4], profits[5], profits[6], profits[7], profits[8] };
+                    for (int step1 = 0; step1 < 9; step1++)
+                    {
+                        int step_index = 0;
+                        double step_max = -999999999;
+                        for (int step2 = 0; step2 < 9; step2++)
+                        {
+                            if (profits_temp[step2] > step_max)
+                            {
+                                step_max = profits_temp[step2];
+                                step_index = step2;
+                            }
+                        }
+                        profits_temp[step_index] = 0;
+                        profits[step1] = step_max;
+                    }
+                    //for (int step = 0; step < 9; step++)
+                    //{
+                    //    profits[step] = profits[step] * 1.208;
+                    //}
+
+                    for (int k = 1; k <= 100; k++)
+                    {
+                        bids[0] = k;
+                        bids[1] = (int)Math.Floor(profits[0] * bids[0] / profits[1]);
+                        bids[2] = (int)Math.Floor(profits[0] * bids[0] / profits[2]);
+                        bids[3] = (int)Math.Floor(profits[0] * bids[0] / profits[3]);
+                        bids[4] = (int)Math.Floor(profits[0] * bids[0] / profits[4]);
+                        bids[5] = (int)Math.Floor(profits[0] * bids[0] / profits[5]);
+                        bids[6] = (int)Math.Floor(profits[0] * bids[0] / profits[6]);
+                        bids[7] = (int)Math.Floor(profits[0] * bids[0] / profits[7]);
+                        bids[8] = (int)Math.Floor(profits[0] * bids[0] / profits[8]);
+
+
+
+                        bids_temp[0] = bids[0];
+                        bids_temp[1] = bids[1];
+                        bids_temp[2] = bids[2];
+                        bids_temp[3] = bids[3];
+                        bids_temp[4] = bids[4];
+                        bids_temp[5] = bids[5];
+                        bids_temp[6] = bids[6];
+                        bids_temp[7] = bids[7];
+                        bids_temp[8] = bids[8];
+                        //上下调整1
+                        double max_persent = -99999;
+                        for (int ajust1 = 0; ajust1 < 2; ajust1++)
+                        {
+                            for (int ajust2 = 0; ajust2 < 2; ajust2++)
+                            {
+                                for (int ajust3 = 0; ajust3 < 2; ajust3++)
+                                {
+                                    for (int ajust4 = 0; ajust4 < 2; ajust4++)
+                                    {
+                                        for (int ajust5 = 0; ajust5 < 2; ajust5++)
+                                        {
+                                            for (int ajust6 = 0; ajust6 < 2; ajust6++)
+                                            {
+                                                for (int ajust7 = 0; ajust7 < 2; ajust7++)
+                                                {
+                                                    for (int ajust8 = 0; ajust8 < 2; ajust8++)
+                                                    {
+                                                        int bid0 = bids[0];
+                                                        int bid1 = bids[1] + ajust1;
+                                                        int bid2 = bids[2] + ajust2;
+                                                        int bid3 = bids[3] + ajust3;
+                                                        int bid4 = bids[4] + ajust4;
+                                                        int bid5 = bids[5] + ajust5;
+                                                        int bid6 = bids[6] + ajust6;
+                                                        int bid7 = bids[7] + ajust7;
+                                                        int bid8 = bids[8] + ajust8;
+                                                        int total = bid0 + bid1 + bid2 + bid3 + bid4 + bid5 + bid6 + bid7 + bid8;
+                                                        double min_temp = 999999999;
+                                                        if (bid0 * profits[0] - total < min_temp) min_temp = bid0 * profits[0] - total;
+                                                        if (bid1 * profits[1] - total < min_temp) min_temp = bid1 * profits[1] - total;
+                                                        if (bid2 * profits[2] - total < min_temp) min_temp = bid2 * profits[2] - total;
+                                                        if (bid3 * profits[3] - total < min_temp) min_temp = bid3 * profits[3] - total;
+                                                        if (bid4 * profits[4] - total < min_temp) min_temp = bid4 * profits[4] - total;
+                                                        if (bid5 * profits[5] - total < min_temp) min_temp = bid5 * profits[5] - total;
+                                                        if (bid6 * profits[6] - total < min_temp) min_temp = bid6 * profits[6] - total;
+                                                        if (bid7 * profits[7] - total < min_temp) min_temp = bid7 * profits[7] - total;
+                                                        if (bid8 * profits[8] - total < min_temp) min_temp = bid8 * profits[8] - total;
+
+                                                        if (min_temp / total > max_persent)
+                                                        {
+                                                            bids_temp[0] = bid0;
+                                                            bids_temp[1] = bid1;
+                                                            bids_temp[2] = bid2;
+                                                            bids_temp[3] = bid3;
+                                                            bids_temp[4] = bid4;
+                                                            bids_temp[5] = bid5;
+                                                            bids_temp[6] = bid6;
+                                                            bids_temp[7] = bid7;
+                                                            bids_temp[8] = bid8;
+                                                        }
+                                                    }
+                                                }
+
+                                            }
+                                        }
+
+                                    }
+                                }
+
+                            }
+                        }
+
+                        bids[0] = bids_temp[0];
+                        bids[1] = bids_temp[1];
+                        bids[2] = bids_temp[2];
+                        bids[3] = bids_temp[3];
+                        bids[4] = bids_temp[4];
+                        bids[5] = bids_temp[5];
+                        bids[6] = bids_temp[6];
+                        bids[7] = bids_temp[7];
+                        bids[8] = bids_temp[8];
+
+                        int bid_total = bids[0] + bids[1] + bids[2] + bids[3] + bids[4] + bids[5] + bids[6] + bids[7] + bids[8];
+                        double min = 999999999;
+                        double max = -999999999;
+                        if (bids[0] * profits[0] - bid_total < min) min = bids[0] * profits[0] - bid_total;
+                        if (bids[1] * profits[1] - bid_total < min) min = bids[1] * profits[1] - bid_total;
+                        if (bids[2] * profits[2] - bid_total < min) min = bids[2] * profits[2] - bid_total;
+                        if (bids[3] * profits[3] - bid_total < min) min = bids[3] * profits[3] - bid_total;
+                        if (bids[4] * profits[4] - bid_total < min) min = bids[4] * profits[4] - bid_total;
+                        if (bids[5] * profits[5] - bid_total < min) min = bids[5] * profits[5] - bid_total;
+                        if (bids[6] * profits[6] - bid_total < min) min = bids[6] * profits[6] - bid_total;
+                        if (bids[7] * profits[7] - bid_total < min) min = bids[7] * profits[7] - bid_total;
+                        if (bids[8] * profits[8] - bid_total < min) min = bids[8] * profits[8] - bid_total;
+                        if (bids[0] * profits[0] - bid_total > max) max = bids[0] * profits[0] - bid_total;
+                        if (bids[1] * profits[1] - bid_total > max) max = bids[1] * profits[1] - bid_total;
+                        if (bids[2] * profits[2] - bid_total > max) max = bids[2] * profits[2] - bid_total;
+                        if (bids[3] * profits[3] - bid_total > max) max = bids[3] * profits[3] - bid_total;
+                        if (bids[4] * profits[4] - bid_total > max) max = bids[4] * profits[4] - bid_total;
+                        if (bids[5] * profits[5] - bid_total > max) max = bids[5] * profits[5] - bid_total;
+                        if (bids[6] * profits[6] - bid_total > max) max = bids[6] * profits[6] - bid_total;
+                        if (bids[7] * profits[7] - bid_total > max) max = bids[7] * profits[7] - bid_total;
+                        if (bids[8] * profits[8] - bid_total > max) max = bids[8] * profits[8] - bid_total;
+
+
+
+
+                        sb.Append("------------------------------------------------------------------------------------------------" + Environment.NewLine);
+                        sb.Append(dt.Rows[i]["start_time"].ToString() + "      " + dt.Rows[i]["host"].ToString().PadRight(10, ' ') + dt.Rows[i]["client"].ToString().PadRight(10, ' '));
+                        sb.Append(three1.ToString().PadRight(10, ' ') + one1.ToString().PadRight(10, ' ') + zero1.ToString().PadRight(10, ' ') + Environment.NewLine);
+                        sb.Append(dt.Rows[j]["start_time"].ToString() + "      " + dt.Rows[j]["host"].ToString().PadRight(10, ' ') + dt.Rows[j]["client"].ToString().PadRight(10, ' '));
+                        sb.Append(three2.ToString().PadRight(10, ' ') + one2.ToString().PadRight(10, ' ') + zero2.ToString().PadRight(10, ' ') + Environment.NewLine);
+                        sb.Append("total bids:" + bid_total.ToString() + Environment.NewLine);
+                        sb.Append("profit range:" + min.ToString("f2") + "  ~  " + max.ToString("f2") + Environment.NewLine);
+                        sb.Append("persent:" + (min / bid_total * 100).ToString("f4") + "%" + Environment.NewLine);
+                        sb.Append("detail info:" + Environment.NewLine);
+                        sb.Append(profits[0].ToString("f2").PadRight(10, ' ') + profits[1].ToString("f2").PadRight(10, ' ') + profits[2].ToString("f2").PadRight(10, ' ') +
+                               profits[3].ToString("f2").PadRight(10, ' ') + profits[4].ToString("f2").PadRight(10, ' ') + profits[5].ToString("f2").PadRight(10, ' ') +
+                               profits[6].ToString("f2").PadRight(10, ' ') + profits[7].ToString("f2").PadRight(10, ' ') + profits[8].ToString("f2").PadRight(10, ' ') + Environment.NewLine);
+                        sb.Append(bids[0].ToString().PadRight(10, ' ') + bids[1].ToString().PadRight(10, ' ') + bids[2].ToString().PadRight(10, ' ') +
+                           bids[3].ToString().PadRight(10, ' ') + bids[4].ToString().PadRight(10, ' ') + bids[5].ToString().PadRight(10, ' ') +
+                           bids[6].ToString().PadRight(10, ' ') + bids[7].ToString().PadRight(10, ' ') + bids[8].ToString().PadRight(10, ' ') + Environment.NewLine);
+                        sb.Append((bids[0] * profits[0] - bid_total).ToString("f2").PadRight(10, ' ') +
+                                  (bids[1] * profits[1] - bid_total).ToString("f2").PadRight(10, ' ') +
+                                  (bids[2] * profits[2] - bid_total).ToString("f2").PadRight(10, ' ') +
+                                  (bids[3] * profits[3] - bid_total).ToString("f2").PadRight(10, ' ') +
+                                  (bids[4] * profits[4] - bid_total).ToString("f2").PadRight(10, ' ') +
+                                  (bids[5] * profits[5] - bid_total).ToString("f2").PadRight(10, ' ') +
+                                  (bids[6] * profits[6] - bid_total).ToString("f2").PadRight(10, ' ') +
+                                  (bids[7] * profits[7] - bid_total).ToString("f2").PadRight(10, ' ') +
+                                  (bids[8] * profits[8] - bid_total).ToString("f2").PadRight(10, ' ') + Environment.NewLine);
+                        this.txt_compute.Text = sb.ToString();
+                        Application.DoEvents();
+
+
+                    }
+
                     sb.Append("------------------------------------------------------------------------------------------------" + Environment.NewLine);
                     this.txt_compute.Text = sb.ToString();
                     Application.DoEvents();
@@ -1747,6 +2019,7 @@ namespace WinCode
             }
             return result;
         }
+
 
 
 

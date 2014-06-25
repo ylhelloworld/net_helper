@@ -35,6 +35,11 @@
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.btn_create_group = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.btn_compute_auto = new System.Windows.Forms.Button();
+            this.btn_compute_range = new System.Windows.Forms.Button();
+            this.txt_range_max = new System.Windows.Forms.TextBox();
+            this.txt_range_min = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
             this.btn_compute_next = new System.Windows.Forms.Button();
             this.txt_count_end = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -50,11 +55,7 @@
             this.txt_compute = new System.Windows.Forms.TextBox();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.dgv_result = new System.Windows.Forms.DataGridView();
-            this.txt_range_max = new System.Windows.Forms.TextBox();
-            this.txt_range_min = new System.Windows.Forms.TextBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.btn_compute_range = new System.Windows.Forms.Button();
-            this.btn_compute_auto = new System.Windows.Forms.Button();
+            this.btn_compute_circle = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox5.SuspendLayout();
             this.groupBox4.SuspendLayout();
@@ -136,6 +137,7 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.btn_compute_circle);
             this.groupBox3.Controls.Add(this.btn_compute_auto);
             this.groupBox3.Controls.Add(this.btn_compute_range);
             this.groupBox3.Controls.Add(this.txt_range_max);
@@ -153,6 +155,51 @@
             this.groupBox3.TabIndex = 10;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Compute Tool";
+            // 
+            // btn_compute_auto
+            // 
+            this.btn_compute_auto.Location = new System.Drawing.Point(6, 169);
+            this.btn_compute_auto.Name = "btn_compute_auto";
+            this.btn_compute_auto.Size = new System.Drawing.Size(97, 23);
+            this.btn_compute_auto.TabIndex = 14;
+            this.btn_compute_auto.Text = "Compute Auto";
+            this.btn_compute_auto.UseVisualStyleBackColor = true;
+            this.btn_compute_auto.Click += new System.EventHandler(this.btn_compute_auto_Click);
+            // 
+            // btn_compute_range
+            // 
+            this.btn_compute_range.Location = new System.Drawing.Point(6, 140);
+            this.btn_compute_range.Name = "btn_compute_range";
+            this.btn_compute_range.Size = new System.Drawing.Size(97, 23);
+            this.btn_compute_range.TabIndex = 13;
+            this.btn_compute_range.Text = "Compute Range";
+            this.btn_compute_range.UseVisualStyleBackColor = true;
+            this.btn_compute_range.Click += new System.EventHandler(this.btn_compute_range_Click);
+            // 
+            // txt_range_max
+            // 
+            this.txt_range_max.Location = new System.Drawing.Point(79, 114);
+            this.txt_range_max.Name = "txt_range_max";
+            this.txt_range_max.Size = new System.Drawing.Size(183, 20);
+            this.txt_range_max.TabIndex = 12;
+            this.txt_range_max.Text = "999999999";
+            // 
+            // txt_range_min
+            // 
+            this.txt_range_min.Location = new System.Drawing.Point(79, 88);
+            this.txt_range_min.Name = "txt_range_min";
+            this.txt_range_min.Size = new System.Drawing.Size(183, 20);
+            this.txt_range_min.TabIndex = 9;
+            this.txt_range_min.Text = "100000001";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(10, 92);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(56, 13);
+            this.label4.TabIndex = 10;
+            this.label4.Text = "Bid Count:";
             // 
             // btn_compute_next
             // 
@@ -304,50 +351,15 @@
             this.dgv_result.Size = new System.Drawing.Size(816, 561);
             this.dgv_result.TabIndex = 0;
             // 
-            // txt_range_max
+            // btn_compute_circle
             // 
-            this.txt_range_max.Location = new System.Drawing.Point(79, 114);
-            this.txt_range_max.Name = "txt_range_max";
-            this.txt_range_max.Size = new System.Drawing.Size(183, 20);
-            this.txt_range_max.TabIndex = 12;
-            this.txt_range_max.Text = "999999999";
-            // 
-            // txt_range_min
-            // 
-            this.txt_range_min.Location = new System.Drawing.Point(79, 88);
-            this.txt_range_min.Name = "txt_range_min";
-            this.txt_range_min.Size = new System.Drawing.Size(183, 20);
-            this.txt_range_min.TabIndex = 9;
-            this.txt_range_min.Text = "100000001";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(10, 92);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(56, 13);
-            this.label4.TabIndex = 10;
-            this.label4.Text = "Bid Count:";
-            // 
-            // btn_compute_range
-            // 
-            this.btn_compute_range.Location = new System.Drawing.Point(6, 140);
-            this.btn_compute_range.Name = "btn_compute_range";
-            this.btn_compute_range.Size = new System.Drawing.Size(97, 23);
-            this.btn_compute_range.TabIndex = 13;
-            this.btn_compute_range.Text = "Compute Range";
-            this.btn_compute_range.UseVisualStyleBackColor = true;
-            this.btn_compute_range.Click += new System.EventHandler(this.btn_compute_range_Click);
-            // 
-            // btn_compute_auto
-            // 
-            this.btn_compute_auto.Location = new System.Drawing.Point(6, 169);
-            this.btn_compute_auto.Name = "btn_compute_auto";
-            this.btn_compute_auto.Size = new System.Drawing.Size(97, 23);
-            this.btn_compute_auto.TabIndex = 14;
-            this.btn_compute_auto.Text = "Compute Auto";
-            this.btn_compute_auto.UseVisualStyleBackColor = true;
-            this.btn_compute_auto.Click += new System.EventHandler(this.btn_compute_auto_Click);
+            this.btn_compute_circle.Location = new System.Drawing.Point(109, 169);
+            this.btn_compute_circle.Name = "btn_compute_circle";
+            this.btn_compute_circle.Size = new System.Drawing.Size(97, 23);
+            this.btn_compute_circle.TabIndex = 15;
+            this.btn_compute_circle.Text = "Compute Circle";
+            this.btn_compute_circle.UseVisualStyleBackColor = true;
+            this.btn_compute_circle.Click += new System.EventHandler(this.btn_compute_circle_Click);
             // 
             // FrmPersent
             // 
@@ -406,5 +418,6 @@
         private System.Windows.Forms.TextBox txt_range_min;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button btn_compute_auto;
+        private System.Windows.Forms.Button btn_compute_circle;
     }
 }

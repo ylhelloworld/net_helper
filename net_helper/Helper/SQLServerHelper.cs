@@ -7,8 +7,8 @@ using System.Data.SqlClient;
 
 public class SQLServerHelper
 {
-    public static string str_con = @"Data Source=yanglong\SQLSERVER2012;Initial Catalog=HtmlSelect;Integrated Security=True";
-    //public static string str_con = @"Data Source=.;Initial Catalog=HtmlSelect;Integrated Security=True";
+    //public static string str_con = @"Data Source=yanglong\SQLSERVER2012;Initial Catalog=HtmlSelect;Integrated Security=True";
+    public static string str_con = @"Data Source=.;Initial Catalog=HtmlSelect;Integrated Security=True";
     public static DataTable get_table(string sql)
     {
         SqlConnection con = new SqlConnection(str_con);
