@@ -35,6 +35,8 @@
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.btn_create_group = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.btn_compute_circle_one = new System.Windows.Forms.Button();
+            this.label3 = new System.Windows.Forms.Label();
             this.btn_compute_circle = new System.Windows.Forms.Button();
             this.btn_compute_auto = new System.Windows.Forms.Button();
             this.btn_compute_range = new System.Windows.Forms.Button();
@@ -56,8 +58,7 @@
             this.txt_compute = new System.Windows.Forms.TextBox();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.dgv_result = new System.Windows.Forms.DataGridView();
-            this.label3 = new System.Windows.Forms.Label();
-            this.btn_compute_circle_one = new System.Windows.Forms.Button();
+            this.btn_compute_circle_three = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox5.SuspendLayout();
             this.groupBox4.SuspendLayout();
@@ -139,6 +140,7 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.btn_compute_circle_three);
             this.groupBox3.Controls.Add(this.btn_compute_circle_one);
             this.groupBox3.Controls.Add(this.label3);
             this.groupBox3.Controls.Add(this.btn_compute_circle);
@@ -160,9 +162,28 @@
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Compute Tool";
             // 
+            // btn_compute_circle_one
+            // 
+            this.btn_compute_circle_one.Location = new System.Drawing.Point(6, 170);
+            this.btn_compute_circle_one.Name = "btn_compute_circle_one";
+            this.btn_compute_circle_one.Size = new System.Drawing.Size(97, 23);
+            this.btn_compute_circle_one.TabIndex = 17;
+            this.btn_compute_circle_one.Text = "Circle One";
+            this.btn_compute_circle_one.UseVisualStyleBackColor = true;
+            this.btn_compute_circle_one.Click += new System.EventHandler(this.btn_compute_circle_one_Click);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(152, 91);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(14, 13);
+            this.label3.TabIndex = 16;
+            this.label3.Text = "~";
+            // 
             // btn_compute_circle
             // 
-            this.btn_compute_circle.Location = new System.Drawing.Point(109, 149);
+            this.btn_compute_circle.Location = new System.Drawing.Point(109, 142);
             this.btn_compute_circle.Name = "btn_compute_circle";
             this.btn_compute_circle.Size = new System.Drawing.Size(107, 23);
             this.btn_compute_circle.TabIndex = 15;
@@ -172,7 +193,7 @@
             // 
             // btn_compute_auto
             // 
-            this.btn_compute_auto.Location = new System.Drawing.Point(6, 149);
+            this.btn_compute_auto.Location = new System.Drawing.Point(6, 142);
             this.btn_compute_auto.Name = "btn_compute_auto";
             this.btn_compute_auto.Size = new System.Drawing.Size(97, 23);
             this.btn_compute_auto.TabIndex = 14;
@@ -211,9 +232,9 @@
             this.label4.AutoSize = true;
             this.label4.Location = new System.Drawing.Point(10, 92);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(56, 13);
+            this.label4.Size = new System.Drawing.Size(60, 13);
             this.label4.TabIndex = 10;
-            this.label4.Text = "Bid Count:";
+            this.label4.Text = "Add Count:";
             // 
             // btn_compute_next
             // 
@@ -365,24 +386,15 @@
             this.dgv_result.Size = new System.Drawing.Size(816, 561);
             this.dgv_result.TabIndex = 0;
             // 
-            // label3
+            // btn_compute_circle_three
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(152, 91);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(14, 13);
-            this.label3.TabIndex = 16;
-            this.label3.Text = "~";
-            // 
-            // btn_compute_circle_one
-            // 
-            this.btn_compute_circle_one.Location = new System.Drawing.Point(6, 179);
-            this.btn_compute_circle_one.Name = "btn_compute_circle_one";
-            this.btn_compute_circle_one.Size = new System.Drawing.Size(97, 23);
-            this.btn_compute_circle_one.TabIndex = 17;
-            this.btn_compute_circle_one.Text = "Circle One";
-            this.btn_compute_circle_one.UseVisualStyleBackColor = true;
-            this.btn_compute_circle_one.Click += new System.EventHandler(this.btn_compute_circle_one_Click);
+            this.btn_compute_circle_three.Location = new System.Drawing.Point(109, 170);
+            this.btn_compute_circle_three.Name = "btn_compute_circle_three";
+            this.btn_compute_circle_three.Size = new System.Drawing.Size(107, 23);
+            this.btn_compute_circle_three.TabIndex = 19;
+            this.btn_compute_circle_three.Text = "Circle Three";
+            this.btn_compute_circle_three.UseVisualStyleBackColor = true;
+            this.btn_compute_circle_three.Click += new System.EventHandler(this.btn_compute_circle_three_Click);
             // 
             // FrmPersent
             // 
@@ -444,5 +456,6 @@
         private System.Windows.Forms.Button btn_compute_circle;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button btn_compute_circle_one;
+        private System.Windows.Forms.Button btn_compute_circle_three;
     }
 }

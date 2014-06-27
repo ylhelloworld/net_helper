@@ -981,6 +981,7 @@ public class MatchHelper
         doc.Add("r7", (bids[6] * profits[6] - bid_total).ToString("f2"));
         doc.Add("r8", (bids[7] * profits[7] - bid_total).ToString("f2"));
         doc.Add("r9", (bids[8] * profits[8] - bid_total).ToString("f2"));
+        if (is_open_mongo) MongoHelper.insert_bson("match", doc);
 
         return doc;
 
@@ -1040,32 +1041,29 @@ public class MatchHelper
                 int bid0 = bids[0];
                 int bid1 = bids[1] + ajust1;
                 int bid2 = bids[2] + ajust2;
-               
+
                 int total = bid0 + bid1 + bid2;
                 double min_temp = 999999999;
                 if (bid0 * profits[0] - total < min_temp) min_temp = bid0 * profits[0] - total;
                 if (bid1 * profits[1] - total < min_temp) min_temp = bid1 * profits[1] - total;
                 if (bid2 * profits[2] - total < min_temp) min_temp = bid2 * profits[2] - total;
-               
+
 
                 if (min_temp / total > max_persent)
                 {
                     bids_temp[0] = bid0;
                     bids_temp[1] = bid1;
-                    bids_temp[2] = bid2; 
+                    bids_temp[2] = bid2;
                 }
-
-
-
             }
         }
 
         bids[0] = bids_temp[0];
         bids[1] = bids_temp[1];
         bids[2] = bids_temp[2];
-       
 
-        int bid_total = bids[0] + bids[1] + bids[2] ;
+
+        int bid_total = bids[0] + bids[1] + bids[2];
         double min = 999999999;
         double max = -999999999;
         if (bids[0] * profits[0] - bid_total < min) min = bids[0] * profits[0] - bid_total;
@@ -1074,7 +1072,7 @@ public class MatchHelper
         if (bids[0] * profits[0] - bid_total > max) max = bids[0] * profits[0] - bid_total;
         if (bids[1] * profits[1] - bid_total > max) max = bids[1] * profits[1] - bid_total;
         if (bids[2] * profits[2] - bid_total > max) max = bids[2] * profits[2] - bid_total;
-       
+
 
         DateTime dt_end = DateTime.Now;
 
@@ -1096,17 +1094,180 @@ public class MatchHelper
         doc.Add("max_value", max.ToString("f4"));
         doc.Add("b1", bids[0].ToString());
         doc.Add("b2", bids[1].ToString());
-        doc.Add("b3", bids[2].ToString());  
+        doc.Add("b3", bids[2].ToString());
         doc.Add("p1", profits[0].ToString("f2"));
         doc.Add("p2", profits[1].ToString("f2"));
-        doc.Add("p3", profits[2].ToString("f2")); 
+        doc.Add("p3", profits[2].ToString("f2"));
         doc.Add("r1", (bids[0] * profits[0] - bid_total).ToString("f2"));
         doc.Add("r2", (bids[1] * profits[1] - bid_total).ToString("f2"));
-        doc.Add("r3", (bids[2] * profits[2] - bid_total).ToString("f2")); 
+        doc.Add("r3", (bids[2] * profits[2] - bid_total).ToString("f2"));
+        if (is_open_mongo) MongoHelper.insert_bson("match", doc);
 
         return doc;
 
-    } 
+    }
+    public static BsonDocument get_doc_three_like_circle(BsonDocument match1, BsonDocument match2, BsonDocument match3, int max_count)
+    {
+
+        double[,] single_profit = new double[3, 3]{{Convert.ToDouble(match1["three"].ToString()),Convert.ToDouble(match1["one"].ToString()),Convert.ToDouble(match1["zero"].ToString())},
+                                                   {Convert.ToDouble(match2["three"].ToString()),Convert.ToDouble(match2["one"].ToString()),Convert.ToDouble(match2["zero"].ToString())},
+                                                   {Convert.ToDouble(match3["three"].ToString()),Convert.ToDouble(match3["one"].ToString()),Convert.ToDouble(match3["zero"].ToString())}};
+
+
+        int[] bids = new int[3 * 3 * 3];
+        int[] bids_temp = new int[3 * 3 * 3];
+        for (int i = 0; i < 3 * 3 * 3; i++)
+        {
+            bids[i] = 1;
+            bids[i] = 1;
+        }
+
+        double[] profits = new double[3 * 3 * 3];
+        double[] profits_temp = new double[3 * 3 * 3];
+        int index = 0;
+        for (int i = 0; i < 3; i++)
+        {
+            for (int j = 0; j < 3; j++)
+            {
+                for (int k = 0; k < 3; k++)
+                {
+                    profits[index] = single_profit[0, i] * single_profit[1, j] * single_profit[2, k];
+                    index = index + 1;
+                }
+            }
+        }
+
+        for (int i = 0; i < 3 * 3 * 3; i++)
+        {
+            profits_temp[i] = profits[i];
+        }
+
+        //排序
+        for (int step1 = 0; step1 < 3 * 3 * 3; step1++)
+        {
+            int step_index = 0;
+            double step_max = -999999999;
+            for (int step2 = 0; step2 < 3 * 3 * 3; step2++)
+            {
+                if (profits_temp[step2] > step_max)
+                {
+                    step_max = profits_temp[step2];
+                    step_index = step2;
+                }
+            }
+            profits_temp[step_index] = 0;
+            profits[step1] = step_max;
+        }
+
+        //for (int step = 0; step < 3*3; step++)
+        //{
+        //    profits[step] = profits[step] * 1.208;
+        //}
+
+
+        DateTime dt_start = DateTime.Now;
+        bids[0] = max_count;
+        for (int i = 1; i < 3 * 3 * 3; i++)
+        {
+            bids[i] = (int)Math.Floor(profits[0] * bids[0] / profits[i]);
+        }
+
+        for (int i = 0; i < 3 * 3 * 3; i++)
+        {
+            bids_temp[i] = bids[i];
+        }
+
+        //DataTable dt = new DataTable();
+        //dt.Columns.Add("less");
+        //dt.Columns.Add("more");
+
+        //for (int i = 1; i < 3 * 3 * 3; i++)
+        //{
+        //    DataRow row_new = dt.NewRow();
+        //    row_new["less"] = bids[i].ToString();
+        //    row_new["more"] = (bids[i] + 1).ToString();
+        //}
+
+
+        int bid_total = 0;
+        for (int i = 0; i < 3 * 3 * 3; i++)
+        {
+            bid_total = bid_total + bids[i];
+        }
+
+        double min = 999999999;
+        double max = -999999999;
+
+        for (int i = 1; i < 3 * 3 * 3; i++)
+        {
+            if (bids[i] * profits[i] - bid_total < min) min = bids[i] * profits[i] - bid_total;
+            if (bids[i] * profits[i] - bid_total > max) max = bids[i] * profits[i] - bid_total;
+        }
+
+
+        DateTime dt_end = DateTime.Now;
+
+        BsonDocument doc = new BsonDocument();
+        doc.Add("doc_id", DateTime.Now.ToString("yyyyMMddHHmmss") + DateTime.Now.Millisecond.ToString());
+        doc.Add("type", "3-like-circle");
+        doc.Add("loop_count", max_count.ToString());
+        doc.Add("start_time1", match1["start_time"].ToString());
+        doc.Add("host1", match1["host"].ToString());
+        doc.Add("client1", match1["client"].ToString());
+        doc.Add("three1", single_profit[0, 0].ToString("f2"));
+        doc.Add("one1", single_profit[0, 1].ToString("f2"));
+        doc.Add("zero1", single_profit[0, 2].ToString("f2"));
+        doc.Add("start_time2", match2["start_time"].ToString());
+        doc.Add("host2", match2["host"].ToString());
+        doc.Add("client2", match2["client"].ToString());
+        doc.Add("three2", single_profit[1, 0].ToString("f2"));
+        doc.Add("one2", single_profit[1, 1].ToString("f2"));
+        doc.Add("zero2", single_profit[1, 2].ToString("f2"));
+        doc.Add("start_time3", match3["start_time"].ToString());
+        doc.Add("host3", match3["host"].ToString());
+        doc.Add("client3", match3["client"].ToString());
+        doc.Add("three3", single_profit[2, 0].ToString("f2"));
+        doc.Add("one3", single_profit[2, 1].ToString("f2"));
+        doc.Add("zero3", single_profit[2, 2].ToString("f2"));
+        doc.Add("bid_count", bid_total.ToString());
+        doc.Add("total_bid_count", bid_total.ToString());
+        doc.Add("compute_count", "81");
+        doc.Add("use_second", (dt_end - dt_start).TotalSeconds.ToString());
+        doc.Add("min_value", min.ToString("f4"));
+        doc.Add("max_value", max.ToString("f4"));
+        //doc.Add("b1", bids[0].ToString());
+        //doc.Add("b2", bids[1].ToString());
+        //doc.Add("b3", bids[2].ToString());
+        //doc.Add("b4", bids[3].ToString());
+        //doc.Add("b5", bids[4].ToString());
+        //doc.Add("b6", bids[5].ToString());
+        //doc.Add("b7", bids[6].ToString());
+        //doc.Add("b8", bids[7].ToString());
+        //doc.Add("b9", profits[8].ToString("f2"));
+        //doc.Add("p1", profits[0].ToString("f2"));
+        //doc.Add("p2", profits[1].ToString("f2"));
+        //doc.Add("p3", profits[2].ToString("f2"));
+        //doc.Add("p4", profits[3].ToString("f2"));
+        //doc.Add("p5", profits[4].ToString("f2"));
+        //doc.Add("p6", profits[5].ToString("f2"));
+        //doc.Add("p7", profits[6].ToString("f2"));
+        //doc.Add("p8", profits[7].ToString("f2"));
+        //doc.Add("p9", profits[8].ToString("f2"));
+        //doc.Add("r1", (bids[0] * profits[0] - bid_total).ToString("f2"));
+        //doc.Add("r2", (bids[1] * profits[1] - bid_total).ToString("f2"));
+        //doc.Add("r3", (bids[2] * profits[2] - bid_total).ToString("f2"));
+        //doc.Add("r4", (bids[3] * profits[3] - bid_total).ToString("f2"));
+        //doc.Add("r5", (bids[4] * profits[4] - bid_total).ToString("f2"));
+        //doc.Add("r6", (bids[5] * profits[5] - bid_total).ToString("f2"));
+        //doc.Add("r7", (bids[6] * profits[6] - bid_total).ToString("f2"));
+        //doc.Add("r8", (bids[7] * profits[7] - bid_total).ToString("f2"));
+        //doc.Add("r9", (bids[8] * profits[8] - bid_total).ToString("f2"));
+        if (is_open_mongo) MongoHelper.insert_bson("match", doc);
+
+        return doc;
+
+    }
+
     public static double get_max_profit(string type, int count, int total, double offer_a, double offer_b)
     {
         double temp = 0;
@@ -1134,7 +1295,7 @@ public class MatchHelper
                  doc["three1"].ToString().PadRight(10, ' ') +
                  doc["one1"].ToString().PadRight(10, ' ') +
                  doc["zero1"].ToString().PadRight(10, ' ') + Environment.NewLine +
-                 doc["start_time1"].ToString() + "      " + doc["host2"].ToString().PadRight(10, ' ') + doc["client2"].ToString().PadRight(10, ' ') +
+                 doc["start_time2"].ToString() + "      " + doc["host2"].ToString().PadRight(10, ' ') + doc["client2"].ToString().PadRight(10, ' ') +
                  doc["three2"].ToString().PadRight(10, ' ') +
                  doc["one2"].ToString().PadRight(10, ' ') +
                  doc["zero2"].ToString().PadRight(10, ' ') + Environment.NewLine +
@@ -1142,7 +1303,7 @@ public class MatchHelper
                 "total bid count:" + doc["total_bid_count"].ToString() + Environment.NewLine +
                 "compute count: " + doc["compute_count"].ToString() + Environment.NewLine +
                 "use seconds: " + doc["use_second"].ToString() + Environment.NewLine +
-                "return value: " + doc["min_value"].ToString() + "~" + doc["max_value"].ToString() + Environment.NewLine +
+                "return value: " + doc["min_value"].ToString() + "  ~  " + doc["max_value"].ToString() + Environment.NewLine +
                 "return persent: " + (Convert.ToDouble(doc["min_value"].ToString()) / Convert.ToDouble(doc["total_bid_count"].ToString()) * 100).ToString("f6") + "%" + Environment.NewLine +
                 "detail infomation:" + Environment.NewLine +
                 "B33: " + doc["b33"].ToString().PadRight(15, ' ') +
@@ -1170,7 +1331,7 @@ public class MatchHelper
             doc["three1"].ToString().PadRight(10, ' ') +
             doc["one1"].ToString().PadRight(10, ' ') +
             doc["zero1"].ToString().PadRight(10, ' ') + Environment.NewLine +
-            doc["start_time1"].ToString() + "      " + doc["host2"].ToString().PadRight(10, ' ') + doc["client2"].ToString().PadRight(10, ' ') +
+            doc["start_time2"].ToString() + "      " + doc["host2"].ToString().PadRight(10, ' ') + doc["client2"].ToString().PadRight(10, ' ') +
             doc["three2"].ToString().PadRight(10, ' ') +
             doc["one2"].ToString().PadRight(10, ' ') +
             doc["zero2"].ToString().PadRight(10, ' ') + Environment.NewLine +
@@ -1178,7 +1339,7 @@ public class MatchHelper
            "total bid count:" + doc["total_bid_count"].ToString() + Environment.NewLine +
            "compute count: " + doc["compute_count"].ToString() + Environment.NewLine +
            "use seconds: " + doc["use_second"].ToString() + Environment.NewLine +
-           "return value: " + doc["min_value"].ToString() + "~" + doc["max_value"].ToString() + Environment.NewLine +
+           "return value: " + doc["min_value"].ToString() + "  ~  " + doc["max_value"].ToString() + Environment.NewLine +
            "return persent: " + (Convert.ToDouble(doc["min_value"].ToString()) / Convert.ToDouble(doc["total_bid_count"].ToString()) * 100).ToString("f6") + "%" + Environment.NewLine +
            "group information: " + doc["group_info"].ToString() + Environment.NewLine +
            "detail infomation:" + Environment.NewLine +
@@ -1207,7 +1368,7 @@ public class MatchHelper
                doc["three1"].ToString().PadRight(10, ' ') +
                doc["one1"].ToString().PadRight(10, ' ') +
                doc["zero1"].ToString().PadRight(10, ' ') + Environment.NewLine +
-               doc["start_time1"].ToString() + "      " + doc["host2"].ToString().PadRight(10, ' ') + doc["client2"].ToString().PadRight(10, ' ') +
+               doc["start_time2"].ToString() + "      " + doc["host2"].ToString().PadRight(10, ' ') + doc["client2"].ToString().PadRight(10, ' ') +
                doc["three2"].ToString().PadRight(10, ' ') +
                doc["one2"].ToString().PadRight(10, ' ') +
                doc["zero2"].ToString().PadRight(10, ' ') + Environment.NewLine +
@@ -1215,7 +1376,7 @@ public class MatchHelper
               "total bid count:" + doc["total_bid_count"].ToString() + Environment.NewLine +
               "compute count: " + doc["compute_count"].ToString() + Environment.NewLine +
               "use seconds: " + doc["use_second"].ToString() + Environment.NewLine +
-              "return value: " + doc["min_value"].ToString() + "~" + doc["max_value"].ToString() + Environment.NewLine +
+              "return value: " + doc["min_value"].ToString() + "  ~  " + doc["max_value"].ToString() + Environment.NewLine +
               "return persent: " + (Convert.ToDouble(doc["min_value"].ToString()) / Convert.ToDouble(doc["total_bid_count"].ToString()) * 100).ToString("f6") + "%" + Environment.NewLine +
                 "detail infomation:" + Environment.NewLine +
                  "B33: " + doc["b33"].ToString().PadRight(15, ' ') +
@@ -1243,7 +1404,7 @@ public class MatchHelper
                  doc["three1"].ToString().PadRight(10, ' ') +
                  doc["one1"].ToString().PadRight(10, ' ') +
                  doc["zero1"].ToString().PadRight(10, ' ') + Environment.NewLine +
-                 doc["start_time1"].ToString() + "      " + doc["host2"].ToString().PadRight(10, ' ') + doc["client2"].ToString().PadRight(10, ' ') +
+                 doc["start_time2"].ToString() + "      " + doc["host2"].ToString().PadRight(10, ' ') + doc["client2"].ToString().PadRight(10, ' ') +
                  doc["three2"].ToString().PadRight(10, ' ') +
                  doc["one2"].ToString().PadRight(10, ' ') +
                  doc["zero2"].ToString().PadRight(10, ' ') + Environment.NewLine +
@@ -1251,7 +1412,7 @@ public class MatchHelper
                 "total bid count:" + doc["total_bid_count"].ToString() + Environment.NewLine +
                 "compute count: " + doc["compute_count"].ToString() + Environment.NewLine +
                 "use seconds: " + doc["use_second"].ToString() + Environment.NewLine +
-                "return value: " + doc["min_value"].ToString() + "~" + doc["max_value"].ToString() + Environment.NewLine +
+                "return value: " + doc["min_value"].ToString() + "  ~  " + doc["max_value"].ToString() + Environment.NewLine +
                 "return persent: " + (Convert.ToDouble(doc["min_value"].ToString()) / Convert.ToDouble(doc["total_bid_count"].ToString()) * 100).ToString("f6") + "%" + Environment.NewLine +
                 "detail infomation:" + Environment.NewLine +
                 "B33: " + doc["b33"].ToString().PadRight(15, ' ') +
@@ -1278,17 +1439,17 @@ public class MatchHelper
                doc["start_time1"].ToString() + "      " + doc["host1"].ToString().PadRight(10, ' ') + doc["client1"].ToString().PadRight(10, ' ') +
                doc["three1"].ToString().PadRight(10, ' ') +
                doc["one1"].ToString().PadRight(10, ' ') +
-               doc["zero1"].ToString().PadRight(10, ' ') + Environment.NewLine + 
+               doc["zero1"].ToString().PadRight(10, ' ') + Environment.NewLine +
               "bid count:" + doc["bid_count"].ToString() + Environment.NewLine +
               "total bid count:" + doc["total_bid_count"].ToString() + Environment.NewLine +
               "compute count: " + doc["compute_count"].ToString() + Environment.NewLine +
               "use seconds: " + doc["use_second"].ToString() + Environment.NewLine +
-              "return value: " + doc["min_value"].ToString() + "~" + doc["max_value"].ToString() + Environment.NewLine +
+              "return value: " + doc["min_value"].ToString() + "  ~  " + doc["max_value"].ToString() + Environment.NewLine +
               "return persent: " + (Convert.ToDouble(doc["min_value"].ToString()) / Convert.ToDouble(doc["total_bid_count"].ToString()) * 100).ToString("f6") + "%" + Environment.NewLine +
               "detail infomation:" + Environment.NewLine +
-               doc["p1"].ToString().PadRight(10, ' ') + doc["p2"].ToString().PadRight(10, ' ') + doc["p3"].ToString().PadRight(10, ' ') +  Environment.NewLine +
-               doc["b1"].ToString().PadRight(10, ' ') + doc["b2"].ToString().PadRight(10, ' ') + doc["b3"].ToString().PadRight(10, ' ') +  Environment.NewLine +
-               doc["r1"].ToString().PadRight(10, ' ') + doc["r2"].ToString().PadRight(10, ' ') + doc["r3"].ToString().PadRight(10, ' ') +  Environment.NewLine + Environment.NewLine;
+               doc["p1"].ToString().PadRight(10, ' ') + doc["p2"].ToString().PadRight(10, ' ') + doc["p3"].ToString().PadRight(10, ' ') + Environment.NewLine +
+               doc["b1"].ToString().PadRight(10, ' ') + doc["b2"].ToString().PadRight(10, ' ') + doc["b3"].ToString().PadRight(10, ' ') + Environment.NewLine +
+               doc["r1"].ToString().PadRight(10, ' ') + doc["r2"].ToString().PadRight(10, ' ') + doc["r3"].ToString().PadRight(10, ' ') + Environment.NewLine + Environment.NewLine;
                 break;
             case "2-like-circle":
                 result = "type:" + doc["type"].ToString() + "  doc id:" + doc["doc_id"].ToString() + Environment.NewLine + "loop_count:" + doc["loop_count"].ToInt32() + Environment.NewLine +
@@ -1296,7 +1457,7 @@ public class MatchHelper
                doc["three1"].ToString().PadRight(10, ' ') +
                doc["one1"].ToString().PadRight(10, ' ') +
                doc["zero1"].ToString().PadRight(10, ' ') + Environment.NewLine +
-               doc["start_time1"].ToString() + "      " + doc["host2"].ToString().PadRight(10, ' ') + doc["client2"].ToString().PadRight(10, ' ') +
+               doc["start_time2"].ToString() + "      " + doc["host2"].ToString().PadRight(10, ' ') + doc["client2"].ToString().PadRight(10, ' ') +
                doc["three2"].ToString().PadRight(10, ' ') +
                doc["one2"].ToString().PadRight(10, ' ') +
                doc["zero2"].ToString().PadRight(10, ' ') + Environment.NewLine +
@@ -1304,7 +1465,7 @@ public class MatchHelper
               "total bid count:" + doc["total_bid_count"].ToString() + Environment.NewLine +
               "compute count: " + doc["compute_count"].ToString() + Environment.NewLine +
               "use seconds: " + doc["use_second"].ToString() + Environment.NewLine +
-              "return value: " + doc["min_value"].ToString() + "~" + doc["max_value"].ToString() + Environment.NewLine +
+              "return value: " + doc["min_value"].ToString() + "  ~  " + doc["max_value"].ToString() + Environment.NewLine +
               "return persent: " + (Convert.ToDouble(doc["min_value"].ToString()) / Convert.ToDouble(doc["total_bid_count"].ToString()) * 100).ToString("f6") + "%" + Environment.NewLine +
               "detail infomation:" + Environment.NewLine +
                doc["p1"].ToString().PadRight(10, ' ') + doc["p2"].ToString().PadRight(10, ' ') + doc["p3"].ToString().PadRight(10, ' ') +
@@ -1316,6 +1477,27 @@ public class MatchHelper
                doc["r1"].ToString().PadRight(10, ' ') + doc["r2"].ToString().PadRight(10, ' ') + doc["r3"].ToString().PadRight(10, ' ') +
                doc["r4"].ToString().PadRight(10, ' ') + doc["r5"].ToString().PadRight(10, ' ') + doc["r6"].ToString().PadRight(10, ' ') +
                doc["r7"].ToString().PadRight(10, ' ') + doc["r8"].ToString().PadRight(10, ' ') + doc["r9"].ToString().PadRight(10, ' ') + Environment.NewLine + Environment.NewLine;
+                break;
+            case "3-like-circle":
+                result = "type:" + doc["type"].ToString() + "  doc id:" + doc["doc_id"].ToString() + Environment.NewLine + "loop_count:" + doc["loop_count"].ToInt32() + Environment.NewLine +
+               doc["start_time1"].ToString() + "      " + doc["host1"].ToString().PadRight(10, ' ') + doc["client1"].ToString().PadRight(10, ' ') +
+               doc["three1"].ToString().PadRight(10, ' ') +
+               doc["one1"].ToString().PadRight(10, ' ') +
+               doc["zero1"].ToString().PadRight(10, ' ') + Environment.NewLine +
+               doc["start_time2"].ToString() + "      " + doc["host2"].ToString().PadRight(10, ' ') + doc["client2"].ToString().PadRight(10, ' ') +
+               doc["three2"].ToString().PadRight(10, ' ') +
+               doc["one2"].ToString().PadRight(10, ' ') +
+               doc["zero2"].ToString().PadRight(10, ' ') + Environment.NewLine +
+               doc["start_time3"].ToString() + "      " + doc["host3"].ToString().PadRight(10, ' ') + doc["client3"].ToString().PadRight(10, ' ') +
+               doc["three3"].ToString().PadRight(10, ' ') +
+               doc["one3"].ToString().PadRight(10, ' ') +
+               doc["zero3"].ToString().PadRight(10, ' ') + Environment.NewLine +
+              "bid count:" + doc["bid_count"].ToString() + Environment.NewLine +
+              "total bid count:" + doc["total_bid_count"].ToString() + Environment.NewLine +
+              "compute count: " + doc["compute_count"].ToString() + Environment.NewLine +
+              "use seconds: " + doc["use_second"].ToString() + Environment.NewLine +
+              "return value: " + doc["min_value"].ToString() + "  ~  " + doc["max_value"].ToString() + Environment.NewLine +
+              "return persent: " + (Convert.ToDouble(doc["min_value"].ToString()) / Convert.ToDouble(doc["total_bid_count"].ToString()) * 100).ToString("f6") + "%" + Environment.NewLine + Environment.NewLine;
                 break;
             default:
                 break;

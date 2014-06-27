@@ -680,6 +680,98 @@ namespace WinCode
                 this.tab.SelectTab(1);
             }
         }
+        private void btn_compute_circle_three_Click(object sender, EventArgs e)
+        {
+
+            this.txt_compute.Text = "";
+
+            DataTable dt = new DataTable();
+            dt.Columns.Add("start_time");
+            dt.Columns.Add("host");
+            dt.Columns.Add("client");
+            dt.Columns.Add("three");
+            dt.Columns.Add("one");
+            dt.Columns.Add("zero");
+
+            foreach (DataGridViewRow row in dgv_condition.Rows)
+            {
+                if (Convert.ToBoolean(row.Cells["selected"].Value) == true)
+                {
+                    DataRow row_new = dt.NewRow();
+                    row_new["start_time"] = row.Cells["start_time"].Value.ToString();
+                    row_new["host"] = row.Cells["host"].Value.ToString();
+                    row_new["client"] = row.Cells["client"].Value.ToString();
+                    row_new["three"] = row.Cells["three"].Value.ToString();
+                    row_new["one"] = row.Cells["one"].Value.ToString();
+                    row_new["zero"] = row.Cells["zero"].Value.ToString();
+                    dt.Rows.Add(row_new);
+                }
+            }
+
+            if (dt.Rows.Count == 0)
+            {
+
+                MessageBox.Show("not select data!");
+                return;
+            }
+
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < dt.Rows.Count; i++)
+            {
+                for (int j = i + 1; j < dt.Rows.Count; j++)
+                {
+
+                    for (int k = j + 1; k < dt.Rows.Count; k++)
+                    {
+                        BsonDocument match1 = new BsonDocument();
+                        match1["start_time"] = dt.Rows[i]["start_time"].ToString();
+                        match1["host"] = dt.Rows[i]["host"].ToString();
+                        match1["client"] = dt.Rows[i]["client"].ToString();
+                        match1["three"] = Convert.ToDouble(dt.Rows[i]["three"].ToString());
+                        match1["one"] = Convert.ToDouble(dt.Rows[i]["one"].ToString());
+                        match1["zero"] = Convert.ToDouble(dt.Rows[i]["zero"].ToString());
+
+                        BsonDocument match2 = new BsonDocument();
+                        match2["start_time"] = dt.Rows[j]["start_time"].ToString();
+                        match2["host"] = dt.Rows[j]["host"].ToString();
+                        match2["client"] = dt.Rows[j]["client"].ToString();
+                        match2["three"] = Convert.ToDouble(dt.Rows[j]["three"].ToString());
+                        match2["one"] = Convert.ToDouble(dt.Rows[j]["one"].ToString());
+                        match2["zero"] = Convert.ToDouble(dt.Rows[j]["zero"].ToString());
+
+                        BsonDocument match3 = new BsonDocument();
+                        match3["start_time"] = dt.Rows[k]["start_time"].ToString();
+                        match3["host"] = dt.Rows[k]["host"].ToString();
+                        match3["client"] = dt.Rows[k]["client"].ToString();
+                        match3["three"] = Convert.ToDouble(dt.Rows[k]["three"].ToString());
+                        match3["one"] = Convert.ToDouble(dt.Rows[k]["one"].ToString());
+                        match3["zero"] = Convert.ToDouble(dt.Rows[k]["zero"].ToString());
+
+
+
+                        for (int l = 1; l <= 100; l++)
+                        {
+                            BsonDocument doc = MatchHelper.get_doc_three_like_circle(match1, match2, match3, l);
+
+                            sb.Append("------------------------------------------------------------------------------------------------" + Environment.NewLine);
+                            sb.Append(MatchHelper.get_info_from_doc(doc));
+                            this.txt_compute.Text = sb.ToString();
+                            Application.DoEvents();
+                        }
+
+                        sb.Append("------------------------------------------------------------------------------------------------" + Environment.NewLine);
+                        this.txt_compute.Text = sb.ToString();
+                        Application.DoEvents();
+                    }
+
+                }
+            }
+
+            this.txt_compute.Text = sb.ToString();
+            this.tab.SelectTab(1);
+
+            MessageBox.Show("bingo!!!complete!!!");
+        }
         private void txt_compute_TextChanged(object sender, EventArgs e)
         {
             this.txt_compute.SelectionStart = this.txt_compute.TextLength;
@@ -799,6 +891,8 @@ namespace WinCode
             }
             this.dgv_condition.DataSource = dt_condition;
         }
+
+ 
 
 
 
