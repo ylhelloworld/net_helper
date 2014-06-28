@@ -1,6 +1,6 @@
 ﻿namespace WinCode
 {
-    partial class FrmMatch
+    partial class FrmMixMatch
     {
         /// <summary>
         /// Required designer variable.
@@ -30,20 +30,24 @@
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.btn_compute = new System.Windows.Forms.Button();
+            this.btn_1_half_min = new System.Windows.Forms.Button();
+            this.btn_1_spread_min = new System.Windows.Forms.Button();
+            this.btn_1_wld_min = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.btn_load_match = new System.Windows.Forms.Button();
-            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tab = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.txt_match = new System.Windows.Forms.TextBox();
             this.dgv_match = new System.Windows.Forms.DataGridView();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.txt_compute_result = new System.Windows.Forms.TextBox();
+            this.btn_1_total_min = new System.Windows.Forms.Button();
+            this.btn_1_point_min = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox2.SuspendLayout();
-            this.tabControl1.SuspendLayout();
+            this.tab.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_match)).BeginInit();
             this.tabPage2.SuspendLayout();
@@ -57,29 +61,54 @@
             this.groupBox1.Controls.Add(this.groupBox2);
             this.groupBox1.Location = new System.Drawing.Point(4, 2);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(317, 587);
+            this.groupBox1.Size = new System.Drawing.Size(317, 618);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Operation";
             // 
             // groupBox3
             // 
-            this.groupBox3.Controls.Add(this.btn_compute);
+            this.groupBox3.Controls.Add(this.btn_1_point_min);
+            this.groupBox3.Controls.Add(this.btn_1_total_min);
+            this.groupBox3.Controls.Add(this.btn_1_half_min);
+            this.groupBox3.Controls.Add(this.btn_1_spread_min);
+            this.groupBox3.Controls.Add(this.btn_1_wld_min);
             this.groupBox3.Location = new System.Drawing.Point(6, 77);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(305, 174);
+            this.groupBox3.Size = new System.Drawing.Size(305, 314);
             this.groupBox3.TabIndex = 1;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Compute Tool";
             // 
-            // btn_compute
+            // btn_1_half_min
             // 
-            this.btn_compute.Location = new System.Drawing.Point(201, 30);
-            this.btn_compute.Name = "btn_compute";
-            this.btn_compute.Size = new System.Drawing.Size(79, 23);
-            this.btn_compute.TabIndex = 0;
-            this.btn_compute.Text = "Compute";
-            this.btn_compute.UseVisualStyleBackColor = true;
+            this.btn_1_half_min.Location = new System.Drawing.Point(9, 86);
+            this.btn_1_half_min.Name = "btn_1_half_min";
+            this.btn_1_half_min.Size = new System.Drawing.Size(80, 23);
+            this.btn_1_half_min.TabIndex = 2;
+            this.btn_1_half_min.Text = "1-half-min";
+            this.btn_1_half_min.UseVisualStyleBackColor = true;
+            this.btn_1_half_min.Click += new System.EventHandler(this.btn_1_half_min_Click);
+            // 
+            // btn_1_spread_min
+            // 
+            this.btn_1_spread_min.Location = new System.Drawing.Point(9, 57);
+            this.btn_1_spread_min.Name = "btn_1_spread_min";
+            this.btn_1_spread_min.Size = new System.Drawing.Size(80, 23);
+            this.btn_1_spread_min.TabIndex = 1;
+            this.btn_1_spread_min.Text = "1-spread-min";
+            this.btn_1_spread_min.UseVisualStyleBackColor = true;
+            this.btn_1_spread_min.Click += new System.EventHandler(this.btn_1_spread_min_Click);
+            // 
+            // btn_1_wld_min
+            // 
+            this.btn_1_wld_min.Location = new System.Drawing.Point(9, 28);
+            this.btn_1_wld_min.Name = "btn_1_wld_min";
+            this.btn_1_wld_min.Size = new System.Drawing.Size(80, 23);
+            this.btn_1_wld_min.TabIndex = 0;
+            this.btn_1_wld_min.Text = "1-wld-min";
+            this.btn_1_wld_min.UseVisualStyleBackColor = true;
+            this.btn_1_wld_min.Click += new System.EventHandler(this.btn_1_wld_min_Click);
             // 
             // groupBox2
             // 
@@ -107,19 +136,20 @@
             this.btn_load_match.TabIndex = 0;
             this.btn_load_match.Text = "Load";
             this.btn_load_match.UseVisualStyleBackColor = true;
+            this.btn_load_match.Click += new System.EventHandler(this.btn_load_match_Click);
             // 
-            // tabControl1
+            // tab
             // 
-            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            this.tab.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.tabControl1.Controls.Add(this.tabPage1);
-            this.tabControl1.Controls.Add(this.tabPage2);
-            this.tabControl1.Location = new System.Drawing.Point(327, 2);
-            this.tabControl1.Name = "tabControl1";
-            this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(741, 587);
-            this.tabControl1.TabIndex = 1;
+            this.tab.Controls.Add(this.tabPage1);
+            this.tab.Controls.Add(this.tabPage2);
+            this.tab.Location = new System.Drawing.Point(327, 2);
+            this.tab.Name = "tab";
+            this.tab.SelectedIndex = 0;
+            this.tab.Size = new System.Drawing.Size(879, 618);
+            this.tab.TabIndex = 1;
             // 
             // tabPage1
             // 
@@ -128,33 +158,36 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(733, 561);
+            this.tabPage1.Size = new System.Drawing.Size(871, 592);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Conditon";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
             // txt_match
             // 
-            this.txt_match.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+            this.txt_match.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.txt_match.Location = new System.Drawing.Point(3, 385);
+            this.txt_match.Font = new System.Drawing.Font("Lucida Console", 9.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txt_match.Location = new System.Drawing.Point(3, 199);
             this.txt_match.Multiline = true;
             this.txt_match.Name = "txt_match";
             this.txt_match.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txt_match.Size = new System.Drawing.Size(725, 170);
+            this.txt_match.Size = new System.Drawing.Size(863, 387);
             this.txt_match.TabIndex = 1;
             // 
             // dgv_match
             // 
-            this.dgv_match.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
+            this.dgv_match.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.dgv_match.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgv_match.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgv_match.Location = new System.Drawing.Point(3, 3);
             this.dgv_match.Name = "dgv_match";
-            this.dgv_match.Size = new System.Drawing.Size(725, 376);
+            this.dgv_match.Size = new System.Drawing.Size(863, 190);
             this.dgv_match.TabIndex = 0;
+            this.dgv_match.RowEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_match_RowEnter);
+            this.dgv_match.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgv_match_CellMouseDown);
             // 
             // tabPage2
             // 
@@ -162,7 +195,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(733, 561);
+            this.tabPage2.Size = new System.Drawing.Size(871, 592);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Compute Result";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -170,29 +203,50 @@
             // txt_compute_result
             // 
             this.txt_compute_result.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txt_compute_result.Font = new System.Drawing.Font("Lucida Console", 9.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txt_compute_result.Location = new System.Drawing.Point(3, 3);
             this.txt_compute_result.Multiline = true;
             this.txt_compute_result.Name = "txt_compute_result";
             this.txt_compute_result.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txt_compute_result.Size = new System.Drawing.Size(727, 555);
+            this.txt_compute_result.Size = new System.Drawing.Size(865, 586);
             this.txt_compute_result.TabIndex = 2;
             this.txt_compute_result.TextChanged += new System.EventHandler(this.txt_compute_result_TextChanged);
             // 
-            // FrmMatch
+            // btn_1_total_min
+            // 
+            this.btn_1_total_min.Location = new System.Drawing.Point(9, 115);
+            this.btn_1_total_min.Name = "btn_1_total_min";
+            this.btn_1_total_min.Size = new System.Drawing.Size(80, 23);
+            this.btn_1_total_min.TabIndex = 3;
+            this.btn_1_total_min.Text = "1-total-min";
+            this.btn_1_total_min.UseVisualStyleBackColor = true;
+            this.btn_1_total_min.Click += new System.EventHandler(this.btn_1_total_min_Click);
+            // 
+            // btn_1_point_min
+            // 
+            this.btn_1_point_min.Location = new System.Drawing.Point(9, 144);
+            this.btn_1_point_min.Name = "btn_1_point_min";
+            this.btn_1_point_min.Size = new System.Drawing.Size(80, 23);
+            this.btn_1_point_min.TabIndex = 4;
+            this.btn_1_point_min.Text = "1-point-min";
+            this.btn_1_point_min.UseVisualStyleBackColor = true;
+            this.btn_1_point_min.Click += new System.EventHandler(this.btn_1_point_min_Click);
+            // 
+            // FrmMixMatch
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1071, 594);
-            this.Controls.Add(this.tabControl1);
+            this.ClientSize = new System.Drawing.Size(1209, 625);
+            this.Controls.Add(this.tab);
             this.Controls.Add(this.groupBox1);
-            this.Name = "FrmMatch";
+            this.Name = "FrmMixMatch";
             this.Text = "Persent Compute";
             this.Load += new System.EventHandler(this.FrmMatch_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
-            this.tabControl1.ResumeLayout(false);
+            this.tab.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_match)).EndInit();
@@ -205,7 +259,7 @@
         #endregion
 
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.TabControl tab;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.TextBox txt_match;
@@ -215,6 +269,10 @@
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Button btn_load_match;
         private System.Windows.Forms.GroupBox groupBox3;
-        private System.Windows.Forms.Button btn_compute;
+        private System.Windows.Forms.Button btn_1_wld_min;
+        private System.Windows.Forms.Button btn_1_spread_min;
+        private System.Windows.Forms.Button btn_1_half_min;
+        private System.Windows.Forms.Button btn_1_total_min;
+        private System.Windows.Forms.Button btn_1_point_min;
     }
 }

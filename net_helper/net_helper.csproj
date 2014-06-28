@@ -141,11 +141,11 @@
     <Compile Include="FrmLogMonitor.Designer.cs">
       <DependentUpon>FrmLogMonitor.cs</DependentUpon>
     </Compile>
-    <Compile Include="FrmMatch.cs">
+    <Compile Include="FrmMixMatch.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FrmMatch.Designer.cs">
-      <DependentUpon>FrmMatch.cs</DependentUpon>
+    <Compile Include="FrmMixMatch.Designer.cs">
+      <DependentUpon>FrmMixMatch.cs</DependentUpon>
     </Compile>
     <Compile Include="FrmPersent.cs">
       <SubType>Form</SubType>
@@ -197,6 +197,7 @@
     <Compile Include="Http\Request.cs" />
     <Compile Include="Http\Response.cs" />
     <Compile Include="Http\Session.cs" />
+    <Compile Include="Helper\MixMatchHelper.cs" />
     <Compile Include="Tool\FrmHook.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -282,8 +283,8 @@
       <DependentUpon>FrmLogMonitor.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="FrmMatch.resx">
-      <DependentUpon>FrmMatch.cs</DependentUpon>
+    <EmbeddedResource Include="FrmMixMatch.resx">
+      <DependentUpon>FrmMixMatch.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="FrmPersent.resx">

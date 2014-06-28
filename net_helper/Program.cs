@@ -26,7 +26,9 @@ namespace WinCode
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FrmMatch()); 
+            Application.Run(new FrmMixMatch()); 
         }
     }
 }
+ 
+          
