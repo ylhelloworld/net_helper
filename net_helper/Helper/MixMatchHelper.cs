@@ -880,7 +880,7 @@ namespace WinCode
             switch (doc["type"].ToString())
             {
                 case "mix-doc":
-                    result = doc["start_time"].ToString() + "      " + doc["host"].ToString().PadRight(10, ' ') + doc["client"].ToString().PadRight(10, ' ') + Environment.NewLine +
+                    result = doc["start_time"].ToString() + "      " + doc["host"].ToString().PadRight(10, ' ') + doc["client"].ToString().PadRight(10, ' ') + Environment.NewLine +Environment.NewLine+
                    "WDL:".PadRight(15, ' ') + "0".PadRight(10, ' ') +
                    doc["wdl_w"].ToString().PadRight(10, ' ') +
                    doc["wdl_d"].ToString().PadRight(10, ' ') +
@@ -888,7 +888,7 @@ namespace WinCode
                    " ".PadRight(15, ' ') + doc["spread_count"].ToString().PadRight(10, ' ') +
                    doc["spread_w"].ToString().PadRight(10, ' ') +
                    doc["spread_d"].ToString().PadRight(10, ' ') +
-                   doc["spread_l"].ToString().PadRight(10, ' ') + Environment.NewLine +
+                   doc["spread_l"].ToString().PadRight(10, ' ') + Environment.NewLine + Environment.NewLine +
                     " ".PadRight(15, ' ') +
                    "WW".PadRight(8, ' ') + "WD".PadRight(8, ' ') + "WL".PadRight(8, ' ') +
                    "DW".PadRight(8, ' ') + "DD".PadRight(8, ' ') + "DL".PadRight(8, ' ') +
@@ -896,7 +896,7 @@ namespace WinCode
                    " ".PadRight(15, ' ') +
                    doc["half_w_w"].ToString().PadRight(8, ' ') + doc["half_w_d"].ToString().PadRight(8, ' ') + doc["half_w_l"].ToString().PadRight(8, ' ') +
                    doc["half_d_w"].ToString().PadRight(8, ' ') + doc["half_d_d"].ToString().PadRight(8, ' ') + doc["half_d_l"].ToString().PadRight(8, ' ') +
-                   doc["half_l_w"].ToString().PadRight(8, ' ') + doc["half_l_d"].ToString().PadRight(8, ' ') + doc["half_l_l"].ToString().PadRight(8, ' ') + Environment.NewLine +
+                   doc["half_l_w"].ToString().PadRight(8, ' ') + doc["half_l_d"].ToString().PadRight(8, ' ') + doc["half_l_l"].ToString().PadRight(8, ' ') + Environment.NewLine + Environment.NewLine +
                    "Points:".PadRight(15, ' ') +
                    "1-0".PadRight(8, ' ') + "2-0".PadRight(8, ' ') + "2-1".PadRight(8, ' ') + "3-0".PadRight(8, ' ') +
                    "3-1".PadRight(8, ' ') + "3-2".PadRight(8, ' ') + "4-0".PadRight(8, ' ') + "4-1".PadRight(8, ' ') +
@@ -907,13 +907,13 @@ namespace WinCode
                    doc["point_w_3_0"].ToString().PadRight(8, ' ') + doc["point_w_3_1"].ToString().PadRight(8, ' ') + doc["point_w_3_2"].ToString().PadRight(8, ' ') +
                    doc["point_w_4_0"].ToString().PadRight(8, ' ') + doc["point_w_4_1"].ToString().PadRight(8, ' ') + doc["point_w_4_2"].ToString().PadRight(8, ' ') +
                    doc["point_w_5_0"].ToString().PadRight(8, ' ') + doc["point_w_5_1"].ToString().PadRight(8, ' ') + doc["point_w_5_2"].ToString().PadRight(8, ' ') +
-                    doc["point_w_other"].ToString().PadRight(8, ' ') + Environment.NewLine +
+                    doc["point_w_other"].ToString().PadRight(8, ' ') + Environment.NewLine + Environment.NewLine +
                     " ".PadRight(15, ' ') +
                    "0-0".PadRight(8, ' ') + "1-1".PadRight(8, ' ') + "2-2".PadRight(8, ' ') + "3-3".PadRight(8, ' ') +
                    "other".PadRight(10, ' ') + Environment.NewLine +
                    " ".PadRight(15, ' ') +
                    doc["point_d_0_0"].ToString().PadRight(8, ' ') + doc["point_d_1_1"].ToString().PadRight(8, ' ') + doc["point_d_2_2"].ToString().PadRight(8, ' ') +
-                   doc["point_d_3_3"].ToString().PadRight(8, ' ') + doc["point_d_other"].ToString().PadRight(8, ' ') + Environment.NewLine +
+                   doc["point_d_3_3"].ToString().PadRight(8, ' ') + doc["point_d_other"].ToString().PadRight(8, ' ') + Environment.NewLine + Environment.NewLine +
                      " ".PadRight(15, ' ') +
                    "0-1".PadRight(8, ' ') + "0-2".PadRight(8, ' ') + "1-2".PadRight(8, ' ') + "0-3".PadRight(8, ' ') +
                    "1-3".PadRight(8, ' ') + "2-3".PadRight(8, ' ') + "0-4".PadRight(8, ' ') + "1-4".PadRight(8, ' ') +
@@ -924,8 +924,8 @@ namespace WinCode
                    doc["point_l_0_3"].ToString().PadRight(8, ' ') + doc["point_l_1_3"].ToString().PadRight(8, ' ') + doc["point_l_2_3"].ToString().PadRight(8, ' ') +
                    doc["point_l_0_4"].ToString().PadRight(8, ' ') + doc["point_l_1_4"].ToString().PadRight(8, ' ') + doc["point_l_2_4"].ToString().PadRight(8, ' ') +
                    doc["point_l_0_5"].ToString().PadRight(8, ' ') + doc["point_l_1_5"].ToString().PadRight(8, ' ') + doc["point_l_2_5"].ToString().PadRight(8, ' ') +
-                   doc["point_l_other"].ToString().PadRight(8, ' ') + Environment.NewLine +
-                    "Total Point:".PadRight(15, ' ') +
+                   doc["point_l_other"].ToString().PadRight(8, ' ') + Environment.NewLine + Environment.NewLine +
+                    "Total :".PadRight(15, ' ') +
                    "0".PadRight(8, ' ') + "1".PadRight(8, ' ') + "2".PadRight(8, ' ') + "3".PadRight(8, ' ') +
                    "4".PadRight(8, ' ') + "5".PadRight(8, ' ') + "6".PadRight(8, ' ') + "more".PadRight(8, ' ') + Environment.NewLine +
                    " ".PadRight(15, ' ') +

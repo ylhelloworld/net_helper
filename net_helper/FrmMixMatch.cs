@@ -269,6 +269,12 @@ namespace WinCode
             MessageBox.Show("bingo!!!complete!!!");
         }
 
+        private void dgv_match_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            this.dgv_match.Columns[0].Width = 60;
+            this.dgv_match.Columns[1].Width = 60;
+        }
+
 
 
  
