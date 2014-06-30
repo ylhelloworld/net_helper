@@ -30,14 +30,33 @@ namespace WinCode
         private void btn_find_Click(object sender, EventArgs e)
         {
             bind_data(this.txt_condition.Text);
-        }
-
+        } 
         private void txt_pick_result_TextChanged(object sender, EventArgs e)
         {
             this.txt_pick_result.SelectionStart = this.txt_pick_result.TextLength;
             this.txt_pick_result.ScrollToCaret();
+        }  
+        private void btn_pick_Click(object sender, EventArgs e)
+        {
+            pick_data();
+        } 
+        private void btn_start_Click(object sender, EventArgs e)
+        {
+            int interval = (int)num_interval.Value;
+            this.timer.Enabled = true;
+            this.timer.Interval = interval;
+            this.timer.Start();
+        } 
+        private void btn_close_Click(object sender, EventArgs e)
+        {
+            this.timer.Enabled = false;
+            this.timer.Stop();
+        } 
+        private void timer_Tick(object sender, EventArgs e)
+        {
+            Thread thread = new Thread(new ThreadStart(pick_data_random));
+            thread.Start();
         }
-
         public void bind_data(string condition)
         {
 
@@ -62,33 +81,7 @@ namespace WinCode
             dt.Columns["selected"].SetOrdinal(0);
 
             this.dgv_find_result.DataSource = dt;
-        }
-
-        private void btn_pick_Click(object sender, EventArgs e)
-        {
-            pick_data();
-        }
-
-        private void btn_start_Click(object sender, EventArgs e)
-        {
-            int interval = (int)num_interval.Value;
-            this.timer.Enabled = true;
-            this.timer.Interval = interval;
-            this.timer.Start();
-        }
-
-        private void btn_close_Click(object sender, EventArgs e)
-        {
-            this.timer.Enabled = false;
-            this.timer.Stop();
-        }
-
-        private void timer_Tick(object sender, EventArgs e)
-        {
-            Thread thread = new Thread(new ThreadStart(pick_data_random));
-            thread.Start();
-        }
-
+        } 
         public void pick_data()
         {
             foreach (DataGridViewRow row in dgv_find_result.Rows)
@@ -125,7 +118,7 @@ namespace WinCode
                         select_new_data_to_sqlserver(doc_id);
                     }
                 }
-            }
+            } 
         }
         public void select_new_data_to_sqlserver(string doc_id)
         {

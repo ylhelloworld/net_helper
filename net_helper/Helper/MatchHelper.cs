@@ -16,13 +16,10 @@ public class MatchHelper
         double zero1 = Convert.ToDouble(match1["zero"].ToString());
         double three2 = Convert.ToDouble(match2["three"].ToString());
         double one2 = Convert.ToDouble(match2["one"].ToString());
-        double zero2 = Convert.ToDouble(match2["zero"].ToString());
-
+        double zero2 = Convert.ToDouble(match2["zero"].ToString()); 
 
         DateTime dt_start = DateTime.Now;
-        Int64 step = 0;
-
-
+        Int64 step = 0;  
 
         double result_min = -1000;
         double result_max = 0;
@@ -43,9 +40,7 @@ public class MatchHelper
         double result_r10 = 0;
         double result_r03 = 0;
         double result_r01 = 0;
-        double result_r00 = 0;
-
-
+        double result_r00 = 0; 
 
 
         for (int b33 = 0; b33 <= count; b33++)

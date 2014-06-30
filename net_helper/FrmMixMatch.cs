@@ -30,9 +30,9 @@ namespace WinCode
         }
         private void btn_load_match_Click(object sender, EventArgs e)
         {
-
+            bind_data();
         }
-        private void btn_1_wld_min_Click(object sender, EventArgs e)
+        private void btn_1_min_1_wdl_Click(object sender, EventArgs e)
         {
             StringBuilder sb = new StringBuilder();
             foreach (DataGridViewRow row in dgv_match.Rows)
@@ -45,7 +45,7 @@ namespace WinCode
 
                     for (int i = 1; i <= 50; i++)
                     {
-                        BsonDocument doc = MixMatchHelper.get_min_from_wdl_with_circle(match, i);
+                        BsonDocument doc = MixMatchHelper.get_1_min_from_1_wdl_with_circle(match, i);
 
                         sb.Append("--------------------------------------------------------------------------------------------------------------------" + Environment.NewLine);
                         sb.Append(MixMatchHelper.get_info_from_doc(doc));
@@ -62,7 +62,7 @@ namespace WinCode
             this.tab.SelectTab(1);
             MessageBox.Show("bingo!!!complete!!!");
         }
-        private void btn_1_spread_min_Click(object sender, EventArgs e)
+        private void btn_1_min_1_spread_Click(object sender, EventArgs e)
         {
             StringBuilder sb = new StringBuilder();
             foreach (DataGridViewRow row in dgv_match.Rows)
@@ -75,7 +75,7 @@ namespace WinCode
 
                     for (int i = 1; i <= 50; i++)
                     {
-                        BsonDocument doc = MixMatchHelper.get_min_from_spread_with_circle(match, i);
+                        BsonDocument doc = MixMatchHelper.get_1_min_from_1_spread_with_circle(match, i);
 
                         sb.Append("--------------------------------------------------------------------------------------------------------------------" + Environment.NewLine);
                         sb.Append(MixMatchHelper.get_info_from_doc(doc));
@@ -92,7 +92,7 @@ namespace WinCode
             this.tab.SelectTab(1);
             MessageBox.Show("bingo!!!complete!!!");
         }
-        private void btn_1_half_min_Click(object sender, EventArgs e)
+        private void btn_1_min_1_half_Click(object sender, EventArgs e)
         {
             StringBuilder sb = new StringBuilder();
             foreach (DataGridViewRow row in dgv_match.Rows)
@@ -105,7 +105,37 @@ namespace WinCode
 
                     for (int i = 1; i <= 50; i++)
                     {
-                        BsonDocument doc = MixMatchHelper.get_min_from_half_with_circle(match, i);
+                        BsonDocument doc = MixMatchHelper.get_1_min_from_1_half_with_circle(match, i);
+
+                        sb.Append("--------------------------------------------------------------------------------------------------------------------" + Environment.NewLine);
+                        sb.Append(MixMatchHelper.get_info_from_doc(doc));
+                        this.txt_compute_result.Text = sb.ToString();
+                        Application.DoEvents();
+                    }
+
+                    sb.Append("--------------------------------------------------------------------------------------------------------------------" + Environment.NewLine);
+                    this.txt_compute_result.Text = sb.ToString();
+                    Application.DoEvents();
+
+                }
+            }
+            this.tab.SelectTab(1);
+            MessageBox.Show("bingo!!!complete!!!");
+        } 
+        private void btn_1_min_1_total_Click(object sender, EventArgs e)
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (DataGridViewRow row in dgv_match.Rows)
+            {
+                if (Convert.ToBoolean(row.Cells["selected"].Value) == true)
+                {
+
+                    string id = row.Cells["id"].Value.ToString();
+                    BsonDocument match = MixMatchHelper.get_mix_doc_from_db(id);
+
+                    for (int i = 1; i <= 50; i++)
+                    {
+                        BsonDocument doc = MixMatchHelper.get_1_min_from_1_total_with_circle(match, i);
 
                         sb.Append("--------------------------------------------------------------------------------------------------------------------" + Environment.NewLine);
                         sb.Append(MixMatchHelper.get_info_from_doc(doc));
@@ -122,6 +152,38 @@ namespace WinCode
             this.tab.SelectTab(1);
             MessageBox.Show("bingo!!!complete!!!");
         }
+        private void btn_1_min_1_point_Click(object sender, EventArgs e)
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (DataGridViewRow row in dgv_match.Rows)
+            {
+                if (Convert.ToBoolean(row.Cells["selected"].Value) == true)
+                {
+
+                    string id = row.Cells["id"].Value.ToString();
+                    BsonDocument match = MixMatchHelper.get_mix_doc_from_db(id);
+
+                    for (int i = 1; i <= 50; i++)
+                    {
+                        BsonDocument doc = MixMatchHelper.get_1_min_from_1_point_with_circle(match, i);
+
+                        sb.Append("--------------------------------------------------------------------------------------------------------------------" + Environment.NewLine);
+                        sb.Append(MixMatchHelper.get_info_from_doc(doc));
+                        this.txt_compute_result.Text = sb.ToString();
+                        Application.DoEvents();
+                    }
+
+                    sb.Append("--------------------------------------------------------------------------------------------------------------------" + Environment.NewLine);
+                    this.txt_compute_result.Text = sb.ToString();
+                    Application.DoEvents();
+
+                }
+            }
+            this.tab.SelectTab(1);
+            MessageBox.Show("bingo!!!complete!!!");
+        }
+
+
         private void txt_compute_result_TextChanged(object sender, EventArgs e)
         {
             this.txt_compute_result.SelectionStart = this.txt_compute_result.TextLength;
@@ -171,6 +233,13 @@ namespace WinCode
             }
 
         }
+        private void dgv_match_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            this.dgv_match.Columns[0].Width = 60;
+            this.dgv_match.Columns[1].Width = 60;
+        }
+
+
         public void bind_data()
         {
             DataTable dt_match = new DataTable();
@@ -207,73 +276,9 @@ namespace WinCode
             this.dgv_match.DataSource = dt_match;
         }
 
-        private void btn_1_total_min_Click(object sender, EventArgs e)
-        {
-            StringBuilder sb = new StringBuilder();
-            foreach (DataGridViewRow row in dgv_match.Rows)
-            {
-                if (Convert.ToBoolean(row.Cells["selected"].Value) == true)
-                {
+  
 
-                    string id = row.Cells["id"].Value.ToString();
-                    BsonDocument match = MixMatchHelper.get_mix_doc_from_db(id);
-
-                    for (int i = 1; i <= 50; i++)
-                    {
-                        BsonDocument doc = MixMatchHelper.get_min_from_total_with_circle(match, i);
-
-                        sb.Append("--------------------------------------------------------------------------------------------------------------------" + Environment.NewLine);
-                        sb.Append(MixMatchHelper.get_info_from_doc(doc));
-                        this.txt_compute_result.Text = sb.ToString();
-                        Application.DoEvents();
-                    }
-
-                    sb.Append("--------------------------------------------------------------------------------------------------------------------" + Environment.NewLine);
-                    this.txt_compute_result.Text = sb.ToString();
-                    Application.DoEvents();
-
-                }
-            }
-            this.tab.SelectTab(1);
-            MessageBox.Show("bingo!!!complete!!!");
-        }
-
-        private void btn_1_point_min_Click(object sender, EventArgs e)
-        {
-            StringBuilder sb = new StringBuilder();
-            foreach (DataGridViewRow row in dgv_match.Rows)
-            {
-                if (Convert.ToBoolean(row.Cells["selected"].Value) == true)
-                {
-
-                    string id = row.Cells["id"].Value.ToString();
-                    BsonDocument match = MixMatchHelper.get_mix_doc_from_db(id);
-
-                    for (int i = 1; i <= 50; i++)
-                    {
-                        BsonDocument doc = MixMatchHelper.get_min_from_point_with_circle(match, i);
-
-                        sb.Append("--------------------------------------------------------------------------------------------------------------------" + Environment.NewLine);
-                        sb.Append(MixMatchHelper.get_info_from_doc(doc));
-                        this.txt_compute_result.Text = sb.ToString();
-                        Application.DoEvents();
-                    }
-
-                    sb.Append("--------------------------------------------------------------------------------------------------------------------" + Environment.NewLine);
-                    this.txt_compute_result.Text = sb.ToString();
-                    Application.DoEvents();
-
-                }
-            }
-            this.tab.SelectTab(1);
-            MessageBox.Show("bingo!!!complete!!!");
-        }
-
-        private void dgv_match_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
-        {
-            this.dgv_match.Columns[0].Width = 60;
-            this.dgv_match.Columns[1].Width = 60;
-        }
+    
 
 
 
