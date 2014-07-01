@@ -789,6 +789,100 @@ namespace WinCode
             return doc;
 
         }
+        public static BsonDocument get_1_min_from_1_free_with_circle(BsonDocument match, double[] profits,int max_count)
+        {
+ 
+
+            int length = profits.Length; 
+
+
+            int[] bids = new int[length];
+            int[] bids_temp = new int[length];
+            for (int i = 0; i < length; i++)
+            {
+                bids[i] = 1;
+                bids[i] = 1;
+            }
+
+
+            double[] profits_temp = new double[length];
+            for (int i = 0; i < length; i++)
+            {
+                profits_temp[i] = profits[i];
+            }
+
+            //排序
+            for (int step1 = 0; step1 < length; step1++)
+            {
+                int step_index = 0;
+                double step_max = -999999999;
+                for (int step2 = 0; step2 < length; step2++)
+                {
+                    if (profits_temp[step2] > step_max)
+                    {
+                        step_max = profits_temp[step2];
+                        step_index = step2;
+                    }
+                }
+                profits_temp[step_index] = 0;
+                profits[step1] = step_max;
+            }
+
+            //for (int step = 0; step < 3*3; step++)
+            //{
+            //    profits[step] = profits[step] * 1.208;
+            //}
+
+
+            DateTime dt_start = DateTime.Now;
+            bids[0] = max_count;
+            for (int i = 1; i < length; i++)
+            {
+                bids[i] = (int)Math.Floor(profits[0] * bids[0] / profits[i]);
+            }
+
+            for (int i = 0; i < length; i++)
+            {
+                bids_temp[i] = bids[i];
+            }
+
+
+
+            int bid_total = 0;
+            for (int i = 0; i < length; i++)
+            {
+                bid_total = bid_total + bids[i];
+            }
+
+            double min = 999999999;
+            double max = -999999999;
+
+            for (int i = 1; i < length; i++)
+            {
+                if (bids[i] * profits[i] - bid_total < min) min = bids[i] * profits[i] - bid_total;
+                if (bids[i] * profits[i] - bid_total > max) max = bids[i] * profits[i] - bid_total;
+            }
+
+
+            DateTime dt_end = DateTime.Now;
+            BsonDocument doc = new BsonDocument();
+
+
+            doc.Add("doc_id", DateTime.Now.ToString("yyyyMMddHHmmss") + DateTime.Now.Millisecond.ToString());
+            doc.Add("type", "1-min-1-free-circle");
+            doc.Add("start_time", match["start_time"].ToString());
+            doc.Add("host", match["host"].ToString());
+            doc.Add("client", match["client"].ToString());
+            doc.Add("bid_count", bid_total.ToString());
+            doc.Add("use_second", (dt_end - dt_start).TotalSeconds.ToString());
+            doc.Add("min_value", min.ToString("f4"));
+            doc.Add("max_value", max.ToString("f4")); 
+
+            if (is_open_mongo) MongoHelper.insert_bson("match", doc);
+
+            return doc;
+
+        }
 
         public static BsonDocument get_1_min_from_2_wdl_with_circle(BsonDocument match1, BsonDocument match2, int max_count)
         {
@@ -1799,6 +1893,7 @@ namespace WinCode
 
         }
 
+ 
 
         public static BsonDocument get_mix_doc_from_db(string id)
         {
@@ -1867,10 +1962,8 @@ namespace WinCode
                 doc.Add("half_l_w", dt.Rows[0]["half_l_w"].ToString());
                 doc.Add("half_l_d", dt.Rows[0]["half_l_d"].ToString());
                 doc.Add("half_l_l", dt.Rows[0]["half_l_l"].ToString());
-            }
-
-            return doc;
-
+            } 
+            return doc; 
         }
         public static string get_info_from_doc(BsonDocument doc)
         {
@@ -2042,8 +2135,15 @@ namespace WinCode
                    doc["point_l_0_3"].ToString().PadRight(8, ' ') + doc["point_l_1_3"].ToString().PadRight(8, ' ') + doc["point_l_2_3"].ToString().PadRight(8, ' ') +
                    doc["point_l_0_4"].ToString().PadRight(8, ' ') + doc["point_l_1_4"].ToString().PadRight(8, ' ') + doc["point_l_2_4"].ToString().PadRight(8, ' ') +
                    doc["point_l_0_5"].ToString().PadRight(8, ' ') + doc["point_l_1_5"].ToString().PadRight(8, ' ') + doc["point_l_2_5"].ToString().PadRight(8, ' ') +
-                   doc["point_l_other"].ToString().PadRight(8, ' ') + Environment.NewLine;
-
+                   doc["point_l_other"].ToString().PadRight(8, ' ') + Environment.NewLine; 
+                    break;
+                case "1-min-1-free-circle":
+                    result = "type:" + doc["type"].ToString() + "  doc id:" + doc["doc_id"].ToString() + Environment.NewLine +
+                    doc["start_time"].ToString() + "      " + doc["host"].ToString().PadRight(10, ' ') + doc["client"].ToString().PadRight(10, ' ') + Environment.NewLine +
+                   "bid count:" + doc["bid_count"].ToString() + Environment.NewLine +
+                   "use seconds: " + doc["use_second"].ToString() + Environment.NewLine +
+                   "return value: " + doc["min_value"].ToString() + "  ~  " + doc["max_value"].ToString() + Environment.NewLine +
+                   "return persent: " + (Convert.ToDouble(doc["min_value"].ToString()) / Convert.ToDouble(doc["bid_count"].ToString()) * 100).ToString("f6") + "%" + Environment.NewLine; 
                     break;
                 default:
                     break;

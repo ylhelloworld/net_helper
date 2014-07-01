@@ -147,11 +147,11 @@
     <Compile Include="FrmMixMatch.Designer.cs">
       <DependentUpon>FrmMixMatch.cs</DependentUpon>
     </Compile>
-    <Compile Include="FrmPersent.cs">
+    <Compile Include="FrmComputeMethod.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FrmPersent.Designer.cs">
-      <DependentUpon>FrmPersent.cs</DependentUpon>
+    <Compile Include="FrmComputeMethod.Designer.cs">
+      <DependentUpon>FrmComputeMethod.cs</DependentUpon>
     </Compile>
     <Compile Include="FrmRequest_Socket.cs">
       <SubType>Form</SubType>
@@ -287,8 +287,8 @@
       <DependentUpon>FrmMixMatch.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="FrmPersent.resx">
-      <DependentUpon>FrmPersent.cs</DependentUpon>
+    <EmbeddedResource Include="FrmComputeMethod.resx">
+      <DependentUpon>FrmComputeMethod.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="FrmRequest_Socket.resx">

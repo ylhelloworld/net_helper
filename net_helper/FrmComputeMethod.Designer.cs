@@ -1,6 +1,6 @@
 ﻿namespace WinCode
 {
-    partial class FrmPersent
+    partial class FrmComputeMethod
     {
         /// <summary>
         /// Required designer variable.
