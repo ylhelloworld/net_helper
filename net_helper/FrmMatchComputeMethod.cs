@@ -13,11 +13,11 @@ using MongoDB.Driver;
 
 namespace WinCode
 {
-    public partial class FrmComputeMethod : Form
+    public partial class FrmMatchComputeMethod : Form
     {
         DataTable dt_condition = new DataTable();
         DataTable dt_group = new DataTable();
-        public FrmComputeMethod()
+        public FrmMatchComputeMethod()
         {
             InitializeComponent();
         }

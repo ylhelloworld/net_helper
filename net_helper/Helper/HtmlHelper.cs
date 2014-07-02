@@ -39,7 +39,7 @@ class HtmlHelper
 
 
             if (File.Exists(path_new) == false)
-            {
+             {
                 client.DownloadFile(url, path_new);
             }
             Log.info("save html to file", url);

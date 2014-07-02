@@ -1893,7 +1893,108 @@ namespace WinCode
 
         }
 
+
+
+        public static BsonDocument get_2_min_from_2_free_with_circle(BsonDocument match1, BsonDocument match2, int max_count)
+        {
+
  
+            int length = 31;
+
+
+            double[] profits = new double[length];
+
+            int[] bids = new int[length];
+            int[] bids_temp = new int[length];
+            for (int i = 0; i < length; i++)
+            {
+                bids[i] = 1;
+                bids[i] = 1;
+            }
+
+
+            double[] profits_temp = new double[length];
+            for (int i = 0; i < length; i++)
+            {
+                profits_temp[i] = profits[i];
+            }
+
+            //排序
+            for (int step1 = 0; step1 < length; step1++)
+            {
+                int step_index = 0;
+                double step_max = -999999999;
+                for (int step2 = 0; step2 < length; step2++)
+                {
+                    if (profits_temp[step2] > step_max)
+                    {
+                        step_max = profits_temp[step2];
+                        step_index = step2;
+                    }
+                }
+                profits_temp[step_index] = 0;
+                profits[step1] = step_max;
+            }
+
+            //for (int step = 0; step < 3*3; step++)
+            //{
+            //    profits[step] = profits[step] * 1.208;
+            //}
+
+
+            DateTime dt_start = DateTime.Now;
+            bids[0] = max_count;
+            for (int i = 1; i < length; i++)
+            {
+                bids[i] = (int)Math.Floor(profits[0] * bids[0] / profits[i]);
+            }
+
+            for (int i = 0; i < length; i++)
+            {
+                bids_temp[i] = bids[i];
+            }
+
+
+
+            int bid_total = 0;
+            for (int i = 0; i < length; i++)
+            {
+                bid_total = bid_total + bids[i];
+            }
+
+            double min = 999999999;
+            double max = -999999999;
+
+            for (int i = 1; i < length; i++)
+            {
+                if (bids[i] * profits[i] - bid_total < min) min = bids[i] * profits[i] - bid_total;
+                if (bids[i] * profits[i] - bid_total > max) max = bids[i] * profits[i] - bid_total;
+            }
+
+
+            DateTime dt_end = DateTime.Now;
+            BsonDocument doc = new BsonDocument();
+
+
+            doc.Add("doc_id", DateTime.Now.ToString("yyyyMMddHHmmss") + DateTime.Now.Millisecond.ToString());
+            doc.Add("type", "2-min-2-free-circle");
+            doc.Add("start_time1", match1["start_time"].ToString());
+            doc.Add("host1", match1["host"].ToString());
+            doc.Add("client1", match1["client"].ToString());
+            doc.Add("start_time2", match2["start_time"].ToString());
+            doc.Add("host2", match2["host"].ToString());
+            doc.Add("client2", match2["client"].ToString());
+            doc.Add("bid_count", bid_total.ToString());
+            doc.Add("use_second", (dt_end - dt_start).TotalSeconds.ToString());
+            doc.Add("min_value", min.ToString("f4"));
+            doc.Add("max_value", max.ToString("f4")); 
+
+
+            if (is_open_mongo) MongoHelper.insert_bson("match", doc);
+
+            return doc; 
+
+        }
 
         public static BsonDocument get_mix_doc_from_db(string id)
         {
@@ -2145,10 +2246,204 @@ namespace WinCode
                    "return value: " + doc["min_value"].ToString() + "  ~  " + doc["max_value"].ToString() + Environment.NewLine +
                    "return persent: " + (Convert.ToDouble(doc["min_value"].ToString()) / Convert.ToDouble(doc["bid_count"].ToString()) * 100).ToString("f6") + "%" + Environment.NewLine; 
                     break;
+
+                case "select-one":
+                    result = "THE FIRST MATCH     " +  
+                   doc["start_time"].ToString() + "      " + doc["host"].ToString().PadRight(10, ' ') + doc["client"].ToString().PadRight(10, ' ') + Environment.NewLine + Environment.NewLine;
+                    foreach (BsonElement element in doc.Elements)
+                    {
+                        if (element.Name != "type" && element.Name != "doc_id" && element.Name != "start_time" && element.Name != "host" && element.Name != "" && element.Name != "client")
+                        {
+                            result = result + (get_beautiful_name(element.Name) + ":").PadRight(20, ' ') + element.Value.ToString() + Environment.NewLine;
+                        }
+                    }
+                    break; 
+                case "select-two":
+                    result = "THE SECOND MATCH     " +  
+                    doc["start_time"].ToString() + "      " + doc["host"].ToString().PadRight(10, ' ') + doc["client"].ToString().PadRight(10, ' ') + Environment.NewLine + Environment.NewLine;
+                    foreach (BsonElement element in doc.Elements)
+                    {
+                        if (element.Name != "type" && element.Name != "doc_id" && element.Name != "start_time" && element.Name != "host" && element.Name != "" && element.Name != "client")
+                        {
+                            result = result + (get_beautiful_name(element.Name) + ":").PadRight(20,' ') + element.Value.ToString() + Environment.NewLine;
+                        }
+                    }
+                    break; 
                 default:
                     break;
             }
             return result;
+        }
+        public static string get_beautiful_name(string input)
+        {
+            switch (input)
+            {
+                case "wdl_w":
+                    return "WDL WIN";
+                    break;
+                case "wdl_d":
+                    return "WDL DRAW";
+                    break;
+                case "wdl_l":
+                    return "WDL LOSE";
+                    break;
+                case "spread_w":
+                    return "SPREAD WIN";
+                    break;
+                case "spread_d":
+                    return "SPREAD DRAW";
+                    break;
+                case "spread_l":
+                    return "SPREAD LOSE";
+                    break;
+                case "half_ww":
+                    return "HALF WW";
+                    break;
+                case "half_wd":
+                    return "HALF WD";
+                    break;
+                case "half_wl":
+                    return "HALF WL";
+                    break;
+                case "half_dw":
+                    return "HALF DW";
+                    break;
+                case "half_dd":
+                    return "HALF DD";
+                    break;
+                case "half_dl":
+                    return "HALF DL";
+                    break;
+                case "half_lw":
+                    return "HALF LW";
+                    break;
+                case "half_ld":
+                    return "HALF LD";
+                    break;
+                case "half_ll":
+                    return "HALF LL";
+                    break;
+                case "point_w_1_0":
+                    return "POINT WIN 1-0";
+                    break;
+                case "point_w_2_0":
+                    return "POINT WIN 2-0";
+                    break;
+                case "point_w_2_1":
+                    return "POINT WIN 2-1";
+                    break;
+                case "point_w_3_0":
+                    return "POINT WIN 3-0";
+                    break;
+                case "point_w_3_1":
+                    return "POINT WIN 3-1";
+                    break;
+                case "point_w_3_2":
+                    return "POINT WIN 3-2";
+                    break;
+                case "point_w_4_0":
+                    return "POINT WIN 4-0";
+                    break;
+                case "point_w_4_1":
+                    return "POINT WIN 4-1";
+                    break;
+                case "point_w_4_2":
+                    return "POINT WIN 4-2";
+                    break;
+                case "point_w_5_0":
+                    return "POINT WIN 5-0";
+                    break;
+                case "point_w_5_1":
+                    return "POINT WIN 5-1";
+                    break;
+                case "point_w_5_2":
+                    return "POINT WIN 5-2";
+                    break;
+                case "point_w_other":
+                    return "POINT WIN OTHER";
+                    break;
+                case "point_d_0_0":
+                    return "POINT DRAW 0-0";
+                    break;
+                case "point_d_1_1":
+                    return "POINT DRAW 1-1";
+                    break;
+                case "point_d_2_2":
+                    return "POINT DRAW 2-2";
+                    break;
+                case "point_d_3_3":
+                    return "POINT DRAW 3-3";
+                    break;
+                case "point_d_other":
+                    return "POINT DRAW OTHER";
+                    break;
+                case "point_l_0_1":
+                    return "POINT LOSE 0-1";
+                    break;
+                case "point_l_0_2":
+                    return "POINT LOSE 0-2";
+                    break;
+                case "point_l_1_2":
+                    return "POINT LOSE 1-2";
+                    break;
+                case "point_l_0_3":
+                    return "POINT LOSE 0-3";
+                    break;
+                case "point_l_1_3":
+                    return "POINT LOSE 1-3";
+                    break;
+                case "point_l_2_3":
+                    return "POINT LOSE 2-3";
+                    break;
+                case "point_l_0_4":
+                    return "POINT LOSE 0-4";
+                    break;
+                case "point_l_1_4":
+                    return "POINT LOSE 1-4";
+                    break;
+                case "point_l_2_4":
+                    return "POINT LOSE 2-4";
+                    break;
+                case "point_l_0_5":
+                    return "POINT LOSE 0-5";
+                    break;
+                case "point_l_1_5":
+                    return "POINT LOSE 1-5";
+                    break;
+                case "point_l_2_5":
+                    return "POINT LOSE 2-5";
+                    break;
+                case "point_l_other":
+                    return "POINT LOSE OTHER";
+                    break;
+                case "total_0":
+                    return "TOTAL 0";
+                    break;
+                case "total_1":
+                    return "TOTAL 1";
+                    break;
+                case "total_2":
+                    return "TOTAL 2";
+                    break;
+                case "total_3":
+                    return "TOTAL 3";
+                    break;
+                case "total_4":
+                    return "TOTAL 4";
+                    break;
+                case "total_5":
+                    return "TOTAL 5";
+                    break;
+                case "total_6":
+                    return "TOTAL 6";
+                    break;
+                case "total_more":
+                    return "TOTAL MORE";
+                    break;
+                default:
+                    break; 
+            }
+            return input;
         }
     }
 }

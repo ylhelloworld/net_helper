@@ -1,6 +1,6 @@
 ﻿namespace WinCode
 {
-    partial class FrmComputeMethod
+    partial class FrmMatchComputeMethod
     {
         /// <summary>
         /// Required designer variable.

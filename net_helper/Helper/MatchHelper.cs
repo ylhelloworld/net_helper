@@ -1268,7 +1268,7 @@ public class MatchHelper
         double temp = 0;
         double profit = -99999999;
 
-        temp = count * offer_a * offer_b - total;
+        temp = count * offer_a * offer_b* - total;
         if (temp > profit) profit = temp;
 
         //temp = count * offer_a * offer_b * 1.208 - total;

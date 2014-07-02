@@ -147,11 +147,11 @@
     <Compile Include="FrmMixMatch.Designer.cs">
       <DependentUpon>FrmMixMatch.cs</DependentUpon>
     </Compile>
-    <Compile Include="FrmComputeMethod.cs">
+    <Compile Include="FrmMatchComputeMethod.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FrmComputeMethod.Designer.cs">
-      <DependentUpon>FrmComputeMethod.cs</DependentUpon>
+    <Compile Include="FrmMatchComputeMethod.Designer.cs">
+      <DependentUpon>FrmMatchComputeMethod.cs</DependentUpon>
     </Compile>
     <Compile Include="FrmRequest_Socket.cs">
       <SubType>Form</SubType>
@@ -185,7 +185,6 @@
     </Compile>
     <Compile Include="Helper\HtmlHelper.cs" />
     <Compile Include="Helper\MatchHelper.cs" />
-    <Compile Include="Helper\MongoHelper_new.cs" />
     <Compile Include="Helper\TemplateHelper_Match.cs" />
     <Compile Include="Http\HttpSocketHelper.cs" />
     <Compile Include="Helper\Log.cs" />
@@ -287,8 +286,8 @@
       <DependentUpon>FrmMixMatch.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="FrmComputeMethod.resx">
-      <DependentUpon>FrmComputeMethod.cs</DependentUpon>
+    <EmbeddedResource Include="FrmMatchComputeMethod.resx">
+      <DependentUpon>FrmMatchComputeMethod.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="FrmRequest_Socket.resx">
