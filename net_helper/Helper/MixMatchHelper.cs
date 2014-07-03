@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Data;
+using System.Collections;
 using MongoDB.Bson;
 using MongoDB.Driver;
 
@@ -14,7 +15,7 @@ namespace WinCode
         static bool is_open_mongo = false;
 
         public static BsonDocument get_1_min_from_1_wdl_with_circle(BsonDocument match, int max_count)
-        { 
+        {
             double wdl_w = Convert.ToDouble(match["wdl_w"].ToString());
             double wdl_d = Convert.ToDouble(match["wdl_d"].ToString());
             double wdl_l = Convert.ToDouble(match["wdl_l"].ToString());
@@ -131,7 +132,7 @@ namespace WinCode
 
         }
         public static BsonDocument get_1_min_from_1_spread_with_circle(BsonDocument match, int max_count)
-        { 
+        {
             double wdl_w = Convert.ToDouble(match["spread_w"].ToString());
             double wdl_d = Convert.ToDouble(match["spread_d"].ToString());
             double wdl_l = Convert.ToDouble(match["spread_l"].ToString());
@@ -248,7 +249,7 @@ namespace WinCode
 
         }
         public static BsonDocument get_1_min_from_1_half_with_circle(BsonDocument match, int max_count)
-        { 
+        {
             int[] bids = new int[] { 1, 1, 1, 1, 1, 1, 1, 1, 1 };
             int[] bids_temp = new int[] { 1, 1, 1, 1, 1, 1, 1, 1, 1 };
 
@@ -450,7 +451,7 @@ namespace WinCode
 
         }
         public static BsonDocument get_1_min_from_1_total_with_circle(BsonDocument match, int max_count)
-        { 
+        {
 
             int[] bids = new int[] { 1, 1, 1, 1, 1, 1, 1, 1 };
             int[] bids_temp = new int[] { 1, 1, 1, 1, 1, 1, 1, 1 };
@@ -517,7 +518,7 @@ namespace WinCode
                                 for (int ajust6 = 0; ajust6 < 2; ajust6++)
                                 {
                                     for (int ajust7 = 0; ajust7 < 2; ajust7++)
-                                    { 
+                                    {
                                         int bid0 = bids[0];
                                         int bid1 = bids[1] + ajust1;
                                         int bid2 = bids[2] + ajust2;
@@ -549,7 +550,7 @@ namespace WinCode
                                             bids_temp[6] = bid6;
                                             bids_temp[7] = bid7;
                                         }
-                                    } 
+                                    }
                                 }
                             }
 
@@ -638,7 +639,7 @@ namespace WinCode
 
         }
         public static BsonDocument get_1_min_from_1_point_with_circle(BsonDocument match, int max_count)
-        { 
+        {
             int[] bids = new int[31];
             int[] bids_temp = new int[31];
             for (int i = 0; i < 31; i++)
@@ -731,7 +732,7 @@ namespace WinCode
             double min = 999999999;
             double max = -999999999;
 
-            for (int i = 1; i < 31; i++)
+            for (int i = 0; i < 31; i++)
             {
                 if (bids[i] * profits[i] - bid_total < min) min = bids[i] * profits[i] - bid_total;
                 if (bids[i] * profits[i] - bid_total > max) max = bids[i] * profits[i] - bid_total;
@@ -789,11 +790,11 @@ namespace WinCode
             return doc;
 
         }
-        public static BsonDocument get_1_min_from_1_free_with_circle(BsonDocument match, double[] profits,int max_count)
+        public static BsonDocument get_1_min_from_1_free_with_circle(BsonDocument match, double[] profits, int max_count)
         {
- 
 
-            int length = profits.Length; 
+
+            int length = profits.Length;
 
 
             int[] bids = new int[length];
@@ -857,7 +858,7 @@ namespace WinCode
             double min = 999999999;
             double max = -999999999;
 
-            for (int i = 1; i < length; i++)
+            for (int i = 0; i < length; i++)
             {
                 if (bids[i] * profits[i] - bid_total < min) min = bids[i] * profits[i] - bid_total;
                 if (bids[i] * profits[i] - bid_total > max) max = bids[i] * profits[i] - bid_total;
@@ -876,7 +877,7 @@ namespace WinCode
             doc.Add("bid_count", bid_total.ToString());
             doc.Add("use_second", (dt_end - dt_start).TotalSeconds.ToString());
             doc.Add("min_value", min.ToString("f4"));
-            doc.Add("max_value", max.ToString("f4")); 
+            doc.Add("max_value", max.ToString("f4"));
 
             if (is_open_mongo) MongoHelper.insert_bson("match", doc);
 
@@ -1635,7 +1636,7 @@ namespace WinCode
             return doc;
 
         }
-        public static BsonDocument get_1_min_from_2_point_with_circle(BsonDocument match1, BsonDocument match2,int max_count)
+        public static BsonDocument get_1_min_from_2_point_with_circle(BsonDocument match1, BsonDocument match2, int max_count)
         {
 
             double point_w_1_0 = 0;
@@ -1668,9 +1669,9 @@ namespace WinCode
             double point_l_0_5 = 0;
             double point_l_1_5 = 0;
             double point_l_2_5 = 0;
-            double point_l_other = 0; 
-            point_w_1_0=(Convert.ToDouble(match1["point_w_1_0"].ToString())>Convert.ToDouble(match2["point_w_1_0"].ToString()))?
-                         Convert.ToDouble(match1["point_w_1_0"].ToString()):Convert.ToDouble(match2["point_w_1_0"].ToString());
+            double point_l_other = 0;
+            point_w_1_0 = (Convert.ToDouble(match1["point_w_1_0"].ToString()) > Convert.ToDouble(match2["point_w_1_0"].ToString())) ?
+                         Convert.ToDouble(match1["point_w_1_0"].ToString()) : Convert.ToDouble(match2["point_w_1_0"].ToString());
             point_w_2_0 = (Convert.ToDouble(match1["point_w_2_0"].ToString()) > Convert.ToDouble(match2["point_w_2_0"].ToString())) ?
                         Convert.ToDouble(match1["point_w_2_0"].ToString()) : Convert.ToDouble(match2["point_w_2_0"].ToString());
             point_w_2_1 = (Convert.ToDouble(match1["point_w_2_1"].ToString()) > Convert.ToDouble(match2["point_w_2_1"].ToString())) ?
@@ -1705,8 +1706,8 @@ namespace WinCode
                         Convert.ToDouble(match1["point_d_3_3"].ToString()) : Convert.ToDouble(match2["point_d_3_3"].ToString());
             point_d_other = (Convert.ToDouble(match1["point_d_other"].ToString()) > Convert.ToDouble(match2["point_d_other"].ToString())) ?
                         Convert.ToDouble(match1["point_d_other"].ToString()) : Convert.ToDouble(match2["point_d_other"].ToString());
-            point_l_0_1=(Convert.ToDouble(match1["point_l_0_1"].ToString())>Convert.ToDouble(match2["point_l_0_1"].ToString()))?
-                         Convert.ToDouble(match1["point_l_0_1"].ToString()):Convert.ToDouble(match2["point_l_0_1"].ToString());
+            point_l_0_1 = (Convert.ToDouble(match1["point_l_0_1"].ToString()) > Convert.ToDouble(match2["point_l_0_1"].ToString())) ?
+                         Convert.ToDouble(match1["point_l_0_1"].ToString()) : Convert.ToDouble(match2["point_l_0_1"].ToString());
             point_l_0_2 = (Convert.ToDouble(match1["point_l_0_2"].ToString()) > Convert.ToDouble(match2["point_l_0_2"].ToString())) ?
                         Convert.ToDouble(match1["point_l_0_2"].ToString()) : Convert.ToDouble(match2["point_l_0_2"].ToString());
             point_l_1_2 = (Convert.ToDouble(match1["point_l_1_2"].ToString()) > Convert.ToDouble(match2["point_l_1_2"].ToString())) ?
@@ -1731,8 +1732,8 @@ namespace WinCode
                         Convert.ToDouble(match1["point_l_2_5"].ToString()) : Convert.ToDouble(match2["point_l_2_5"].ToString());
             point_l_other = (Convert.ToDouble(match1["point_l_other"].ToString()) > Convert.ToDouble(match2["point_l_other"].ToString())) ?
                             Convert.ToDouble(match1["point_l_other"].ToString()) : Convert.ToDouble(match2["point_l_other"].ToString());
-           
-            
+
+
 
 
 
@@ -1801,7 +1802,7 @@ namespace WinCode
             double min = 999999999;
             double max = -999999999;
 
-            for (int i = 1; i < 31; i++)
+            for (int i = 0; i < 31; i++)
             {
                 if (bids[i] * profits[i] - bid_total < min) min = bids[i] * profits[i] - bid_total;
                 if (bids[i] * profits[i] - bid_total > max) max = bids[i] * profits[i] - bid_total;
@@ -1894,15 +1895,132 @@ namespace WinCode
         }
 
 
-
-        public static BsonDocument get_2_min_from_2_free_with_circle(BsonDocument match1, BsonDocument match2, int max_count)
+        public static BsonDocument get_2_min_from_2_wld_with_circle(BsonDocument match1, BsonDocument match2, int max_count)
         {
 
- 
-            int length = 31;
+
+            int length = 9;
+            double[] profits = new double[]
+            {
+                  Convert.ToDouble(match1["wdl_w"].ToString())*Convert.ToDouble(match2["wdl_w"].ToString()),
+                  Convert.ToDouble(match1["wdl_w"].ToString())*Convert.ToDouble(match2["wdl_d"].ToString()),
+                  Convert.ToDouble(match1["wdl_w"].ToString())*Convert.ToDouble(match2["wdl_l"].ToString()),
+                  Convert.ToDouble(match1["wdl_d"].ToString())*Convert.ToDouble(match2["wdl_w"].ToString()),
+                  Convert.ToDouble(match1["wdl_d"].ToString())*Convert.ToDouble(match2["wdl_d"].ToString()),
+                  Convert.ToDouble(match1["wdl_d"].ToString())*Convert.ToDouble(match2["wdl_l"].ToString()),
+                  Convert.ToDouble(match1["wdl_l"].ToString())*Convert.ToDouble(match2["wdl_w"].ToString()),
+                  Convert.ToDouble(match1["wdl_l"].ToString())*Convert.ToDouble(match2["wdl_d"].ToString()),
+                  Convert.ToDouble(match1["wdl_l"].ToString())*Convert.ToDouble(match2["wdl_l"].ToString()) 
+            };
+
+            int[] bids = new int[length];
+            int[] bids_temp = new int[length];
+            for (int i = 0; i < length; i++)
+            {
+                bids[i] = 1;
+                bids[i] = 1;
+            }
 
 
-            double[] profits = new double[length];
+            double[] profits_temp = new double[length];
+            for (int i = 0; i < length; i++)
+            {
+                profits_temp[i] = profits[i];
+            }
+
+            //排序
+            for (int step1 = 0; step1 < length; step1++)
+            {
+                int step_index = 0;
+                double step_max = -999999999;
+                for (int step2 = 0; step2 < length; step2++)
+                {
+                    if (profits_temp[step2] > step_max)
+                    {
+                        step_max = profits_temp[step2];
+                        step_index = step2;
+                    }
+                }
+                profits_temp[step_index] = 0;
+                profits[step1] = step_max;
+            }
+
+            //for (int step = 0; step < length; step++)
+            //{
+            //    profits[step] = profits[step] * 1.208;
+            //}
+
+
+            DateTime dt_start = DateTime.Now;
+            bids[0] = max_count;
+            for (int i = 1; i < length; i++)
+            {
+                bids[i] = (int)Math.Floor(profits[0] * bids[0] / profits[i]);
+            }
+
+            for (int i = 0; i < length; i++)
+            {
+                bids_temp[i] = bids[i];
+            }
+
+
+
+            int bid_total = 0;
+            for (int i = 0; i < length; i++)
+            {
+                bid_total = bid_total + bids[i];
+            }
+
+            double min = 999999999;
+            double max = -999999999;
+
+            for (int i = 0; i < length; i++)
+            {
+                if (bids[i] * profits[i] - bid_total < min) min = bids[i] * profits[i] - bid_total;
+                if (bids[i] * profits[i] - bid_total > max) max = bids[i] * profits[i] - bid_total;
+            }
+
+
+            DateTime dt_end = DateTime.Now;
+            BsonDocument doc = new BsonDocument();
+
+
+            doc.Add("doc_id", DateTime.Now.ToString("yyyyMMddHHmmss") + DateTime.Now.Millisecond.ToString());
+            doc.Add("type", "2-min-2-wdl-circle");
+            doc.Add("start_time1", match1["start_time"].ToString());
+            doc.Add("host1", match1["host"].ToString());
+            doc.Add("client1", match1["client"].ToString());
+            doc.Add("start_time2", match2["start_time"].ToString());
+            doc.Add("host2", match2["host"].ToString());
+            doc.Add("client2", match2["client"].ToString());
+            doc.Add("bid_count", bid_total.ToString());
+            doc.Add("use_second", (dt_end - dt_start).TotalSeconds.ToString());
+            doc.Add("min_value", min.ToString("f4"));
+            doc.Add("max_value", max.ToString("f4"));
+
+
+            if (is_open_mongo) MongoHelper.insert_bson("match", doc);
+
+            return doc;
+        }
+        public static BsonDocument get_2_min_from_2_spread_with_circle(BsonDocument match1, BsonDocument match2, int max_count)
+        {
+
+
+            int length = 9;
+            double[] profits = new double[]{
+                                                  Convert.ToDouble(match1["spread_w"].ToString())*Convert.ToDouble(match2["spread_w"].ToString()),
+                                                  Convert.ToDouble(match1["spread_w"].ToString())*Convert.ToDouble(match2["spread_d"].ToString()),
+                                                  Convert.ToDouble(match1["spread_w"].ToString())*Convert.ToDouble(match2["spread_l"].ToString()),
+                                                  Convert.ToDouble(match1["spread_d"].ToString())*Convert.ToDouble(match2["spread_w"].ToString()),
+                                                  Convert.ToDouble(match1["spread_d"].ToString())*Convert.ToDouble(match2["spread_d"].ToString()),
+                                                  Convert.ToDouble(match1["spread_d"].ToString())*Convert.ToDouble(match2["spread_l"].ToString()),
+                                                  Convert.ToDouble(match1["spread_l"].ToString())*Convert.ToDouble(match2["spread_w"].ToString()),
+                                                  Convert.ToDouble(match1["spread_l"].ToString())*Convert.ToDouble(match2["spread_d"].ToString()),
+                                                  Convert.ToDouble(match1["spread_l"].ToString())*Convert.ToDouble(match2["spread_l"].ToString())
+                
+                
+                                                 };
 
             int[] bids = new int[length];
             int[] bids_temp = new int[length];
@@ -1965,7 +2083,691 @@ namespace WinCode
             double min = 999999999;
             double max = -999999999;
 
+            for (int i = 0; i < length; i++)
+            {
+                if (bids[i] * profits[i] - bid_total < min) min = bids[i] * profits[i] - bid_total;
+                if (bids[i] * profits[i] - bid_total > max) max = bids[i] * profits[i] - bid_total;
+            }
+
+
+            DateTime dt_end = DateTime.Now;
+            BsonDocument doc = new BsonDocument();
+
+
+            doc.Add("doc_id", DateTime.Now.ToString("yyyyMMddHHmmss") + DateTime.Now.Millisecond.ToString());
+            doc.Add("type", "2-min-2-spread-circle");
+            doc.Add("start_time1", match1["start_time"].ToString());
+            doc.Add("host1", match1["host"].ToString());
+            doc.Add("client1", match1["client"].ToString());
+            doc.Add("start_time2", match2["start_time"].ToString());
+            doc.Add("host2", match2["host"].ToString());
+            doc.Add("client2", match2["client"].ToString());
+            doc.Add("bid_count", bid_total.ToString());
+            doc.Add("use_second", (dt_end - dt_start).TotalSeconds.ToString());
+            doc.Add("min_value", min.ToString("f4"));
+            doc.Add("max_value", max.ToString("f4"));
+
+
+            if (is_open_mongo) MongoHelper.insert_bson("match", doc);
+
+            return doc;
+        }
+        public static BsonDocument get_2_min_from_2_half_with_circle(BsonDocument match1, BsonDocument match2, int max_count)
+        {
+
+
+
+            double[] list1 = new double[] 
+            { 
+                Convert.ToDouble(match1["half_w_w"].ToString()),
+                Convert.ToDouble(match1["half_w_d"].ToString()),
+                Convert.ToDouble(match1["half_w_l"].ToString()),
+                Convert.ToDouble(match1["half_d_w"].ToString()),
+                Convert.ToDouble(match1["half_d_d"].ToString()),
+                Convert.ToDouble(match1["half_d_l"].ToString()),
+                Convert.ToDouble(match1["half_l_w"].ToString()),
+                Convert.ToDouble(match1["half_l_d"].ToString()),
+                Convert.ToDouble(match1["half_l_l"].ToString())
+            };
+            double[] list2 = new double[]
+            {
+                Convert.ToDouble(match2["half_w_w"].ToString()),
+                Convert.ToDouble(match2["half_w_d"].ToString()),
+                Convert.ToDouble(match2["half_w_l"].ToString()),
+                Convert.ToDouble(match2["half_d_w"].ToString()),
+                Convert.ToDouble(match2["half_d_d"].ToString()),
+                Convert.ToDouble(match2["half_d_l"].ToString()),
+                Convert.ToDouble(match2["half_l_w"].ToString()),
+                Convert.ToDouble(match2["half_l_d"].ToString()),
+                Convert.ToDouble(match2["half_l_l"].ToString()) 
+            };
+
+            int length = list1.Length * list2.Length;
+            double[] profits = new double[length];
+
+            int index = 0;
+            for (int i = 0; i < list1.Length; i++)
+            {
+                for (int j = 0; j < list1.Length; j++)
+                {
+                    profits[index] = list1[i] * list2[j];
+                    index = index + 1;
+                }
+            }
+
+
+
+
+            int[] bids = new int[length];
+            int[] bids_temp = new int[length];
+            for (int i = 0; i < length; i++)
+            {
+                bids[i] = 1;
+                bids[i] = 1;
+            }
+
+
+            double[] profits_temp = new double[length];
+            for (int i = 0; i < length; i++)
+            {
+                profits_temp[i] = profits[i];
+            }
+
+            //排序
+            for (int step1 = 0; step1 < length; step1++)
+            {
+                int step_index = 0;
+                double step_max = -999999999;
+                for (int step2 = 0; step2 < length; step2++)
+                {
+                    if (profits_temp[step2] > step_max)
+                    {
+                        step_max = profits_temp[step2];
+                        step_index = step2;
+                    }
+                }
+                profits_temp[step_index] = 0;
+                profits[step1] = step_max;
+            }
+
+            //for (int step = 0; step < 3*3; step++)
+            //{
+            //    profits[step] = profits[step] * 1.208;
+            //}
+
+
+            DateTime dt_start = DateTime.Now;
+            bids[0] = max_count;
             for (int i = 1; i < length; i++)
+            {
+                bids[i] = (int)Math.Floor(profits[0] * bids[0] / profits[i]);
+            }
+
+            for (int i = 0; i < length; i++)
+            {
+                bids_temp[i] = bids[i];
+            }
+
+
+
+            int bid_total = 0;
+            for (int i = 0; i < length; i++)
+            {
+                bid_total = bid_total + bids[i];
+            }
+
+            double min = 999999999;
+            double max = -999999999;
+
+            for (int i = 0; i < length; i++)
+            {
+                if (bids[i] * profits[i] - bid_total < min) min = bids[i] * profits[i] - bid_total;
+                if (bids[i] * profits[i] - bid_total > max) max = bids[i] * profits[i] - bid_total;
+            }
+
+
+            DateTime dt_end = DateTime.Now;
+            BsonDocument doc = new BsonDocument();
+
+
+            doc.Add("doc_id", DateTime.Now.ToString("yyyyMMddHHmmss") + DateTime.Now.Millisecond.ToString());
+            doc.Add("type", "2-min-2-half-circle");
+            doc.Add("start_time1", match1["start_time"].ToString());
+            doc.Add("host1", match1["host"].ToString());
+            doc.Add("client1", match1["client"].ToString());
+            doc.Add("start_time2", match2["start_time"].ToString());
+            doc.Add("host2", match2["host"].ToString());
+            doc.Add("client2", match2["client"].ToString());
+            doc.Add("bid_count", bid_total.ToString());
+            doc.Add("use_second", (dt_end - dt_start).TotalSeconds.ToString());
+            doc.Add("min_value", min.ToString("f4"));
+            doc.Add("max_value", max.ToString("f4"));
+
+
+            if (is_open_mongo) MongoHelper.insert_bson("match", doc);
+
+            return doc;
+        }
+        public static BsonDocument get_2_min_from_2_total_with_circle(BsonDocument match1, BsonDocument match2, int max_count)
+        {
+
+
+
+            double[] list1 = new double[] 
+            { 
+             Convert.ToDouble(match1["total_0"].ToString()), 
+             Convert.ToDouble(match1["total_1"].ToString()), 
+             Convert.ToDouble(match1["total_2"].ToString()),
+             Convert.ToDouble(match1["total_3"].ToString()), 
+             Convert.ToDouble(match1["total_4"].ToString()), 
+             Convert.ToDouble(match1["total_5"].ToString()), 
+             Convert.ToDouble(match1["total_6"].ToString()), 
+             Convert.ToDouble(match1["total_more"].ToString())
+            };
+            double[] list2 = new double[]
+            {
+             Convert.ToDouble(match2["total_0"].ToString()), 
+             Convert.ToDouble(match2["total_1"].ToString()), 
+             Convert.ToDouble(match2["total_2"].ToString()),
+             Convert.ToDouble(match2["total_3"].ToString()), 
+             Convert.ToDouble(match2["total_4"].ToString()), 
+             Convert.ToDouble(match2["total_5"].ToString()), 
+             Convert.ToDouble(match2["total_6"].ToString()), 
+             Convert.ToDouble(match2["total_more"].ToString())
+            };
+
+            int length = list1.Length * list2.Length;
+            double[] profits = new double[length];
+
+            int index = 0;
+            for (int i = 0; i < list1.Length; i++)
+            {
+                for (int j = 0; j < list1.Length; j++)
+                {
+                    profits[index] = list1[i] * list2[j];
+                    index = index + 1;
+                }
+            }
+
+
+
+
+            int[] bids = new int[length];
+            int[] bids_temp = new int[length];
+            for (int i = 0; i < length; i++)
+            {
+                bids[i] = 1;
+                bids[i] = 1;
+            }
+
+
+            double[] profits_temp = new double[length];
+            for (int i = 0; i < length; i++)
+            {
+                profits_temp[i] = profits[i];
+            }
+
+            //排序
+            for (int step1 = 0; step1 < length; step1++)
+            {
+                int step_index = 0;
+                double step_max = -999999999;
+                for (int step2 = 0; step2 < length; step2++)
+                {
+                    if (profits_temp[step2] > step_max)
+                    {
+                        step_max = profits_temp[step2];
+                        step_index = step2;
+                    }
+                }
+                profits_temp[step_index] = 0;
+                profits[step1] = step_max;
+            }
+
+            //for (int step = 0; step < 3*3; step++)
+            //{
+            //    profits[step] = profits[step] * 1.208;
+            //}
+
+
+            DateTime dt_start = DateTime.Now;
+            bids[0] = max_count;
+            for (int i = 1; i < length; i++)
+            {
+                bids[i] = (int)Math.Floor(profits[0] * bids[0] / profits[i]);
+            }
+
+            for (int i = 0; i < length; i++)
+            {
+                bids_temp[i] = bids[i];
+            }
+
+
+
+            int bid_total = 0;
+            for (int i = 0; i < length; i++)
+            {
+                bid_total = bid_total + bids[i];
+            }
+
+            double min = 999999999;
+            double max = -999999999;
+
+            for (int i = 0; i < length; i++)
+            {
+                if (bids[i] * profits[i] - bid_total < min) min = bids[i] * profits[i] - bid_total;
+                if (bids[i] * profits[i] - bid_total > max) max = bids[i] * profits[i] - bid_total;
+            }
+
+
+            DateTime dt_end = DateTime.Now;
+            BsonDocument doc = new BsonDocument();
+
+
+            doc.Add("doc_id", DateTime.Now.ToString("yyyyMMddHHmmss") + DateTime.Now.Millisecond.ToString());
+            doc.Add("type", "2-min-2-total-circle");
+            doc.Add("start_time1", match1["start_time"].ToString());
+            doc.Add("host1", match1["host"].ToString());
+            doc.Add("client1", match1["client"].ToString());
+            doc.Add("start_time2", match2["start_time"].ToString());
+            doc.Add("host2", match2["host"].ToString());
+            doc.Add("client2", match2["client"].ToString());
+            doc.Add("bid_count", bid_total.ToString());
+            doc.Add("use_second", (dt_end - dt_start).TotalSeconds.ToString());
+            doc.Add("min_value", min.ToString("f4"));
+            doc.Add("max_value", max.ToString("f4"));
+
+
+            if (is_open_mongo) MongoHelper.insert_bson("match", doc);
+
+            return doc;
+        } 
+        public static BsonDocument get_2_min_from_2_point_with_circle(BsonDocument match1, BsonDocument match2, int max_count)
+        {
+
+
+
+            double[] list1 = new double[] 
+            { 
+                 Convert.ToDouble(match1["point_w_1_0"].ToString()),
+                 Convert.ToDouble(match1["point_w_2_0"].ToString()),
+                 Convert.ToDouble(match1["point_w_2_1"].ToString()),
+                 Convert.ToDouble(match1["point_w_3_0"].ToString()),
+                 Convert.ToDouble(match1["point_w_3_1"].ToString()),
+                 Convert.ToDouble(match1["point_w_3_2"].ToString()),
+                 Convert.ToDouble(match1["point_w_4_0"].ToString()),
+                 Convert.ToDouble(match1["point_w_4_1"].ToString()),
+                 Convert.ToDouble(match1["point_w_4_2"].ToString()),
+                 Convert.ToDouble(match1["point_w_5_0"].ToString()),
+                 Convert.ToDouble(match1["point_w_5_1"].ToString()),
+                 Convert.ToDouble(match1["point_w_5_2"].ToString()),
+                 Convert.ToDouble(match1["point_w_other"].ToString()),
+                 Convert.ToDouble(match1["point_d_0_0"].ToString()),
+                 Convert.ToDouble(match1["point_d_1_1"].ToString()),
+                 Convert.ToDouble(match1["point_d_2_2"].ToString()),
+                 Convert.ToDouble(match1["point_d_3_3"].ToString()),
+                 Convert.ToDouble(match1["point_d_other"].ToString()),
+                 Convert.ToDouble(match1["point_l_0_1"].ToString()),
+                 Convert.ToDouble(match1["point_l_0_2"].ToString()),
+                 Convert.ToDouble(match1["point_l_1_2"].ToString()),
+                 Convert.ToDouble(match1["point_l_0_3"].ToString()),
+                 Convert.ToDouble(match1["point_l_1_3"].ToString()),
+                 Convert.ToDouble(match1["point_l_2_3"].ToString()),
+                 Convert.ToDouble(match1["point_l_0_4"].ToString()),
+                 Convert.ToDouble(match1["point_l_1_4"].ToString()),
+                 Convert.ToDouble(match1["point_l_2_4"].ToString()),
+                 Convert.ToDouble(match1["point_l_0_5"].ToString()),
+                 Convert.ToDouble(match1["point_l_1_5"].ToString()),
+                 Convert.ToDouble(match1["point_l_2_5"].ToString()),
+                 Convert.ToDouble(match1["point_l_other"].ToString()) 
+            };
+            double[] list2 = new double[]
+            {
+                 Convert.ToDouble(match2["point_w_1_0"].ToString()),
+                 Convert.ToDouble(match2["point_w_2_0"].ToString()),
+                 Convert.ToDouble(match2["point_w_2_1"].ToString()),
+                 Convert.ToDouble(match2["point_w_3_0"].ToString()),
+                 Convert.ToDouble(match2["point_w_3_1"].ToString()),
+                 Convert.ToDouble(match2["point_w_3_2"].ToString()),
+                 Convert.ToDouble(match2["point_w_4_0"].ToString()),
+                 Convert.ToDouble(match2["point_w_4_1"].ToString()),
+                 Convert.ToDouble(match2["point_w_4_2"].ToString()),
+                 Convert.ToDouble(match2["point_w_5_0"].ToString()),
+                 Convert.ToDouble(match2["point_w_5_1"].ToString()),
+                 Convert.ToDouble(match2["point_w_5_2"].ToString()),
+                 Convert.ToDouble(match2["point_w_other"].ToString()),
+                 Convert.ToDouble(match2["point_d_0_0"].ToString()),
+                 Convert.ToDouble(match2["point_d_1_1"].ToString()),
+                 Convert.ToDouble(match2["point_d_2_2"].ToString()),
+                 Convert.ToDouble(match2["point_d_3_3"].ToString()),
+                 Convert.ToDouble(match2["point_d_other"].ToString()),
+                 Convert.ToDouble(match2["point_l_0_1"].ToString()),
+                 Convert.ToDouble(match2["point_l_0_2"].ToString()),
+                 Convert.ToDouble(match2["point_l_1_2"].ToString()),
+                 Convert.ToDouble(match2["point_l_0_3"].ToString()),
+                 Convert.ToDouble(match2["point_l_1_3"].ToString()),
+                 Convert.ToDouble(match2["point_l_2_3"].ToString()),
+                 Convert.ToDouble(match2["point_l_0_4"].ToString()),
+                 Convert.ToDouble(match2["point_l_1_4"].ToString()),
+                 Convert.ToDouble(match2["point_l_2_4"].ToString()),
+                 Convert.ToDouble(match2["point_l_0_5"].ToString()),
+                 Convert.ToDouble(match2["point_l_1_5"].ToString()),
+                 Convert.ToDouble(match2["point_l_2_5"].ToString()),
+                 Convert.ToDouble(match2["point_l_other"].ToString()) 
+            };
+
+            int length = list1.Length * list2.Length;
+            double[] profits = new double[length];
+
+            int index = 0;
+            for (int i = 0; i < list1.Length; i++)
+            {
+                for (int j = 0; j < list1.Length; j++)
+                {
+                    profits[index] = list1[i] * list2[j];
+                    index = index + 1;
+                }
+            }
+
+
+
+
+            int[] bids = new int[length];
+            int[] bids_temp = new int[length];
+            for (int i = 0; i < length; i++)
+            {
+                bids[i] = 1;
+                bids[i] = 1;
+            }
+
+
+            double[] profits_temp = new double[length];
+            for (int i = 0; i < length; i++)
+            {
+                profits_temp[i] = profits[i];
+            }
+
+            //排序
+            for (int step1 = 0; step1 < length; step1++)
+            {
+                int step_index = 0;
+                double step_max = -999999999;
+                for (int step2 = 0; step2 < length; step2++)
+                {
+                    if (profits_temp[step2] > step_max)
+                    {
+                        step_max = profits_temp[step2];
+                        step_index = step2;
+                    }
+                }
+                profits_temp[step_index] = 0;
+                profits[step1] = step_max;
+            }
+
+            //for (int step = 0; step < 3*3; step++)
+            //{
+            //    profits[step] = profits[step] * 1.208;
+            //}
+
+
+            DateTime dt_start = DateTime.Now;
+            bids[0] = max_count;
+            for (int i = 1; i < length; i++)
+            {
+                bids[i] = (int)Math.Floor(profits[0] * bids[0] / profits[i]);
+            }
+
+            for (int i = 0; i < length; i++)
+            {
+                bids_temp[i] = bids[i];
+            }
+
+
+
+            int bid_total = 0;
+            for (int i = 0; i < length; i++)
+            {
+                bid_total = bid_total + bids[i];
+            }
+
+            double min = 999999999;
+            double max = -999999999;
+
+            for (int i = 0; i < length; i++)
+            {
+                if (bids[i] * profits[i] - bid_total < min) min = bids[i] * profits[i] - bid_total;
+                if (bids[i] * profits[i] - bid_total > max) max = bids[i] * profits[i] - bid_total;
+            }
+
+
+            DateTime dt_end = DateTime.Now;
+            BsonDocument doc = new BsonDocument();
+
+
+            doc.Add("doc_id", DateTime.Now.ToString("yyyyMMddHHmmss") + DateTime.Now.Millisecond.ToString());
+            doc.Add("type", "2-min-2-point-circle");
+            doc.Add("start_time1", match1["start_time"].ToString());
+            doc.Add("host1", match1["host"].ToString());
+            doc.Add("client1", match1["client"].ToString());
+            doc.Add("start_time2", match2["start_time"].ToString());
+            doc.Add("host2", match2["host"].ToString());
+            doc.Add("client2", match2["client"].ToString());
+            doc.Add("bid_count", bid_total.ToString());
+            doc.Add("use_second", (dt_end - dt_start).TotalSeconds.ToString());
+            doc.Add("min_value", min.ToString("f4"));
+            doc.Add("max_value", max.ToString("f4"));
+
+
+            if (is_open_mongo) MongoHelper.insert_bson("match", doc);
+
+            return doc;
+        } 
+        public static BsonDocument get_2_min_from_2_free_with_circle(BsonDocument match1, BsonDocument match2, int max_count)
+        {
+
+            ArrayList list_wdl_1 = new ArrayList();
+            ArrayList list_wdl_2 = new ArrayList();
+            foreach (BsonElement element in match1.Elements)
+            {
+                if (element.Name.StartsWith("wdl_"))
+                {
+                    list_wdl_1.Add(element.Value.ToString());
+                }
+            }
+            foreach (BsonElement element in match2.Elements)
+            {
+                if (element.Name.StartsWith("wdl_"))
+                {
+                    list_wdl_2.Add(element.Value.ToString());
+                }
+            }
+
+            ArrayList list_spread_1 = new ArrayList();
+            ArrayList list_spread_2 = new ArrayList();
+            foreach (BsonElement element in match1.Elements)
+            {
+                if (element.Name.StartsWith("spread_"))
+                {
+                    list_spread_1.Add(element.Value.ToString());
+                }
+            }
+            foreach (BsonElement element in match2.Elements)
+            {
+                if (element.Name.StartsWith("spread_"))
+                {
+                    list_spread_1.Add(element.Value.ToString());
+                }
+            }
+
+            ArrayList list_half_1 = new ArrayList();
+            ArrayList list_half_2 = new ArrayList();
+            foreach (BsonElement element in match1.Elements)
+            {
+                if (element.Name.StartsWith("half_"))
+                {
+                    list_half_1.Add(element.Value.ToString());
+                }
+            }
+            foreach (BsonElement element in match2.Elements)
+            {
+                if (element.Name.StartsWith("half_"))
+                {
+                    list_half_2.Add(element.Value.ToString());
+                }
+            }
+
+            ArrayList list_total_1 = new ArrayList();
+            ArrayList list_total_2 = new ArrayList();
+            foreach (BsonElement element in match1.Elements)
+            {
+                if (element.Name.StartsWith("total_"))
+                {
+                    list_total_1.Add(element.Value.ToString());
+                }
+            }
+            foreach (BsonElement element in match2.Elements)
+            {
+                if (element.Name.StartsWith("total_"))
+                {
+                    list_total_2.Add(element.Value.ToString());
+                }
+            }
+
+            ArrayList list_point_1 = new ArrayList();
+            ArrayList list_point_2 = new ArrayList();
+            foreach (BsonElement element in match1.Elements)
+            {
+                if (element.Name.StartsWith("point_"))
+                {
+                    list_point_1.Add(element.Value.ToString());
+                }
+            }
+            foreach (BsonElement element in match2.Elements)
+            {
+                if (element.Name.StartsWith("point_"))
+                {
+                    list_point_2.Add(element.Value.ToString());
+                }
+            }
+
+
+
+            int length = list_wdl_1.Count * list_wdl_2.Count +
+                        list_spread_1.Count * list_spread_2.Count +
+                        list_half_1.Count * list_half_2.Count +
+                        list_total_1.Count * list_total_2.Count +
+                        list_point_1.Count * list_point_2.Count;
+
+
+            double[] profits = new double[length];
+
+            int index = 0;
+            for (int i = 0; i < list_wdl_1.Count; i++)
+            {
+                for (int j = 0; j < list_wdl_2.Count; j++)
+                {
+                    profits[index] = Convert.ToDouble(list_wdl_1[i]) * Convert.ToDouble(list_wdl_2[j]);
+                    index = index + 1;
+                }
+            }
+            for (int i = 0; i < list_spread_1.Count; i++)
+            {
+                for (int j = 0; j < list_spread_2.Count; j++)
+                {
+                    profits[index] = Convert.ToDouble(list_spread_1[i]) * Convert.ToDouble(list_spread_2[j]);
+                    index = index + 1;
+                }
+            }
+            for (int i = 0; i < list_half_1.Count; i++)
+            {
+                for (int j = 0; j < list_half_2.Count; j++)
+                {
+                    profits[index] = Convert.ToDouble(list_half_1[i]) * Convert.ToDouble(list_half_2[j]);
+                    index = index + 1;
+                }
+            }
+            for (int i = 0; i < list_total_1.Count; i++)
+            {
+                for (int j = 0; j < list_total_2.Count; j++)
+                {
+                    profits[index] = Convert.ToDouble(list_total_1[i]) * Convert.ToDouble(list_total_2[j]);
+                    index = index + 1;
+                }
+            }
+            for (int i = 0; i < list_point_1.Count; i++)
+            {
+                for (int j = 0; j < list_point_2.Count; j++)
+                {
+                    profits[index] = Convert.ToDouble(list_point_1[i]) * Convert.ToDouble(list_point_2[j]);
+                    index = index + 1;
+                }
+            }
+
+
+
+
+            int[] bids = new int[length];
+            int[] bids_temp = new int[length];
+            for (int i = 0; i < length; i++)
+            {
+                bids[i] = 1;
+                bids[i] = 1;
+            }
+
+
+            double[] profits_temp = new double[length];
+            for (int i = 0; i < length; i++)
+            {
+                profits_temp[i] = profits[i];
+            }
+
+            //排序
+            for (int step1 = 0; step1 < length; step1++)
+            {
+                int step_index = 0;
+                double step_max = -999999999;
+                for (int step2 = 0; step2 < length; step2++)
+                {
+                    if (profits_temp[step2] > step_max)
+                    {
+                        step_max = profits_temp[step2];
+                        step_index = step2;
+                    }
+                }
+                profits_temp[step_index] = 0;
+                profits[step1] = step_max;
+            }
+
+            //for (int step = 0; step < 3*3; step++)
+            //{
+            //    profits[step] = profits[step] * 1.208;
+            //}
+
+
+            DateTime dt_start = DateTime.Now;
+            bids[0] = max_count;
+            for (int i = 1; i < length; i++)
+            {
+                bids[i] = (int)Math.Floor(profits[0] * bids[0] / profits[i]);
+            }
+
+            for (int i = 0; i < length; i++)
+            {
+                bids_temp[i] = bids[i];
+            }
+
+
+
+            int bid_total = 0;
+            for (int i = 0; i < length; i++)
+            {
+                bid_total = bid_total + bids[i];
+            }
+
+            double min = 999999999;
+            double max = -999999999;
+
+            for (int i = 0; i < length; i++)
             {
                 if (bids[i] * profits[i] - bid_total < min) min = bids[i] * profits[i] - bid_total;
                 if (bids[i] * profits[i] - bid_total > max) max = bids[i] * profits[i] - bid_total;
@@ -1987,12 +2789,12 @@ namespace WinCode
             doc.Add("bid_count", bid_total.ToString());
             doc.Add("use_second", (dt_end - dt_start).TotalSeconds.ToString());
             doc.Add("min_value", min.ToString("f4"));
-            doc.Add("max_value", max.ToString("f4")); 
+            doc.Add("max_value", max.ToString("f4"));
 
 
             if (is_open_mongo) MongoHelper.insert_bson("match", doc);
 
-            return doc; 
+            return doc;
 
         }
 
@@ -2063,8 +2865,8 @@ namespace WinCode
                 doc.Add("half_l_w", dt.Rows[0]["half_l_w"].ToString());
                 doc.Add("half_l_d", dt.Rows[0]["half_l_d"].ToString());
                 doc.Add("half_l_l", dt.Rows[0]["half_l_l"].ToString());
-            } 
-            return doc; 
+            }
+            return doc;
         }
         public static string get_info_from_doc(BsonDocument doc)
         {
@@ -2236,7 +3038,7 @@ namespace WinCode
                    doc["point_l_0_3"].ToString().PadRight(8, ' ') + doc["point_l_1_3"].ToString().PadRight(8, ' ') + doc["point_l_2_3"].ToString().PadRight(8, ' ') +
                    doc["point_l_0_4"].ToString().PadRight(8, ' ') + doc["point_l_1_4"].ToString().PadRight(8, ' ') + doc["point_l_2_4"].ToString().PadRight(8, ' ') +
                    doc["point_l_0_5"].ToString().PadRight(8, ' ') + doc["point_l_1_5"].ToString().PadRight(8, ' ') + doc["point_l_2_5"].ToString().PadRight(8, ' ') +
-                   doc["point_l_other"].ToString().PadRight(8, ' ') + Environment.NewLine; 
+                   doc["point_l_other"].ToString().PadRight(8, ' ') + Environment.NewLine;
                     break;
                 case "1-min-1-free-circle":
                     result = "type:" + doc["type"].ToString() + "  doc id:" + doc["doc_id"].ToString() + Environment.NewLine +
@@ -2244,11 +3046,11 @@ namespace WinCode
                    "bid count:" + doc["bid_count"].ToString() + Environment.NewLine +
                    "use seconds: " + doc["use_second"].ToString() + Environment.NewLine +
                    "return value: " + doc["min_value"].ToString() + "  ~  " + doc["max_value"].ToString() + Environment.NewLine +
-                   "return persent: " + (Convert.ToDouble(doc["min_value"].ToString()) / Convert.ToDouble(doc["bid_count"].ToString()) * 100).ToString("f6") + "%" + Environment.NewLine; 
+                   "return persent: " + (Convert.ToDouble(doc["min_value"].ToString()) / Convert.ToDouble(doc["bid_count"].ToString()) * 100).ToString("f6") + "%" + Environment.NewLine;
                     break;
 
                 case "select-one":
-                    result = "THE FIRST MATCH     " +  
+                    result = "THE FIRST MATCH     " +
                    doc["start_time"].ToString() + "      " + doc["host"].ToString().PadRight(10, ' ') + doc["client"].ToString().PadRight(10, ' ') + Environment.NewLine + Environment.NewLine;
                     foreach (BsonElement element in doc.Elements)
                     {
@@ -2257,18 +3059,72 @@ namespace WinCode
                             result = result + (get_beautiful_name(element.Name) + ":").PadRight(20, ' ') + element.Value.ToString() + Environment.NewLine;
                         }
                     }
-                    break; 
+                    break;
                 case "select-two":
-                    result = "THE SECOND MATCH     " +  
+                    result = "THE SECOND MATCH     " +
                     doc["start_time"].ToString() + "      " + doc["host"].ToString().PadRight(10, ' ') + doc["client"].ToString().PadRight(10, ' ') + Environment.NewLine + Environment.NewLine;
                     foreach (BsonElement element in doc.Elements)
                     {
                         if (element.Name != "type" && element.Name != "doc_id" && element.Name != "start_time" && element.Name != "host" && element.Name != "" && element.Name != "client")
                         {
-                            result = result + (get_beautiful_name(element.Name) + ":").PadRight(20,' ') + element.Value.ToString() + Environment.NewLine;
+                            result = result + (get_beautiful_name(element.Name) + ":").PadRight(20, ' ') + element.Value.ToString() + Environment.NewLine;
                         }
                     }
-                    break; 
+                    break;
+                case "2-min-2-wdl-circle":
+                    result = "type:" + doc["type"].ToString() + "  doc id:" + doc["doc_id"].ToString() + Environment.NewLine +
+                    doc["start_time1"].ToString() + "      " + doc["host1"].ToString().PadRight(10, ' ') + doc["client1"].ToString().PadRight(10, ' ') + Environment.NewLine +
+                    doc["start_time2"].ToString() + "      " + doc["host2"].ToString().PadRight(10, ' ') + doc["client2"].ToString().PadRight(10, ' ') + Environment.NewLine +
+                    "bid count:" + doc["bid_count"].ToString() + Environment.NewLine +
+                    "use seconds: " + doc["use_second"].ToString() + Environment.NewLine +
+                    "return value: " + doc["min_value"].ToString() + "  ~  " + doc["max_value"].ToString() + Environment.NewLine +
+                    "return persent: " + (Convert.ToDouble(doc["min_value"].ToString()) / Convert.ToDouble(doc["bid_count"].ToString()) * 100).ToString("f6") + "%" + Environment.NewLine;
+                    break;
+                case "2-min-2-spread-circle":
+                    result = "type:" + doc["type"].ToString() + "  doc id:" + doc["doc_id"].ToString() + Environment.NewLine +
+                    doc["start_time1"].ToString() + "      " + doc["host1"].ToString().PadRight(10, ' ') + doc["client1"].ToString().PadRight(10, ' ') + Environment.NewLine +
+                    doc["start_time2"].ToString() + "      " + doc["host2"].ToString().PadRight(10, ' ') + doc["client2"].ToString().PadRight(10, ' ') + Environment.NewLine +
+                    "bid count:" + doc["bid_count"].ToString() + Environment.NewLine +
+                    "use seconds: " + doc["use_second"].ToString() + Environment.NewLine +
+                    "return value: " + doc["min_value"].ToString() + "  ~  " + doc["max_value"].ToString() + Environment.NewLine +
+                    "return persent: " + (Convert.ToDouble(doc["min_value"].ToString()) / Convert.ToDouble(doc["bid_count"].ToString()) * 100).ToString("f6") + "%" + Environment.NewLine;
+                    break;
+                case "2-min-2-half-circle":
+                    result = "type:" + doc["type"].ToString() + "  doc id:" + doc["doc_id"].ToString() + Environment.NewLine +
+                    doc["start_time1"].ToString() + "      " + doc["host1"].ToString().PadRight(10, ' ') + doc["client1"].ToString().PadRight(10, ' ') + Environment.NewLine +
+                    doc["start_time2"].ToString() + "      " + doc["host2"].ToString().PadRight(10, ' ') + doc["client2"].ToString().PadRight(10, ' ') + Environment.NewLine +
+                    "bid count:" + doc["bid_count"].ToString() + Environment.NewLine +
+                    "use seconds: " + doc["use_second"].ToString() + Environment.NewLine +
+                    "return value: " + doc["min_value"].ToString() + "  ~  " + doc["max_value"].ToString() + Environment.NewLine +
+                    "return persent: " + (Convert.ToDouble(doc["min_value"].ToString()) / Convert.ToDouble(doc["bid_count"].ToString()) * 100).ToString("f6") + "%" + Environment.NewLine;
+                    break;
+                case "2-min-2-total-circle":
+                    result = "type:" + doc["type"].ToString() + "  doc id:" + doc["doc_id"].ToString() + Environment.NewLine +
+                    doc["start_time1"].ToString() + "      " + doc["host1"].ToString().PadRight(10, ' ') + doc["client1"].ToString().PadRight(10, ' ') + Environment.NewLine +
+                    doc["start_time2"].ToString() + "      " + doc["host2"].ToString().PadRight(10, ' ') + doc["client2"].ToString().PadRight(10, ' ') + Environment.NewLine +
+                    "bid count:" + doc["bid_count"].ToString() + Environment.NewLine +
+                    "use seconds: " + doc["use_second"].ToString() + Environment.NewLine +
+                    "return value: " + doc["min_value"].ToString() + "  ~  " + doc["max_value"].ToString() + Environment.NewLine +
+                    "return persent: " + (Convert.ToDouble(doc["min_value"].ToString()) / Convert.ToDouble(doc["bid_count"].ToString()) * 100).ToString("f6") + "%" + Environment.NewLine;
+                    break;
+                case "2-min-2-point-circle":
+                    result = "type:" + doc["type"].ToString() + "  doc id:" + doc["doc_id"].ToString() + Environment.NewLine +
+                    doc["start_time1"].ToString() + "      " + doc["host1"].ToString().PadRight(10, ' ') + doc["client1"].ToString().PadRight(10, ' ') + Environment.NewLine +
+                    doc["start_time2"].ToString() + "      " + doc["host2"].ToString().PadRight(10, ' ') + doc["client2"].ToString().PadRight(10, ' ') + Environment.NewLine +
+                    "bid count:" + doc["bid_count"].ToString() + Environment.NewLine +
+                    "use seconds: " + doc["use_second"].ToString() + Environment.NewLine +
+                    "return value: " + doc["min_value"].ToString() + "  ~  " + doc["max_value"].ToString() + Environment.NewLine +
+                    "return persent: " + (Convert.ToDouble(doc["min_value"].ToString()) / Convert.ToDouble(doc["bid_count"].ToString()) * 100).ToString("f6") + "%" + Environment.NewLine;
+                    break;
+                case "2-min-2-free-circle":
+                    result = "type:" + doc["type"].ToString() + "  doc id:" + doc["doc_id"].ToString() + Environment.NewLine +
+                    doc["start_time1"].ToString() + "      " + doc["host1"].ToString().PadRight(10, ' ') + doc["client1"].ToString().PadRight(10, ' ') + Environment.NewLine +
+                    doc["start_time2"].ToString() + "      " + doc["host2"].ToString().PadRight(10, ' ') + doc["client2"].ToString().PadRight(10, ' ') + Environment.NewLine +
+                    "bid count:" + doc["bid_count"].ToString() + Environment.NewLine +
+                    "use seconds: " + doc["use_second"].ToString() + Environment.NewLine +
+                    "return value: " + doc["min_value"].ToString() + "  ~  " + doc["max_value"].ToString() + Environment.NewLine +
+                    "return persent: " + (Convert.ToDouble(doc["min_value"].ToString()) / Convert.ToDouble(doc["bid_count"].ToString()) * 100).ToString("f6") + "%" + Environment.NewLine;
+                    break;
                 default:
                     break;
             }
@@ -2441,7 +3297,7 @@ namespace WinCode
                     return "TOTAL MORE";
                     break;
                 default:
-                    break; 
+                    break;
             }
             return input;
         }

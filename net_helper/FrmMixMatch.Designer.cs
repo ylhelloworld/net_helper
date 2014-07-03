@@ -30,6 +30,11 @@
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.btn_2_min_2_point = new System.Windows.Forms.Button();
+            this.btn_min_2_total = new System.Windows.Forms.Button();
+            this.btn_2_min_2_half = new System.Windows.Forms.Button();
+            this.btn_2_min_2_spread = new System.Windows.Forms.Button();
+            this.btn_2_min_2_wld = new System.Windows.Forms.Button();
             this.btn_1_min_1_free = new System.Windows.Forms.Button();
             this.btn_1_min_1_point = new System.Windows.Forms.Button();
             this.btn_1_min_1_total = new System.Windows.Forms.Button();
@@ -46,6 +51,12 @@
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.txt_match = new System.Windows.Forms.TextBox();
             this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.btn_clear_two = new System.Windows.Forms.Button();
+            this.btn_clear_one = new System.Windows.Forms.Button();
+            this.label19 = new System.Windows.Forms.Label();
+            this.btn_select_two = new System.Windows.Forms.Button();
+            this.btn_select_one = new System.Windows.Forms.Button();
+            this.label18 = new System.Windows.Forms.Label();
             this.label54 = new System.Windows.Forms.Label();
             this.label55 = new System.Windows.Forms.Label();
             this.label56 = new System.Windows.Forms.Label();
@@ -189,12 +200,7 @@
             this.checkBox64 = new System.Windows.Forms.CheckBox();
             this.checkBox65 = new System.Windows.Forms.CheckBox();
             this.checkBox66 = new System.Windows.Forms.CheckBox();
-            this.label18 = new System.Windows.Forms.Label();
-            this.btn_select_one = new System.Windows.Forms.Button();
-            this.btn_select_two = new System.Windows.Forms.Button();
-            this.label19 = new System.Windows.Forms.Label();
-            this.btn_clear_one = new System.Windows.Forms.Button();
-            this.btn_clear_two = new System.Windows.Forms.Button();
+            this.btn_2_min_2_free = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -222,6 +228,12 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.btn_2_min_2_free);
+            this.groupBox3.Controls.Add(this.btn_2_min_2_point);
+            this.groupBox3.Controls.Add(this.btn_min_2_total);
+            this.groupBox3.Controls.Add(this.btn_2_min_2_half);
+            this.groupBox3.Controls.Add(this.btn_2_min_2_spread);
+            this.groupBox3.Controls.Add(this.btn_2_min_2_wld);
             this.groupBox3.Controls.Add(this.btn_1_min_1_free);
             this.groupBox3.Controls.Add(this.btn_1_min_1_point);
             this.groupBox3.Controls.Add(this.btn_1_min_1_total);
@@ -234,6 +246,56 @@
             this.groupBox3.TabIndex = 1;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Compute Tool";
+            // 
+            // btn_2_min_2_point
+            // 
+            this.btn_2_min_2_point.Location = new System.Drawing.Point(108, 144);
+            this.btn_2_min_2_point.Name = "btn_2_min_2_point";
+            this.btn_2_min_2_point.Size = new System.Drawing.Size(93, 23);
+            this.btn_2_min_2_point.TabIndex = 10;
+            this.btn_2_min_2_point.Text = "2-min-2-point";
+            this.btn_2_min_2_point.UseVisualStyleBackColor = true;
+            this.btn_2_min_2_point.Click += new System.EventHandler(this.btn_2_min_2_point_Click);
+            // 
+            // btn_min_2_total
+            // 
+            this.btn_min_2_total.Location = new System.Drawing.Point(108, 115);
+            this.btn_min_2_total.Name = "btn_min_2_total";
+            this.btn_min_2_total.Size = new System.Drawing.Size(93, 23);
+            this.btn_min_2_total.TabIndex = 9;
+            this.btn_min_2_total.Text = "2-min-2-total";
+            this.btn_min_2_total.UseVisualStyleBackColor = true;
+            this.btn_min_2_total.Click += new System.EventHandler(this.btn_min_2_total_Click);
+            // 
+            // btn_2_min_2_half
+            // 
+            this.btn_2_min_2_half.Location = new System.Drawing.Point(108, 86);
+            this.btn_2_min_2_half.Name = "btn_2_min_2_half";
+            this.btn_2_min_2_half.Size = new System.Drawing.Size(93, 23);
+            this.btn_2_min_2_half.TabIndex = 8;
+            this.btn_2_min_2_half.Text = "2-min-2-half";
+            this.btn_2_min_2_half.UseVisualStyleBackColor = true;
+            this.btn_2_min_2_half.Click += new System.EventHandler(this.btn_2_min_2_half_Click);
+            // 
+            // btn_2_min_2_spread
+            // 
+            this.btn_2_min_2_spread.Location = new System.Drawing.Point(108, 57);
+            this.btn_2_min_2_spread.Name = "btn_2_min_2_spread";
+            this.btn_2_min_2_spread.Size = new System.Drawing.Size(93, 23);
+            this.btn_2_min_2_spread.TabIndex = 7;
+            this.btn_2_min_2_spread.Text = "2-min-2-spread";
+            this.btn_2_min_2_spread.UseVisualStyleBackColor = true;
+            this.btn_2_min_2_spread.Click += new System.EventHandler(this.btn_2_min_2_spread_Click);
+            // 
+            // btn_2_min_2_wld
+            // 
+            this.btn_2_min_2_wld.Location = new System.Drawing.Point(108, 28);
+            this.btn_2_min_2_wld.Name = "btn_2_min_2_wld";
+            this.btn_2_min_2_wld.Size = new System.Drawing.Size(93, 23);
+            this.btn_2_min_2_wld.TabIndex = 6;
+            this.btn_2_min_2_wld.Text = "2-min-2-wdl";
+            this.btn_2_min_2_wld.UseVisualStyleBackColor = true;
+            this.btn_2_min_2_wld.Click += new System.EventHandler(this.btn_2_min_2_wld_Click);
             // 
             // btn_1_min_1_free
             // 
@@ -516,6 +578,68 @@
             this.tabPage4.TabIndex = 1;
             this.tabPage4.Text = "Select";
             this.tabPage4.UseVisualStyleBackColor = true;
+            // 
+            // btn_clear_two
+            // 
+            this.btn_clear_two.Location = new System.Drawing.Point(86, 339);
+            this.btn_clear_two.Name = "btn_clear_two";
+            this.btn_clear_two.Size = new System.Drawing.Size(75, 23);
+            this.btn_clear_two.TabIndex = 118;
+            this.btn_clear_two.Text = "Clear Two";
+            this.btn_clear_two.UseVisualStyleBackColor = true;
+            this.btn_clear_two.Click += new System.EventHandler(this.btn_clear_two_Click);
+            // 
+            // btn_clear_one
+            // 
+            this.btn_clear_one.Location = new System.Drawing.Point(5, 339);
+            this.btn_clear_one.Name = "btn_clear_one";
+            this.btn_clear_one.Size = new System.Drawing.Size(75, 23);
+            this.btn_clear_one.TabIndex = 117;
+            this.btn_clear_one.Text = "Clear One";
+            this.btn_clear_one.UseVisualStyleBackColor = true;
+            this.btn_clear_one.Click += new System.EventHandler(this.btn_clear_one_Click);
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Font = new System.Drawing.Font("Lucida Console", 9.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label19.Location = new System.Drawing.Point(0, 296);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(871, 13);
+            this.label19.TabIndex = 116;
+            this.label19.Text = "---------------------------------------------------------------------------------" +
+                "---------------------------";
+            // 
+            // btn_select_two
+            // 
+            this.btn_select_two.Location = new System.Drawing.Point(86, 315);
+            this.btn_select_two.Name = "btn_select_two";
+            this.btn_select_two.Size = new System.Drawing.Size(75, 23);
+            this.btn_select_two.TabIndex = 115;
+            this.btn_select_two.Text = "Select Two";
+            this.btn_select_two.UseVisualStyleBackColor = true;
+            this.btn_select_two.Click += new System.EventHandler(this.btn_select_two_Click);
+            // 
+            // btn_select_one
+            // 
+            this.btn_select_one.Location = new System.Drawing.Point(5, 315);
+            this.btn_select_one.Name = "btn_select_one";
+            this.btn_select_one.Size = new System.Drawing.Size(75, 23);
+            this.btn_select_one.TabIndex = 114;
+            this.btn_select_one.Text = "Select One";
+            this.btn_select_one.UseVisualStyleBackColor = true;
+            this.btn_select_one.Click += new System.EventHandler(this.btn_select_one_Click);
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Font = new System.Drawing.Font("Lucida Console", 9.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label18.Location = new System.Drawing.Point(0, 1);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(871, 13);
+            this.label18.TabIndex = 112;
+            this.label18.Text = "---------------------------------------------------------------------------------" +
+                "---------------------------";
             // 
             // label54
             // 
@@ -1901,67 +2025,15 @@
             this.checkBox66.Text = "200.00";
             this.checkBox66.UseVisualStyleBackColor = true;
             // 
-            // label18
+            // btn_2_min_2_free
             // 
-            this.label18.AutoSize = true;
-            this.label18.Font = new System.Drawing.Font("Lucida Console", 9.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label18.Location = new System.Drawing.Point(0, 1);
-            this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(871, 13);
-            this.label18.TabIndex = 112;
-            this.label18.Text = "---------------------------------------------------------------------------------" +
-                "---------------------------";
-            // 
-            // btn_select_one
-            // 
-            this.btn_select_one.Location = new System.Drawing.Point(5, 315);
-            this.btn_select_one.Name = "btn_select_one";
-            this.btn_select_one.Size = new System.Drawing.Size(75, 23);
-            this.btn_select_one.TabIndex = 114;
-            this.btn_select_one.Text = "Select One";
-            this.btn_select_one.UseVisualStyleBackColor = true;
-            this.btn_select_one.Click += new System.EventHandler(this.btn_select_one_Click);
-            // 
-            // btn_select_two
-            // 
-            this.btn_select_two.Location = new System.Drawing.Point(86, 315);
-            this.btn_select_two.Name = "btn_select_two";
-            this.btn_select_two.Size = new System.Drawing.Size(75, 23);
-            this.btn_select_two.TabIndex = 115;
-            this.btn_select_two.Text = "Select Two";
-            this.btn_select_two.UseVisualStyleBackColor = true;
-            this.btn_select_two.Click += new System.EventHandler(this.btn_select_two_Click);
-            // 
-            // label19
-            // 
-            this.label19.AutoSize = true;
-            this.label19.Font = new System.Drawing.Font("Lucida Console", 9.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label19.Location = new System.Drawing.Point(0, 296);
-            this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(871, 13);
-            this.label19.TabIndex = 116;
-            this.label19.Text = "---------------------------------------------------------------------------------" +
-                "---------------------------";
-            // 
-            // btn_clear_one
-            // 
-            this.btn_clear_one.Location = new System.Drawing.Point(6, 339);
-            this.btn_clear_one.Name = "btn_clear_one";
-            this.btn_clear_one.Size = new System.Drawing.Size(75, 23);
-            this.btn_clear_one.TabIndex = 117;
-            this.btn_clear_one.Text = "Clear One";
-            this.btn_clear_one.UseVisualStyleBackColor = true;
-            this.btn_clear_one.Click += new System.EventHandler(this.btn_clear_one_Click);
-            // 
-            // btn_clear_two
-            // 
-            this.btn_clear_two.Location = new System.Drawing.Point(87, 339);
-            this.btn_clear_two.Name = "btn_clear_two";
-            this.btn_clear_two.Size = new System.Drawing.Size(75, 23);
-            this.btn_clear_two.TabIndex = 118;
-            this.btn_clear_two.Text = "Clear Two";
-            this.btn_clear_two.UseVisualStyleBackColor = true;
-            this.btn_clear_two.Click += new System.EventHandler(this.btn_clear_two_Click);
+            this.btn_2_min_2_free.Location = new System.Drawing.Point(108, 173);
+            this.btn_2_min_2_free.Name = "btn_2_min_2_free";
+            this.btn_2_min_2_free.Size = new System.Drawing.Size(93, 23);
+            this.btn_2_min_2_free.TabIndex = 11;
+            this.btn_2_min_2_free.Text = "2-min-2-free";
+            this.btn_2_min_2_free.UseVisualStyleBackColor = true;
+            this.btn_2_min_2_free.Click += new System.EventHandler(this.btn_2_min_2_free_Click);
             // 
             // FrmMixMatch
             // 
@@ -2160,5 +2232,11 @@
         private System.Windows.Forms.Label label19;
         private System.Windows.Forms.Button btn_clear_two;
         private System.Windows.Forms.Button btn_clear_one;
+        private System.Windows.Forms.Button btn_2_min_2_wld;
+        private System.Windows.Forms.Button btn_2_min_2_spread;
+        private System.Windows.Forms.Button btn_2_min_2_half;
+        private System.Windows.Forms.Button btn_2_min_2_point;
+        private System.Windows.Forms.Button btn_min_2_total;
+        private System.Windows.Forms.Button btn_2_min_2_free;
     }
 }

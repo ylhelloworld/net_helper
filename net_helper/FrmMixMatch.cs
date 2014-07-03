@@ -64,7 +64,7 @@ namespace WinCode
                 }
             }
             this.tab.SelectTab(1);
-            MessageBox.Show("bingo!!!complete!!!");
+
         }
         private void btn_1_min_1_spread_Click(object sender, EventArgs e)
         {
@@ -94,7 +94,7 @@ namespace WinCode
                 }
             }
             this.tab.SelectTab(1);
-            MessageBox.Show("bingo!!!complete!!!");
+
         }
         private void btn_1_min_1_half_Click(object sender, EventArgs e)
         {
@@ -124,7 +124,7 @@ namespace WinCode
                 }
             }
             this.tab.SelectTab(1);
-            MessageBox.Show("bingo!!!complete!!!");
+
         }
         private void btn_1_min_1_total_Click(object sender, EventArgs e)
         {
@@ -154,7 +154,7 @@ namespace WinCode
                 }
             }
             this.tab.SelectTab(1);
-            MessageBox.Show("bingo!!!complete!!!");
+
         }
         private void btn_1_min_1_point_Click(object sender, EventArgs e)
         {
@@ -184,7 +184,7 @@ namespace WinCode
                 }
             }
             this.tab.SelectTab(1);
-            MessageBox.Show("bingo!!!complete!!!");
+
         }
         private void btn_1_min_1_free_Click(object sender, EventArgs e)
         {
@@ -193,15 +193,53 @@ namespace WinCode
             {
                 if (Convert.ToBoolean(row.Cells["selected"].Value) == true)
                 {
-
                     string id = row.Cells["id"].Value.ToString();
                     BsonDocument match = MixMatchHelper.get_mix_doc_from_db(id);
 
                     for (int i = 1; i <= 50; i++)
                     {
                         double[] profits = get_profits_from_select();
+                        if (profits.Length == 0) return;
                         BsonDocument doc = MixMatchHelper.get_1_min_from_1_free_with_circle(match, profits, i);
 
+                        sb.Append("--------------------------------------------------------------------------------------------------------------------" + Environment.NewLine);
+                        sb.Append(MixMatchHelper.get_info_from_doc(doc));
+                        this.txt_compute_result.Text = sb.ToString();
+                        Application.DoEvents();
+                    }
+
+                    sb.Append("--------------------------------------------------------------------------------------------------------------------" + Environment.NewLine);
+                    this.txt_compute_result.Text = sb.ToString();
+                    Application.DoEvents();
+                }
+            }
+            this.tab.SelectTab(1);
+        }
+
+
+        private void btn_2_min_2_wld_Click(object sender, EventArgs e)
+        {
+            ArrayList list = new ArrayList();
+            StringBuilder sb = new StringBuilder();
+            foreach (DataGridViewRow row in dgv_match.Rows)
+            {
+                if (Convert.ToBoolean(row.Cells["selected"].Value) == true)
+                {
+
+                    string id = row.Cells["id"].Value.ToString();
+                    list.Add(id);
+                }
+            }
+
+            for (int i = 0; i < list.Count; i++)
+            {
+                for (int j = i + 1; j < list.Count; j++)
+                {
+                    BsonDocument match1 = MixMatchHelper.get_mix_doc_from_db(list[i].ToString());
+                    BsonDocument match2 = MixMatchHelper.get_mix_doc_from_db(list[j].ToString());
+                    for (int k = 1; k <= 50; k++)
+                    {
+                        BsonDocument doc = MixMatchHelper.get_2_min_from_2_wld_with_circle(match1, match2, k);
                         sb.Append("--------------------------------------------------------------------------------------------------------------------" + Environment.NewLine);
                         sb.Append(MixMatchHelper.get_info_from_doc(doc));
                         this.txt_compute_result.Text = sb.ToString();
@@ -215,61 +253,175 @@ namespace WinCode
                 }
             }
             this.tab.SelectTab(1);
-            MessageBox.Show("bingo!!!complete!!!");
         }
-
-
-        private void txt_compute_result_TextChanged(object sender, EventArgs e)
+        private void btn_2_min_2_spread_Click(object sender, EventArgs e)
         {
-            this.txt_compute_result.SelectionStart = this.txt_compute_result.TextLength;
-            this.txt_compute_result.ScrollToCaret();
-        }
-        private void dgv_match_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
-        {
-            try
+            ArrayList list = new ArrayList();
+            StringBuilder sb = new StringBuilder();
+            foreach (DataGridViewRow row in dgv_match.Rows)
             {
-                if (e != null && e.RowIndex > -1 && e.RowIndex < dgv_match.Rows.Count - 1)
+                if (Convert.ToBoolean(row.Cells["selected"].Value) == true)
                 {
-                    if (e.RowIndex >= 0 && e.RowIndex <= dgv_match.Rows.Count - 1)
+
+                    string id = row.Cells["id"].Value.ToString();
+                    list.Add(id);
+                }
+            }
+
+            for (int i = 0; i < list.Count; i++)
+            {
+                for (int j = i + 1; j < list.Count; j++)
+                {
+                    BsonDocument match1 = MixMatchHelper.get_mix_doc_from_db(list[i].ToString());
+                    BsonDocument match2 = MixMatchHelper.get_mix_doc_from_db(list[j].ToString());
+                    for (int k = 1; k <= 50; k++)
                     {
-                        id = dgv_match.Rows[e.RowIndex].Cells["id"].Value.ToString();
-                        get_select_match_info();
-
-
+                        BsonDocument doc = MixMatchHelper.get_2_min_from_2_spread_with_circle(match1, match2, k);
+                        sb.Append("--------------------------------------------------------------------------------------------------------------------" + Environment.NewLine);
+                        sb.Append(MixMatchHelper.get_info_from_doc(doc));
+                        this.txt_compute_result.Text = sb.ToString();
+                        Application.DoEvents();
                     }
+
+                    sb.Append("--------------------------------------------------------------------------------------------------------------------" + Environment.NewLine);
+                    this.txt_compute_result.Text = sb.ToString();
+                    Application.DoEvents();
+
                 }
             }
-            catch (Exception error)
-            {
-                Log.error("cell mouse down", error);
-            }
-
+            this.tab.SelectTab(1);
         }
-        private void dgv_match_RowEnter(object sender, DataGridViewCellEventArgs e)
+        private void btn_2_min_2_half_Click(object sender, EventArgs e)
         {
-            //try
-            //{
-            if (e != null && e.RowIndex > -1 && e.RowIndex < dgv_match.Rows.Count - 1)
+            ArrayList list = new ArrayList();
+            StringBuilder sb = new StringBuilder();
+            foreach (DataGridViewRow row in dgv_match.Rows)
             {
-                if (e.RowIndex >= 0 && e.RowIndex <= dgv_match.Rows.Count - 1)
+                if (Convert.ToBoolean(row.Cells["selected"].Value) == true)
                 {
-                    id = dgv_match.Rows[e.RowIndex].Cells["id"].Value.ToString();
-                    get_select_match_info();
+
+                    string id = row.Cells["id"].Value.ToString();
+                    list.Add(id);
+                }
+            }
+
+            for (int i = 0; i < list.Count; i++)
+            {
+                for (int j = i + 1; j < list.Count; j++)
+                {
+                    BsonDocument match1 = MixMatchHelper.get_mix_doc_from_db(list[i].ToString());
+                    BsonDocument match2 = MixMatchHelper.get_mix_doc_from_db(list[j].ToString());
+                    for (int k = 1; k <= 50; k++)
+                    {
+                        BsonDocument doc = MixMatchHelper.get_2_min_from_2_half_with_circle(match1, match2, k);
+                        sb.Append("--------------------------------------------------------------------------------------------------------------------" + Environment.NewLine);
+                        sb.Append(MixMatchHelper.get_info_from_doc(doc));
+                        this.txt_compute_result.Text = sb.ToString();
+                        Application.DoEvents();
+                    }
+
+                    sb.Append("--------------------------------------------------------------------------------------------------------------------" + Environment.NewLine);
+                    this.txt_compute_result.Text = sb.ToString();
+                    Application.DoEvents();
 
                 }
             }
-            //}
-            //catch (Exception error)
-            //{
-            //    Log.error("cell mouse down", error);
-            //}
-
+            this.tab.SelectTab(1);
         }
-        private void dgv_match_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        private void btn_min_2_total_Click(object sender, EventArgs e)
         {
-            this.dgv_match.Columns[0].Width = 60;
-            this.dgv_match.Columns[1].Width = 60;
+            ArrayList list = new ArrayList();
+            StringBuilder sb = new StringBuilder();
+            foreach (DataGridViewRow row in dgv_match.Rows)
+            {
+                if (Convert.ToBoolean(row.Cells["selected"].Value) == true)
+                {
+
+                    string id = row.Cells["id"].Value.ToString();
+                    list.Add(id);
+                }
+            }
+
+            for (int i = 0; i < list.Count; i++)
+            {
+                for (int j = i + 1; j < list.Count; j++)
+                {
+                    BsonDocument match1 = MixMatchHelper.get_mix_doc_from_db(list[i].ToString());
+                    BsonDocument match2 = MixMatchHelper.get_mix_doc_from_db(list[j].ToString());
+                    for (int k = 1; k <= 50; k++)
+                    {
+                        BsonDocument doc = MixMatchHelper.get_2_min_from_2_total_with_circle(match1, match2, k);
+                        sb.Append("--------------------------------------------------------------------------------------------------------------------" + Environment.NewLine);
+                        sb.Append(MixMatchHelper.get_info_from_doc(doc));
+                        this.txt_compute_result.Text = sb.ToString();
+                        Application.DoEvents();
+                    }
+
+                    sb.Append("--------------------------------------------------------------------------------------------------------------------" + Environment.NewLine);
+                    this.txt_compute_result.Text = sb.ToString();
+                    Application.DoEvents();
+
+                }
+            }
+            this.tab.SelectTab(1);
         }
+        private void btn_2_min_2_point_Click(object sender, EventArgs e)
+        {
+            ArrayList list = new ArrayList();
+            StringBuilder sb = new StringBuilder();
+            foreach (DataGridViewRow row in dgv_match.Rows)
+            {
+                if (Convert.ToBoolean(row.Cells["selected"].Value) == true)
+                {
+
+                    string id = row.Cells["id"].Value.ToString();
+                    list.Add(id);
+                }
+            }
+
+            for (int i = 0; i < list.Count; i++)
+            {
+                for (int j = i + 1; j < list.Count; j++)
+                {
+                    BsonDocument match1 = MixMatchHelper.get_mix_doc_from_db(list[i].ToString());
+                    BsonDocument match2 = MixMatchHelper.get_mix_doc_from_db(list[j].ToString());
+                    for (int k = 1; k <= 50; k++)
+                    {
+                        BsonDocument doc = MixMatchHelper.get_2_min_from_2_point_with_circle(match1, match2, k);
+                        sb.Append("--------------------------------------------------------------------------------------------------------------------" + Environment.NewLine);
+                        sb.Append(MixMatchHelper.get_info_from_doc(doc));
+                        this.txt_compute_result.Text = sb.ToString();
+                        Application.DoEvents();
+                    }
+
+                    sb.Append("--------------------------------------------------------------------------------------------------------------------" + Environment.NewLine);
+                    this.txt_compute_result.Text = sb.ToString();
+                    Application.DoEvents();
+
+                }
+            }
+            this.tab.SelectTab(1);
+        }
+        private void btn_2_min_2_free_Click(object sender, EventArgs e)
+        {
+            StringBuilder sb = new StringBuilder();
+            if (match1 != null && match2 != null)
+            { 
+                for (int k = 1; k <= 50; k++)
+                {
+                    BsonDocument doc = MixMatchHelper.get_2_min_from_2_free_with_circle(match1, match2, k);
+                    sb.Append("--------------------------------------------------------------------------------------------------------------------" + Environment.NewLine);
+                    sb.Append(MixMatchHelper.get_info_from_doc(doc));
+                    this.txt_compute_result.Text = sb.ToString();
+                    Application.DoEvents();
+                }
+
+                sb.Append("--------------------------------------------------------------------------------------------------------------------" + Environment.NewLine);
+                this.txt_compute_result.Text = sb.ToString();
+                Application.DoEvents();
+            }
+        }
+
         private void btn_select_one_Click(object sender, EventArgs e)
         {
             BsonDocument doc = MixMatchHelper.get_mix_doc_from_db(id);
@@ -336,11 +488,11 @@ namespace WinCode
             if (this.cb_total_4.Checked) match1.Add("total_4", this.cb_total_4.Text);
             if (this.cb_total_5.Checked) match1.Add("total_5", this.cb_total_5.Text);
             if (this.cb_total_6.Checked) match1.Add("total_6", this.cb_total_6.Text);
-            if (this.cb_total_more.Checked) match1.Add("total_more", this.cb_total_more.Text); 
+            if (this.cb_total_more.Checked) match1.Add("total_more", this.cb_total_more.Text);
 
             get_select_match_info();
 
-        } 
+        }
         private void btn_select_two_Click(object sender, EventArgs e)
         {
             BsonDocument doc = MixMatchHelper.get_mix_doc_from_db(id);
@@ -423,6 +575,60 @@ namespace WinCode
         }
 
 
+        private void txt_compute_result_TextChanged(object sender, EventArgs e)
+        {
+            this.txt_compute_result.SelectionStart = this.txt_compute_result.TextLength;
+            this.txt_compute_result.ScrollToCaret();
+        }
+        private void dgv_match_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            try
+            {
+                if (e != null && e.RowIndex > -1 && e.RowIndex < dgv_match.Rows.Count - 1)
+                {
+                    if (e.RowIndex >= 0 && e.RowIndex <= dgv_match.Rows.Count - 1)
+                    {
+                        id = dgv_match.Rows[e.RowIndex].Cells["id"].Value.ToString();
+                        get_select_match_info();
+
+
+                    }
+                }
+            }
+            catch (Exception error)
+            {
+                Log.error("cell mouse down", error);
+            }
+
+        }
+        private void dgv_match_RowEnter(object sender, DataGridViewCellEventArgs e)
+        {
+            //try
+            //{
+            if (e != null && e.RowIndex > -1 && e.RowIndex < dgv_match.Rows.Count - 1)
+            {
+                if (e.RowIndex >= 0 && e.RowIndex <= dgv_match.Rows.Count - 1)
+                {
+                    id = dgv_match.Rows[e.RowIndex].Cells["id"].Value.ToString();
+                    get_select_match_info();
+
+                }
+            }
+            //}
+            //catch (Exception error)
+            //{
+            //    Log.error("cell mouse down", error);
+            //}
+
+        }
+        private void dgv_match_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            this.dgv_match.Columns[0].Width = 60;
+            this.dgv_match.Columns[1].Width = 60;
+        }
+
+
+
         public void bind_data()
         {
             DataTable dt_match = new DataTable();
@@ -457,19 +663,19 @@ namespace WinCode
                 dt_match.Rows.Add(row_new);
             }
             this.dgv_match.DataSource = dt_match;
-        } 
+        }
         public void get_select_match_info()
         {
             BsonDocument doc = MixMatchHelper.get_mix_doc_from_db(id);
-            string result="";
+            string result = "";
             result = "--------------------------------------------------------------------------------------------------------------------" + Environment.NewLine +
                       MixMatchHelper.get_info_from_doc(doc) +
                       "--------------------------------------------------------------------------------------------------------------------" + Environment.NewLine;
             if (match1 != null)
             {
                 result = result +
-                    MixMatchHelper.get_info_from_doc(match1)+Environment.NewLine+
-                    "--------------------------------------------------------------------------------------------------------------------" + Environment.NewLine; 
+                    MixMatchHelper.get_info_from_doc(match1) + Environment.NewLine +
+                    "--------------------------------------------------------------------------------------------------------------------" + Environment.NewLine;
             }
             if (match2 != null)
             {
@@ -612,7 +818,10 @@ namespace WinCode
                 profits[i] = Convert.ToDouble(list[i].ToString());
             }
             return profits;
-        } 
+        }
+
+
+
 
     }
 
