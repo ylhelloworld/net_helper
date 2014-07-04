@@ -574,7 +574,6 @@ namespace WinCode
             get_select_match_info();
         }
 
-
         private void txt_compute_result_TextChanged(object sender, EventArgs e)
         {
             this.txt_compute_result.SelectionStart = this.txt_compute_result.TextLength;
@@ -818,10 +817,7 @@ namespace WinCode
                 profits[i] = Convert.ToDouble(list[i].ToString());
             }
             return profits;
-        }
-
-
-
+        } 
 
     }
 
