@@ -2504,7 +2504,7 @@ namespace WinCode
                 profits[step1] = step_max;
             }
 
-            //for (int step = 0; step < 3*3; step++)
+            //for (int step = 0; step < length; step++)
             //{
             //    profits[step] = profits[step] * 1.208;
             //}

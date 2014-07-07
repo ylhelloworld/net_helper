@@ -240,8 +240,6 @@ class HttpSocketHelper
         }
         return -1;
     }
-
-
     public static string convert_cookie_to_string(Hashtable table)
     {
 
