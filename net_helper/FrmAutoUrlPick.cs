@@ -18,7 +18,13 @@ namespace WinCode
 
         private void btn_pick_Click(object sender, EventArgs e)
         {
+            this.txt_result.Text = AutoPickHelper.select_data_from_url(this.txt_url.Text);
+        }
 
+        private void txt_result_TextChanged(object sender, EventArgs e)
+        {
+            this.txt_result.SelectionStart = this.txt_result.TextLength;
+            this.txt_result.ScrollToCaret();
         }
     }
 }

@@ -193,6 +193,12 @@ namespace WinCode
         {
             FrmFixedUrlAutoPick frm = new FrmFixedUrlAutoPick();
             set_window((Form)frm);
+        }
+
+        private void autoUrlPickToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FrmAutoUrlPick frm = new FrmAutoUrlPick();
+            set_window((Form)frm);
         } 
     }
 

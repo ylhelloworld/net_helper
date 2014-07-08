@@ -42,6 +42,7 @@
             this.templateOperateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.setFixedUrlToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.selectFixedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.autoFiexeURLPickToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.logMonitorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.codeConsoleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -51,7 +52,7 @@
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.tool_close_form = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.autoFiexeURLPickToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.autoUrlPickToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MainMenu.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -131,7 +132,8 @@
             this.templateOperateToolStripMenuItem,
             this.setFixedUrlToolStripMenuItem,
             this.selectFixedToolStripMenuItem,
-            this.autoFiexeURLPickToolStripMenuItem});
+            this.autoFiexeURLPickToolStripMenuItem,
+            this.autoUrlPickToolStripMenuItem});
             this.templateToolStripMenuItem.Name = "templateToolStripMenuItem";
             this.templateToolStripMenuItem.Size = new System.Drawing.Size(65, 20);
             this.templateToolStripMenuItem.Text = "Template";
@@ -163,6 +165,13 @@
             this.selectFixedToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
             this.selectFixedToolStripMenuItem.Text = "Fixed URL Pick";
             this.selectFixedToolStripMenuItem.Click += new System.EventHandler(this.selectFixedToolStripMenuItem_Click);
+            // 
+            // autoFiexeURLPickToolStripMenuItem
+            // 
+            this.autoFiexeURLPickToolStripMenuItem.Name = "autoFiexeURLPickToolStripMenuItem";
+            this.autoFiexeURLPickToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
+            this.autoFiexeURLPickToolStripMenuItem.Text = "Auto Fiexe URL Pick";
+            this.autoFiexeURLPickToolStripMenuItem.Click += new System.EventHandler(this.autoFiexeURLPickToolStripMenuItem_Click);
             // 
             // toolToolStripMenuItem
             // 
@@ -250,12 +259,12 @@
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
             // 
-            // autoFiexeURLPickToolStripMenuItem
+            // autoUrlPickToolStripMenuItem
             // 
-            this.autoFiexeURLPickToolStripMenuItem.Name = "autoFiexeURLPickToolStripMenuItem";
-            this.autoFiexeURLPickToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
-            this.autoFiexeURLPickToolStripMenuItem.Text = "Auto Fiexe URL Pick";
-            this.autoFiexeURLPickToolStripMenuItem.Click += new System.EventHandler(this.autoFiexeURLPickToolStripMenuItem_Click);
+            this.autoUrlPickToolStripMenuItem.Name = "autoUrlPickToolStripMenuItem";
+            this.autoUrlPickToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
+            this.autoUrlPickToolStripMenuItem.Text = "Auto Url Pick";
+            this.autoUrlPickToolStripMenuItem.Click += new System.EventHandler(this.autoUrlPickToolStripMenuItem_Click);
             // 
             // FrmMain
             // 
@@ -308,5 +317,6 @@
         private System.Windows.Forms.ToolStripMenuItem requestSocketToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem viewHexToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem autoFiexeURLPickToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem autoUrlPickToolStripMenuItem;
     }
 }
