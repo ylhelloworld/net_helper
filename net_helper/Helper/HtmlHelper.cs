@@ -19,9 +19,7 @@ class HtmlHelper
         try
         {
             //make a temp url to struct file path 
-            string url_temp = get_normal_url(url);
-
-
+            string url_temp = get_normal_url(url);  
 
             //保存文件
             string path_new = down_html_file;
